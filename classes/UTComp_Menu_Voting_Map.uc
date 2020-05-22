@@ -117,7 +117,7 @@ defaultproperties
          OnKeyType=MapInputEditBox.InternalOnKeyType
          OnKeyEvent=MapInputEditBox.InternalOnKeyEvent
      End Object
-     eb_MapInput=GUIEditBox'UTCompv17Beta4SRC.UTComp_Menu_Voting_Map.MapInputEditBox'
+     eb_MapInput=GUIEditBox'UTCompv18.UTComp_Menu_Voting_Map.MapInputEditBox'
 
      Begin Object Class=GUIButton Name=quickrestartButton
         Caption="Restart Current Map"
@@ -128,7 +128,7 @@ defaultproperties
          OnClick=UTComp_Menu_Voting_Map.InternalOnClick
          OnKeyEvent=quickrestartButton.InternalOnKeyEvent
      End Object
-     bu_QuickRestart=GUIButton'UTCompv17Beta4SRC.UTComp_Menu_Voting_Map.quickrestartButton'
+     bu_QuickRestart=GUIButton'UTCompv18.UTComp_Menu_Voting_Map.quickrestartButton'
 
      Begin Object Class=GUIButton Name=ChangeMapButton
          Caption="Change Map"
@@ -139,7 +139,7 @@ defaultproperties
          OnClick=UTComp_Menu_Voting_Map.InternalOnClick
          OnKeyEvent=ChangeMapButton.InternalOnKeyEvent
      End Object
-     bu_ChangeMap=GUIButton'UTCompv17Beta4SRC.UTComp_Menu_Voting_Map.ChangeMapButton'
+     bu_ChangeMap=GUIButton'UTCompv18.UTComp_Menu_Voting_Map.ChangeMapButton'
 
      Begin Object Class=GUILabel Name=MapNameLabel
          Caption="Map Name"
@@ -149,7 +149,7 @@ defaultproperties
 		WinLeft=0.380438
 		WinTop=0.480417
      End Object
-     l_MapName=GUILabel'UTCompv17Beta4SRC.UTComp_Menu_Voting_Map.MapNameLabel'
+     l_MapName=GUILabel'UTCompv18.UTComp_Menu_Voting_Map.MapNameLabel'
 
      Begin Object class=GUIListBox name=MapListBox
 		WinWidth=0.214061

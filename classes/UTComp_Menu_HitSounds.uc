@@ -113,7 +113,7 @@ defaultproperties
          OnKeyEvent=HitSoundVolume.InternalOnKeyEvent
          OnCapturedMouseMove=HitSoundVolume.InternalCapturedMouseMove
      End Object
-     sl_Volume=GUISlider'UTCompv17Beta4SRC.UTComp_Menu_HitSounds.HitSoundVolume'
+     sl_Volume=GUISlider'UTCompv18.UTComp_Menu_HitSounds.HitSoundVolume'
 
      Begin Object Class=GUISlider Name=PitchMod
          MinValue=1.000000
@@ -129,7 +129,7 @@ defaultproperties
          OnKeyEvent=PitchMod.InternalOnKeyEvent
          OnCapturedMouseMove=PitchMod.InternalCapturedMouseMove
      End Object
-     sl_Pitch=GUISlider'UTCompv17Beta4SRC.UTComp_Menu_HitSounds.PitchMod'
+     sl_Pitch=GUISlider'UTCompv18.UTComp_Menu_HitSounds.PitchMod'
 
      Begin Object Class=moCheckBox Name=CPMAstyle
          Caption="CPMA Style Hitsounds"
@@ -138,7 +138,7 @@ defaultproperties
          WinLeft=0.250000
          OnChange=UTComp_Menu_HitSounds.InternalOnChange
      End Object
-     ch_CPMAStyle=moCheckBox'UTCompv17Beta4SRC.UTComp_Menu_HitSounds.CPMAstyle'
+     ch_CPMAStyle=moCheckBox'UTCompv18.UTComp_Menu_HitSounds.CPMAstyle'
 
      Begin Object Class=moCheckBox Name=EnableHit
          Caption="Enable Hitsounds"
@@ -147,7 +147,7 @@ defaultproperties
          WinLeft=0.250000
          OnChange=UTComp_Menu_HitSounds.InternalOnChange
      End Object
-     ch_EnableHitSounds=moCheckBox'UTCompv17Beta4SRC.UTComp_Menu_HitSounds.EnableHit'
+     ch_EnableHitSounds=moCheckBox'UTCompv18.UTComp_Menu_HitSounds.EnableHit'
 
      Begin Object Class=GUIComboBox Name=EnemySound
          WinTop=0.654000
@@ -157,7 +157,7 @@ defaultproperties
          OnChange=UTComp_Menu_HitSounds.InternalOnChange
          OnKeyEvent=UTComp_Menu_HitSounds.InternalOnKeyEvent
      End Object
-     co_EnemySound=GUIComboBox'UTCompv17Beta4SRC.UTComp_Menu_HitSounds.EnemySound'
+     co_EnemySound=GUIComboBox'UTCompv18.UTComp_Menu_HitSounds.EnemySound'
 
      Begin Object Class=GUIComboBox Name=TeammateSound
          WinTop=0.704000
@@ -167,7 +167,7 @@ defaultproperties
          OnChange=UTComp_Menu_HitSounds.InternalOnChange
          OnKeyEvent=UTComp_Menu_HitSounds.InternalOnKeyEvent
      End Object
-     co_FriendlySound=GUIComboBox'UTCompv17Beta4SRC.UTComp_Menu_HitSounds.TeammateSound'
+     co_FriendlySound=GUIComboBox'UTCompv18.UTComp_Menu_HitSounds.TeammateSound'
 
      Begin Object Class=GUILabel Name=VolumeLabel
          Caption="Hitsound Volume"
@@ -175,7 +175,7 @@ defaultproperties
          WinTop=0.390000
          WinLeft=0.250000
      End Object
-     l_Volume=GUILabel'UTCompv17Beta4SRC.UTComp_Menu_HitSounds.VolumeLabel'
+     l_Volume=GUILabel'UTCompv18.UTComp_Menu_HitSounds.VolumeLabel'
 
      Begin Object Class=GUILabel Name=PitchLabel
          Caption="CPMA Pitch Modifier"
@@ -183,7 +183,7 @@ defaultproperties
          WinTop=0.540000
          WinLeft=0.250000
      End Object
-     l_Pitch=GUILabel'UTCompv17Beta4SRC.UTComp_Menu_HitSounds.PitchLabel'
+     l_Pitch=GUILabel'UTCompv18.UTComp_Menu_HitSounds.PitchLabel'
 
      Begin Object Class=GUILabel Name=EnemySoundLabel
          Caption="Enemy Sound"
@@ -191,7 +191,7 @@ defaultproperties
          WinTop=0.640000
          WinLeft=0.250000
      End Object
-     l_EnemySound=GUILabel'UTCompv17Beta4SRC.UTComp_Menu_HitSounds.EnemySoundLabel'
+     l_EnemySound=GUILabel'UTCompv18.UTComp_Menu_HitSounds.EnemySoundLabel'
 
      Begin Object Class=GUILabel Name=FriendlySoundLabel
          Caption="Team Sound"
@@ -199,6 +199,6 @@ defaultproperties
          WinTop=0.690000
          WinLeft=0.250000
      End Object
-     l_FriendlySound=GUILabel'UTCompv17Beta4SRC.UTComp_Menu_HitSounds.FriendlySoundLabel'
+     l_FriendlySound=GUILabel'UTCompv18.UTComp_Menu_HitSounds.FriendlySoundLabel'
 
 }

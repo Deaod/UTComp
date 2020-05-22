@@ -3,5 +3,5 @@ class NewNet_ShockRiflePickup extends ShockRiflePickup;
 
 defaultproperties
 {
-     InventoryType=Class'UTCompv17Beta4SRC.NewNet_ShockRifle'
+     InventoryType=Class'UTCompv18.NewNet_ShockRifle'
 }

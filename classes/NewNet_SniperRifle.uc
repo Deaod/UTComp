@@ -211,5 +211,5 @@ function bool IsReasonable(Vector V)
 defaultproperties
 {
     FireModeClass(0) = class'NewNet_SniperFire'
-    PickupClass=Class'UTCompv17Beta4SRC.NewNet_SniperRiflePickup'
+    PickupClass=Class'UTCompv18.NewNet_SniperRiflePickup'
 }

@@ -79,7 +79,7 @@ defaultproperties
 		WinLeft=0.250000
 		WinTop=0.487629
      End Object
-     l_InfoTitle=GUILabel'UTCompv17Beta4SRC.UTComp_Menu_Miscellaneous.InfoLabel'
+     l_InfoTitle=GUILabel'UTCompv18.UTComp_Menu_Miscellaneous.InfoLabel'
 
      Begin Object Class=GUILabel Name=GenericLabel
          Caption="----Generic UT2004 Settings----"
@@ -89,7 +89,7 @@ defaultproperties
 		WinLeft=0.250000
 		WinTop=0.579382
      End Object
-     l_GenericTitle=GUILabel'UTCompv17Beta4SRC.UTComp_Menu_Miscellaneous.GenericLabel'
+     l_GenericTitle=GUILabel'UTCompv18.UTComp_Menu_Miscellaneous.GenericLabel'
 
      Begin Object Class=moCheckBox Name=ScoreboardCheck
          Caption="Use UTComp enhanced scoreboard."
@@ -100,7 +100,7 @@ defaultproperties
 		WinTop=0.360000
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
-     ch_UseScoreBoard=moCheckBox'UTCompv17Beta4SRC.UTComp_Menu_Miscellaneous.ScoreboardCheck'
+     ch_UseScoreBoard=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.ScoreboardCheck'
 
      Begin Object Class=moCheckBox Name=StatsCheck
          Caption="Show weapon stats on scoreboard."
@@ -109,7 +109,7 @@ defaultproperties
          WinLeft=0.250000
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
-     ch_WepStats=moCheckBox'UTCompv17Beta4SRC.UTComp_Menu_Miscellaneous.StatsCheck'
+     ch_WepStats=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.StatsCheck'
 
      Begin Object Class=moCheckBox Name=PickupCheck
          Caption="Show pickup stats on scoreboard."
@@ -118,7 +118,7 @@ defaultproperties
          WinLeft=0.250000
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
-     ch_PickupStats=moCheckBox'UTCompv17Beta4SRC.UTComp_Menu_Miscellaneous.PickupCheck'
+     ch_PickupStats=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.PickupCheck'
 
      Begin Object Class=moCheckBox Name=InfoCheck
          Caption="Show UTComp info box on connect."
@@ -129,7 +129,7 @@ defaultproperties
 		WinTop=0.543505
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
-     ch_InfoBox=moCheckBox'UTCompv17Beta4SRC.UTComp_Menu_Miscellaneous.InfoCheck'
+     ch_InfoBox=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.InfoCheck'
 
      Begin Object Class=moCheckBox Name=FootCheck
          Caption="Play own footstep sounds."
@@ -140,7 +140,7 @@ defaultproperties
 		WinTop=0.633196
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
-     ch_FootSteps=moCheckBox'UTCompv17Beta4SRC.UTComp_Menu_Miscellaneous.FootCheck'
+     ch_FootSteps=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.FootCheck'
 
      Begin Object Class=moCheckBox Name=HudColorCheck
          Caption="Match Hud Color To Skins"
@@ -151,7 +151,7 @@ defaultproperties
 		WinTop=0.675774
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
-     ch_MatchHudColor=moCheckBox'UTCompv17Beta4SRC.UTComp_Menu_Miscellaneous.HudColorCheck'
+     ch_MatchHudColor=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.HudColorCheck'
 
      Begin Object Class=moCheckBox Name=NewNetCheck
          Caption="Enable Enhanced Netcode"
@@ -162,7 +162,7 @@ defaultproperties
 		WinTop=0.751134
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
-     ch_UseNewNet=moCheckBox'UTCompv17Beta4SRC.UTComp_Menu_Miscellaneous.NewNetCheck'
+     ch_UseNewNet=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.NewNetCheck'
 
      Begin Object Class=GUILabel Name=ScoreboardLabel
          Caption="----------Scoreboard----------"

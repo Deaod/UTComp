@@ -166,6 +166,6 @@ function  Projectile ForwardSuperSpawnProjectile(Vector Start, Rotator Dir)
 
 DefaultProperties
 {
-    FireModeClass[0] = Class'utcompv17Beta4SRC.Forward_newNet_RocketFire';
-    FireModeClass[1] = Class'utcompv17Beta4SRC.Forward_NewNet_RocketMultiFire';
+    FireModeClass[0] = Class'UTCompv18.Forward_newNet_RocketFire';
+    FireModeClass[1] = Class'UTCompv18.Forward_NewNet_RocketMultiFire';
 }

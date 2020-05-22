@@ -17,7 +17,7 @@ function Projectile SpawnProjectile(Vector Start, Rotator Dir)
 
     // super function
     Start += Vector(Dir) * 10.0 * LinkGun(Weapon).Links;
-    Proj = Weapon.Spawn(class'utcompv17Beta4SRC.Forward_LinkProjectile',,, Start, Dir);
+    Proj = Weapon.Spawn(class'UTCompv18.Forward_LinkProjectile',,, Start, Dir);
     if ( Proj != None )
     {
 		Proj.Links = LinkGun(Weapon).Links;
@@ -28,5 +28,5 @@ function Projectile SpawnProjectile(Vector Start, Rotator Dir)
 
 DefaultProperties
 {
-   ProjectileClass = class'utcompv17Beta4SRC.forward_linkProjectile'
+   ProjectileClass = class'UTCompv18.forward_linkProjectile'
 }

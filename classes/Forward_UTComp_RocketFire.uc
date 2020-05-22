@@ -7,5 +7,5 @@ CacheExempt;
 
 DefaultProperties
 {
-    ProjectileClass=Class'utcompv17Beta4SRC.Forward_RocketProj'
+    ProjectileClass=Class'UTCompv18.Forward_RocketProj'
 }
