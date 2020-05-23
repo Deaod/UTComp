@@ -388,7 +388,7 @@ simulated function Tick(float DeltaTime)
             }
 
             ClientTimeStamp+=DeltaTime;
-            AverDT = (9.0*AverDT + DeltaTime) / 10.0;
+            AverDT = (9.0*AverDT + DeltaTime) * 0.1;
             StampInfo.ReplicatetimeStamp(ClientTimeStamp);
             if(ClientTimeStamp > LastReplicatedAverDT + AVERDT_SEND_PERIOD)
             {
