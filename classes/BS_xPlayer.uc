@@ -2235,6 +2235,9 @@ function bool ComboDisabled(class<Combo> ComboClass)
     return false;
 }
 
+exec function ShowWeaponName() {
+    Player.Console.Message(Pawn.Weapon.ItemName, 10);
+}
 
 
 defaultproperties
