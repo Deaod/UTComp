@@ -635,28 +635,28 @@ exec function Echo(string S)
 /*
 exec function SpecViewGoal()
 {
-	if(IsCoaching())
-	   return;
+    if(IsCoaching())
+       return;
     Super.SpecViewGoal();
 }     */
 
 function ServerSpecViewGoal()
 {
- 	local actor NewGoal;
+    local actor NewGoal;
 
     if(!IsCoaching())
        super.ServerSpecViewGoal();
 
     if ( PlayerReplicationInfo.bOnlySpectator && IsInState('Spectating') )
     {
-    	NewGoal = Level.Game.FindSpecGoalFor(PlayerReplicationInfo,0);
+        NewGoal = Level.Game.FindSpecGoalFor(PlayerReplicationInfo,0);
         if (NewGoal!=None)
         {
             if(Pawn(NewGoal)!=None && ((Pawn(NewGoal).GetTeamNum() == 1 && IsCoachingBlue()) || (Pawn(NewGoal).GetTeamNum() == 0 && IsCoachingRed())))
             {
                 SetViewTarget(NewGoal);
-    	        ClientSetViewTarget(NewGoal);
-	            bBehindView = true; //bChaseCam;
+                ClientSetViewTarget(NewGoal);
+                bBehindView = true; //bChaseCam;
             }
         }
     }
@@ -1041,15 +1041,15 @@ exec function BehindView( bool B )
 {
 
     if ( Level.NetMode == NM_Standalone || Level.Game.bAllowBehindView || Vehicle(Pawn) != None || PlayerReplicationInfo.bOnlySpectator || PlayerReplicationInfo.bOutOfLives || PlayerReplicationInfo.bAdmin || IsA('Admin') )
-	{
-		if((ViewTarget.IsA('xPawn') && xPAwn(viewtarget).DrivenVehicle==None) && IsCoaching())
-		    return;
-        if ( (Vehicle(Pawn)==None) || (Vehicle(Pawn).bAllowViewChange) )	// Allow vehicles to limit view changes
-		{
-			ClientSetBehindView(B);
-			bBehindView = B;
-		}
-	}
+    {
+        if((ViewTarget.IsA('xPawn') && xPAwn(viewtarget).DrivenVehicle==None) && IsCoaching())
+            return;
+        if ( (Vehicle(Pawn)==None) || (Vehicle(Pawn).bAllowViewChange) )    // Allow vehicles to limit view changes
+        {
+            ClientSetBehindView(B);
+            bBehindView = B;
+        }
+    }
 }
 
 exec function SpecLockRed()
@@ -1109,23 +1109,23 @@ exec function SpecLockBlue()
 exec function ToggleBehindView()
 {
     if((ViewTarget.IsA('xPawn') && xPAwn(viewtarget).DrivenVehicle==None) && IsCoaching())
-	   return;
+       return;
     ServerToggleBehindview();
 }
 
 function ServerToggleBehindView()
 {
-	local bool B;
+    local bool B;
 
     if ( Level.NetMode == NM_Standalone || Level.Game.bAllowBehindView || Vehicle(Pawn) != None || PlayerReplicationInfo.bOnlySpectator || PlayerReplicationInfo.bAdmin || IsA('Admin') || PlayerReplicationInfo.bOutOfLives)
-	{
-		if ( (Vehicle(Pawn)==None) || (Vehicle(Pawn).bAllowViewChange) )	// Allow vehicles to limit view changes
-		{
-			B = !bBehindView;
+    {
+        if ( (Vehicle(Pawn)==None) || (Vehicle(Pawn).bAllowViewChange) )    // Allow vehicles to limit view changes
+        {
+            B = !bBehindView;
             ClientSetBehindView(B);
-			bBehindView = B;
-		}
-	}
+            bBehindView = B;
+        }
+    }
 }
 
 state spectating
@@ -1137,12 +1137,12 @@ state spectating
     }
       exec function Fire( optional float F )
     {
-    	if ( bFrozen )
-	{
-		if ( (TimerRate <= 0.0) || (TimerRate > 1.0) )
-			bFrozen = false;
-		return;
-	}
+        if ( bFrozen )
+    {
+        if ( (TimerRate <= 0.0) || (TimerRate > 1.0) )
+            bFrozen = false;
+        return;
+    }
         if(IsCoachingRed())
             NextRedPlayer();
         else if(IsCoachingBlue())
@@ -1324,11 +1324,11 @@ simulated function ResetEpicStats()
         for(i=0; i<=4; i++)
             tPRI.Combos[i]=0;
         for ( i = tPRI.VehicleStatsArray.Length - 1; i >= 0; i-- )
-		{
+        {
             tPRI.VehicleStatsArray.Remove(i,1);
         }
         for ( i = tPRI.WeaponStatsArray.Length - 1; i >= 0; i-- )
-		{
+        {
             tPRI.WeaponStatsArray.Remove(i,1);
         }
     }
@@ -1598,27 +1598,27 @@ simulated function reskinall()
 
 function bool AllowTextMessage(string Msg)
 {
-	local int k;
+    local int k;
 
-	if ( (Level.NetMode == NM_Standalone) || PlayerReplicationInfo.bAdmin )
-		return true;
+    if ( (Level.NetMode == NM_Standalone) || PlayerReplicationInfo.bAdmin )
+        return true;
 
     if ( (Level.Pauser == none) && (Level.TimeSeconds - LastBroadcastTime < 0.66) )
-		return false;
+        return false;
 
-	// lower frequency if same text
-	if ( Level.TimeSeconds - LastBroadcastTime < 5 )
-	{
-		Msg = Left(Msg,Clamp(len(Msg) - 4, 8, 64));
-		for ( k=0; k<4; k++ )
-			if ( LastBroadcastString[k] ~= Msg )
-				return false;
-	}
-	for ( k=3; k>0; k-- )
-		LastBroadcastString[k] = LastBroadcastString[k-1];
+    // lower frequency if same text
+    if ( Level.TimeSeconds - LastBroadcastTime < 5 )
+    {
+        Msg = Left(Msg,Clamp(len(Msg) - 4, 8, 64));
+        for ( k=0; k<4; k++ )
+            if ( LastBroadcastString[k] ~= Msg )
+                return false;
+    }
+    for ( k=3; k>0; k-- )
+        LastBroadcastString[k] = LastBroadcastString[k-1];
 
-	LastBroadcastTime = Level.TimeSeconds;
-	return true;
+    LastBroadcastTime = Level.TimeSeconds;
+    return true;
 }
 
 simulated function ClientCallMapVote(String S, int i)
@@ -1828,16 +1828,16 @@ simulated function string CheckShortMapName(coerce string MapName)
 
 event TeamMessage( PlayerReplicationInfo PRI, coerce string S, name Type  )
 {
-	local string c;
+    local string c;
     local int k;
-	// Wait for player to be up to date with replication when joining a server, before stacking up messages
-	if ( Level.NetMode == NM_DedicatedServer || GameReplicationInfo == None )
-		return;
+    // Wait for player to be up to date with replication when joining a server, before stacking up messages
+    if ( Level.NetMode == NM_DedicatedServer || GameReplicationInfo == None )
+        return;
 
-	if( AllowTextToSpeech(PRI, Type) )
-		TextToSpeech( S, TextToSpeechVoiceVolume );
-	if ( Type == 'TeamSayQuiet' )
-		Type = 'TeamSay';
+    if( AllowTextToSpeech(PRI, Type) )
+        TextToSpeech( S, TextToSpeechVoiceVolume );
+    if ( Type == 'TeamSayQuiet' )
+        Type = 'TeamSay';
 
     //replace the color codes
     if(class'UTComp_Settings'.default.bAllowColoredMessages)
@@ -1857,44 +1857,44 @@ event TeamMessage( PlayerReplicationInfo PRI, coerce string S, name Type  )
        S=Repl(S, "^r", "");
     }
     if ( myHUD != None )
-	{   if (class'UTComp_Settings'.default.bEnableColoredNamesInTalk)
-    	   Message( PRI, c$S, Type );
-    	else myHud.Message( PRI, c$S, Type );
+    {   if (class'UTComp_Settings'.default.bEnableColoredNamesInTalk)
+           Message( PRI, c$S, Type );
+        else myHud.Message( PRI, c$S, Type );
     }
-	if ( (Player != None) && (Player.Console != None) )
-	{
-		if ( PRI!=None )
-		{
-			if ( PRI.Team!=None && GameReplicationInfo.bTeamGame)
-			{
-    			if (PRI.Team.TeamIndex==0)
-					c = chr(27)$chr(200)$chr(1)$chr(1);
-    			else if (PRI.Team.TeamIndex==1)
-        			c = chr(27)$chr(125)$chr(200)$chr(253);
-			}
+    if ( (Player != None) && (Player.Console != None) )
+    {
+        if ( PRI!=None )
+        {
+            if ( PRI.Team!=None && GameReplicationInfo.bTeamGame)
+            {
+                if (PRI.Team.TeamIndex==0)
+                    c = chr(27)$chr(200)$chr(1)$chr(1);
+                else if (PRI.Team.TeamIndex==1)
+                    c = chr(27)$chr(125)$chr(200)$chr(253);
+            }
             S = PRI.PlayerName$": "$S;
-		}
-		Player.Console.Chat( c$s, 6.0, PRI );
-	}
+        }
+        Player.Console.Chat( c$s, 6.0, PRI );
+    }
 }
 
 function ServerSay( string Msg )
 {
-	local controller C;
+    local controller C;
 
-	// center print admin messages which start with #
-	if (PlayerReplicationInfo.bAdmin && left(Msg,1) == "#" )
-	{
-		Msg = right(Msg,len(Msg)-1);
-		for( C=Level.ControllerList; C!=None; C=C.nextController )
-			if( C.IsA('PlayerController') )
-			{
-				PlayerController(C).ClearProgressMessages();
-				PlayerController(C).SetProgressTime(6);
-				PlayerController(C).SetProgressMessage(0, Msg, class'Canvas'.Static.MakeColor(255,255,255));
-			}
-		return;
-	}
+    // center print admin messages which start with #
+    if (PlayerReplicationInfo.bAdmin && left(Msg,1) == "#" )
+    {
+        Msg = right(Msg,len(Msg)-1);
+        for( C=Level.ControllerList; C!=None; C=C.nextController )
+            if( C.IsA('PlayerController') )
+            {
+                PlayerController(C).ClearProgressMessages();
+                PlayerController(C).SetProgressTime(6);
+                PlayerController(C).SetProgressMessage(0, Msg, class'Canvas'.Static.MakeColor(255,255,255));
+            }
+        return;
+    }
     if(PlayerReplicationInfo.bOnlySpectator && IsCoaching() && gamereplicationinfo.bTeamGame)
         Level.Game.BroadcastTeam( self, Level.Game.ParseMessageString( Level.Game.BaseMutator , self, Msg ) , 'TeamSay');
     else
@@ -1903,21 +1903,21 @@ function ServerSay( string Msg )
 
 function ServerTeamSay( string Msg )
 {
-	LastActiveTime = Level.TimeSeconds;
+    LastActiveTime = Level.TimeSeconds;
 
-	if( !GameReplicationInfo.bTeamGame)
-	{
-		if(!playerreplicationInfo.bOnlySpectator)
+    if( !GameReplicationInfo.bTeamGame)
+    {
+        if(!playerreplicationInfo.bOnlySpectator)
         {
            Say( Msg );
            return;
-		}
-		else
-		{
-		  SpecDMSay(msg);
-		  return;
-		}
- 	}
+        }
+        else
+        {
+          SpecDMSay(msg);
+          return;
+        }
+    }
     if(GameReplicationInfo.bTeamGame && IsCoaching() && PlayerReplicationInfo.bOnlySpectator)
         SpecLockTeamSay(msg);
     else
@@ -1953,56 +1953,56 @@ function SpecLockTeamSay(string msg)
 
 simulated function Message( PlayerReplicationInfo PRI, coerce string Msg, name MsgType )
 {
-	local Class<LocalMessage> LocalMessageClass2;
+    local Class<LocalMessage> LocalMessageClass2;
 
-	switch( MsgType )
-	{
-		case 'Say':
-			if ( PRI == None )
-				return;
+    switch( MsgType )
+    {
+        case 'Say':
+            if ( PRI == None )
+                return;
 
             if(class'UTComp_Util'.Static.GetUTCompPRI(PRI)==None || class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName=="")
                Msg = PRI.PlayerName$": "$Msg;
             else if(pri.team!= none && PRI.Team.TeamIndex == 0)
                Msg= class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(RedMessageColor)$": "$Msg;
-			else if(pri.team!= none && PRI.Team.TeamIndex == 1)
-			   Msg= class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(blueMessageColor)$": "$Msg;
-			else
+            else if(pri.team!= none && PRI.Team.TeamIndex == 1)
+               Msg= class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(blueMessageColor)$": "$Msg;
+            else
                MSG= class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(yellowMessageColor)$": "$Msg;
-			LocalMessageClass2 = class'SayMessagePlus';
+            LocalMessageClass2 = class'SayMessagePlus';
             break;
 
-		case 'TeamSay':
+        case 'TeamSay':
             if ( PRI == None )
-				return;
-			if(class'UTComp_Util'.Static.GetUTCompPRI(PRI)==None || class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName=="")
+                return;
+            if(class'UTComp_Util'.Static.GetUTCompPRI(PRI)==None || class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName=="")
                Msg = PRI.PlayerName$"("$PRI.GetLocationName()$"): "$Msg;
-			else
-			   Msg = class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(GreenMessageColor)$"("$PRI.GetLocationName()$"): "$Msg;
-			LocalMessageClass2 = class'TeamSayMessagePlus';
+            else
+               Msg = class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(GreenMessageColor)$"("$PRI.GetLocationName()$"): "$Msg;
+            LocalMessageClass2 = class'TeamSayMessagePlus';
             break;
         case 'CoachTeamSay':
             if ( PRI == None )
-				return;
-			if(class'UTComp_Util'.Static.GetUTCompPRI(PRI)==None || class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName=="")
+                return;
+            if(class'UTComp_Util'.Static.GetUTCompPRI(PRI)==None || class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName=="")
                Msg = PRI.PlayerName$"("$PRI.GetLocationName()$"): "$Msg;
-			else
-			   Msg = class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(GrayMessageColor)$"("$PRI.GetLocationName()$"): "$Msg;
-			LocalMessageClass2 = class'CoachTeamSayMessagePlus';
+            else
+               Msg = class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(GrayMessageColor)$"("$PRI.GetLocationName()$"): "$Msg;
+            LocalMessageClass2 = class'CoachTeamSayMessagePlus';
             break;
-		case 'CriticalEvent':
-			LocalMessageClass2 = class'CriticalEventPlus';
-			myHud.LocalizedMessage( LocalMessageClass2, 0, None, None, None, Msg );
-			return;
-		case 'DeathMessage':
-			LocalMessageClass2 = class'xDeathMessage';
-			break;
-		default:
-			LocalMessageClass2 = class'StringMessagePlus';
-			break;
-	}
+        case 'CriticalEvent':
+            LocalMessageClass2 = class'CriticalEventPlus';
+            myHud.LocalizedMessage( LocalMessageClass2, 0, None, None, None, Msg );
+            return;
+        case 'DeathMessage':
+            LocalMessageClass2 = class'xDeathMessage';
+            break;
+        default:
+            LocalMessageClass2 = class'StringMessagePlus';
+            break;
+    }
     if(myHud!=None)
-	myHud.AddTextMessage(Msg,LocalMessageClass2,PRI);
+    myHud.AddTextMessage(Msg,LocalMessageClass2,PRI);
 }
 
 function GetMapList()
@@ -2105,22 +2105,22 @@ function ResetNet()
 
 state PlayerWalking
 {
-  	function bool NotifyLanded(vector HitNormal)
-	{
-		if (DoubleClickDir == DCLICK_Active)
-		{
-			DoubleClickDir = DCLICK_Done;
-			ClearDoubleClick();
-			Pawn.Velocity *= Vect(0.8,0.8,1.0);
-		}
-		else
-			DoubleClickDir = DCLICK_None;
+    function bool NotifyLanded(vector HitNormal)
+    {
+        if (DoubleClickDir == DCLICK_Active)
+        {
+            DoubleClickDir = DCLICK_Done;
+            ClearDoubleClick();
+            Pawn.Velocity *= Vect(0.8,0.8,1.0);
+        }
+        else
+            DoubleClickDir = DCLICK_None;
 
-		if ( Global.NotifyLanded(HitNormal) )
-			return true;
+        if ( Global.NotifyLanded(HitNormal) )
+            return true;
 
-		return false;
-	}
+        return false;
+    }
 }
  /*
 exec function UseNewRotation()
