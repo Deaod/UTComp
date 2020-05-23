@@ -1,5 +1,3 @@
-
-
 class UTComp_SuperShockBeamFire extends SuperShockBeamFire;
 
 event ModeDoFire()

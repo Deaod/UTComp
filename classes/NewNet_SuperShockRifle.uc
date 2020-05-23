@@ -1,0 +1,204 @@
+class NewNet_SuperShockRifle extends UTComp_SuperShockRifle
+	HideDropDown
+	CacheExempt;
+
+var TimeStamp T;
+var MutUTComp M;
+
+struct ReplicatedRotator
+{
+    var int Yaw;
+    var int Pitch;
+};
+
+struct ReplicatedVector
+{
+    var float X;
+    var float Y;
+    var float Z;
+};
+
+replication
+{
+    reliable if( Role<ROLE_Authority )
+        NewNet_ServerStartFire,NewNet_OldServerStartFire;
+    unreliable if(bDemoRecording)
+        SpawnBeamEffect;
+}
+
+function DisableNet()
+{
+    NewNet_SuperShockBeamFire(FireMode[0]).bUseEnhancedNetCode = false;
+    NewNet_SuperShockBeamFire(FireMode[0]).PingDT = 0.00;
+    NewNet_SuperShockBeamFire(FireMode[1]).bUseEnhancedNetCode = false;
+    NewNet_SuperShockBeamFire(FireMode[1]).PingDT = 0.00;
+}
+
+//// client only ////
+simulated event ClientStartFire(int Mode)
+{
+    if(Level.NetMode!=NM_Client || !class'BS_xPlayer'.static.UseNewNet() || NewNet_SuperShockBeamFire(FireMode[Mode]) == None)
+        super.ClientStartFire(mode);
+    else
+        NewNet_ClientStartFire(mode);
+}
+
+simulated event NewNet_ClientStartFire(int Mode)
+{
+    local ReplicatedRotator R;
+    local ReplicatedVector V;
+    local vector Start;
+    local float stamp;
+
+    if ( Pawn(Owner).Controller.IsInState('GameEnded') || Pawn(Owner).Controller.IsInState('RoundEnded') )
+        return;
+    if (Role < ROLE_Authority)
+    {
+        if (AltReadyToFire(Mode) && StartFire(Mode))
+        {
+            if(!ReadyToFire(Mode))
+            {
+                if(T==None)
+                    foreach DynamicActors(class'TimeStamp', T)
+                         break;
+                Stamp = T.ClientTimeStamp;
+                NewNet_OldServerStartFire(Mode,Stamp);
+                return;
+            }
+            R.Pitch = Pawn(Owner).Controller.Rotation.Pitch;
+            R.Yaw = Pawn(Owner).Controller.Rotation.Yaw;
+            STart=Pawn(Owner).Location + Pawn(Owner).EyePosition();
+
+            V.X = Start.X;
+            V.Y = Start.Y;
+            V.Z = Start.Z;
+
+            if(T==None)
+                foreach DynamicActors(class'TimeStamp', T)
+                     break;
+            Stamp = T.ClientTimeStamp;
+
+            NewNet_SuperShockBeamFire(FireMode[mode]).DoInstantFireEffect();
+            NewNet_ServerStartFire(Mode, stamp, R, V);
+        }
+    }
+    else
+    {
+        StartFire(Mode);
+    }
+}
+
+simulated function bool AltReadyToFire(int Mode)
+{
+    local int alt;
+    local float f;
+
+    //There is a very slight descynchronization error on the server
+    // with weapons due to differing deltatimes which accrues to a pretty big
+    // error if people just hold down the button...
+    // This will never cause the weapon to actually fire slower
+    f = 0.015;
+
+    if(!ReadyToFire(Mode))
+        return false;
+
+    if ( Mode == 0 )
+        alt = 1;
+    else
+        alt = 0;
+
+    if ( ((FireMode[alt] != FireMode[Mode]) && FireMode[alt].bModeExclusive && FireMode[alt].bIsFiring)
+		|| !FireMode[Mode].AllowFire()
+		|| (FireMode[Mode].NextFireTime > Level.TimeSeconds + FireMode[Mode].PreFireTime - f) )
+    {
+        return false;
+    }
+
+	return true;
+}
+
+function NewNet_ServerStartFire(byte Mode, float ClientTimeStamp, ReplicatedRotator R, ReplicatedVector V/*, bool bBelievesHit, ReplicatedVector BelievedHLDelta, Actor A, vector HN, vector HL*/)
+{
+	if ( (Instigator != None) && (Instigator.Weapon != self) )
+	{
+		if ( Instigator.Weapon == None )
+			Instigator.ServerChangedWeapon(None,self);
+		else
+			Instigator.Weapon.SynchronizeWeapon(self);
+		return;
+	}
+
+    if(M==None)
+        foreach DynamicActors(class'MutUTComp', M)
+            break;
+
+    NewNet_SuperShockBeamFire(FireMode[Mode]).PingDT = M.ClientTimeStamp - ClientTimeStamp + 1.75*M.AverDT;
+    NewNet_SuperShockBeamFire(FireMode[Mode]).bUseEnhancedNetCode = true;
+    if ( (FireMode[Mode].NextFireTime <= Level.TimeSeconds + FireMode[Mode].PreFireTime)
+        && StartFire(Mode) )
+    {
+        FireMode[Mode].ServerStartFireTime = Level.TimeSeconds;
+        FireMode[Mode].bServerDelayStartFire = false;
+        NewNet_SuperShockBeamFire(FireMode[Mode]).SavedVec.X = V.X;
+        NewNet_SuperShockBeamFire(FireMode[Mode]).SavedVec.Y = V.Y;
+        NewNet_SuperShockBeamFire(FireMode[Mode]).SavedVec.Z = V.Z;
+        NewNet_SuperShockBeamFire(FireMode[Mode]).SavedRot.Yaw = R.Yaw;
+        NewNet_SuperShockBeamFire(FireMode[Mode]).SavedRot.Pitch = R.Pitch;
+        NewNet_SuperShockBeamFire(FireMode[Mode]).bUseReplicatedInfo=IsReasonable(NewNet_SuperShockBeamFire(FireMode[Mode]).SavedVec);
+    }
+    else if ( FireMode[Mode].AllowFire() )
+    {
+        FireMode[Mode].bServerDelayStartFire = true;
+	}
+	else
+		ClientForceAmmoUpdate(Mode, AmmoAmount(Mode));
+}
+
+function NewNet_OldServerStartFire(byte Mode, float ClientTimeStamp)
+{
+    if(M==None)
+        foreach DynamicActors(class'MutUTComp', M)
+            break;
+    NewNet_SuperShockBeamFire(FireMode[Mode]).PingDT = M.ClientTimeStamp - ClientTimeStamp + 1.75*M.AverDT;
+    NewNet_SuperShockBeamFire(FireMode[Mode]).bUseEnhancedNetCode = true;
+    ServerStartFire(mode);
+}
+
+function bool IsReasonable(Vector V)
+{
+    local vector LocDiff;
+    local float clErr;
+
+    if(Owner == none || Pawn(Owner) == none)
+        return true;
+
+    LocDiff = V - (Pawn(Owner).Location + Pawn(Owner).EyePosition());
+    clErr = (LocDiff dot LocDiff);
+
+    return clErr < 750.0;
+}
+
+simulated function SpawnBeamEffect(vector HitLocation, vector HitNormal, vector Start, rotator Dir, int reflectnum)
+{
+    local ShockBeamEffect Beam;
+
+    if(bClientDemoNetFunc)
+    {
+        Start.Z = Start.Z - 64.0;
+    }
+    if ( (Instigator.PlayerReplicationInfo.Team != None) && (Instigator.PlayerReplicationInfo.Team.TeamIndex == 1) )
+        Beam = Spawn(class'NewNet_BlueSuperShockBeam',,, Start, Dir);
+    else
+        Beam = Spawn(class'NewNet_SuperShockBeamEffect',,, Start, Dir);
+    Beam.RemoteRole = ROLE_None;
+    if (ReflectNum != 0) Beam.Instigator = None; // prevents client side repositioning of beam start
+    Beam.AimAt(HitLocation, HitNormal);
+}
+
+
+DefaultProperties
+{
+    ItemName="NewNet SSR"
+    FireModeClass(0)=class'UTCompv18.NewNet_SuperShockBeamFire'
+    FireModeClass(1)=class'UTCompv18.NewNet_SuperShockBeamFire'
+}
