@@ -45,6 +45,8 @@ var bool bDemoStarted;
 var config bool bForward;
 var config bool bEnableForwardVoting;
 
+var config int MaxMultiDodges;
+
 /* ----Known issues ----
    Mutant:  No Bskins/Forcemodel
    Invasion:  No Bskins/forcemodel on bots (but will on players), no warmup, no custom scoreboard
@@ -224,6 +226,11 @@ function ModifyPlayer(Pawn Other)
     {
         SpawnCollisionCopy(Other);
         RemoveOldPawns();
+    }
+
+    if (UTComp_xPawn(Other) != none) {
+        UTComp_xPawn(Other).MaxMultiDodges = MaxMultiDodges;
+        UTComp_xPawn(Other).MultiDodgesRemaining = MaxMultiDodges;
     }
 
     Super.ModifyPlayer(Other);
@@ -974,6 +981,7 @@ static function FillPlayInfo (PlayInfo PlayInfo)
     PlayInfo.AddSetting("UTComp Settings", "bForward", "Enable the Forward gameplay modification.", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "ServerMaxPlayers", "Voting Max Players",255, 1, "Text","2;0:32",,True,True);
     PlayInfo.AddSetting("UTComp Settings", "NumGrenadesOnSpawn", "Number of grenades on spawn.",255, 1, "Text","2;0:32",,True,True);
+    PlayInfo.AddSetting("UTComp Settings", "MaxMultiDodges", "Number of additional dodges.",255, 1, "Text","2;0:99",);
 
     PlayInfo.AddSetting("UTComp Settings", "bEnableVoting", "Enable Voting", 1, 1, "Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableBrightskinsVoting", "Allow players to vote on Brightskins settings.", 1, 1,"Check");
@@ -1000,6 +1008,7 @@ static event string GetDescriptionText(string PropName)
 	    case "bEnableAutoDemoRec": return "Check this to enable a recording of every map, beginning as warmup ends.";
         case "ServerMaxPlayers": return "Set this to the maximum number of players you wish for to allow a client to vote for.";
         case "NumGrenadesOnSpawn": return "Set this to the number of Assault Rifle grenades you wish a player to spawn with.";
+        case "MaxMultiDodges": return "Additional dodges players can perform without landing.";
         case "bEnableTeamOverlay": return "Check this to enable the team overlay.";
         case "bEnableEnhancedNetcode": return "Check this to enable the enhanced netcode.";
         case "bEnableVoting": return "Check this to enable voting.";
@@ -1128,6 +1137,7 @@ defaultproperties
      VotingGametype(7)=(GametypeOptions="?game=XGame.xDoubleDom?timelimit=20?goalscore=0?FriendlyFireScale=0,WeaponStay=true?mutator=XWeapons.MutNoSuperWeapon?DoubleDamage=true?GrenadesOnSpawn=4?TimedOverTimeLength=0",GametypeName="Double Domination")
      VotingGametype(8)=(GametypeOptions="?game=XGame.xBombingRun?timelimit=20?goalscore=0?FriendlyFireScale=0,WeaponStay=True?mutator=XWeapons.MutNoSuperWeapon?DoubleDamage=True?GrenadesOnSpawn=4?TimedOverTimeLength=0",GametypeName="Bombing Run")
 
+     MaxMultiDodges=1
 
      FriendlyName="UTComp Version 1.8"
      Description="A mutator for warmup, brightskins, hitsounds, and various other features."

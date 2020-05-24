@@ -174,30 +174,37 @@ simulated function ChangeDeathMessageOrder()
 
 event PlayerTick(float deltatime)
 {
-     if(RepInfo==None)
+    if(RepInfo==None)
         foreach DynamicActors(Class'UTComp_ServerReplicationInfo', RepInfo)
             break;
-     if(uWarmup==None)
-       foreach Dynamicactors(class'UTComp_Warmup', uWarmup)
-           break;
-     if(UTCompPRI==None)
+    if(uWarmup==None)
+        foreach Dynamicactors(class'UTComp_Warmup', uWarmup)
+            break;
+    if(UTCompPRI==None)
         UTCompPRI=class'UTComp_Util'.static.GetUTCompPRIFor(self);
-     if(Level.NetMode!=NM_DedicatedServer && !Blah && PlayerReplicationInfo !=None && PlayerReplicationInfo.CustomReplicationInfo!=None && myHud !=None && RepInfo!=None && UTCompPRI!=None)
-     {
-         if(uWarmup==None || !uWarmup.bInWarmup)
-             StartDemo();
-         InitializeStuff();
-         blah=true;
-     }
+    if(Level.NetMode!=NM_DedicatedServer && !Blah && PlayerReplicationInfo !=None && PlayerReplicationInfo.CustomReplicationInfo!=None && myHud !=None && RepInfo!=None && UTCompPRI!=None)
+    {
+        if(uWarmup==None || !uWarmup.bInWarmup)
+            StartDemo();
+        InitializeStuff();
+        blah=true;
+    }
 
-     if(bWaitingOnGrouping)
-     {
-         if(Level.TimeSeconds > WaitingOnGroupingTime)
-         {
-             DelayedHitSound(DelayedDamageTotal, bWaitingEnemy);
-             bWaitingOnGrouping=false;
-         }
-     }
+    if(bWaitingOnGrouping)
+    {
+        if(Level.TimeSeconds > WaitingOnGroupingTime)
+        {
+            DelayedHitSound(DelayedDamageTotal, bWaitingEnemy);
+            bWaitingOnGrouping=false;
+        }
+    }
+
+    if (DoubleClickDir == DCLICK_Active &&
+        UTComp_xPawn(Pawn) != none && UTComp_xPawn(Pawn).MultiDodgesRemaining > 0
+    ) {
+        UTComp_xPawn(Pawn).MultiDodgesRemaining -= 1;
+        DoubleClickDir = DCLICK_None;
+    }
 
     Super.PlayerTick(deltatime);
 }
