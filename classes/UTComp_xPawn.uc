@@ -19,7 +19,6 @@ var color BrightSkinColors[8];
 var byte oldteam;
 
 var EDoubleClickDir OldDodgeDir;
-var int MaxMultiDodges;
 var int MultiDodgesRemaining;
 
 replication
@@ -31,7 +30,7 @@ replication
 event Landed(vector HitNormal)
 {
     super.Landed(HitNormal);
-    MultiDodgesRemaining = MaxMultiDodges;
+    MultiDodgesRemaining = RepInfo.MaxMultiDodges;
 }
 
 simulated function UpdatePrecacheMaterials()
@@ -897,6 +896,5 @@ defaultproperties
      lgcolor=(B=80,G=40,R=40)
      beffectscleared=True
 
-     MaxMultiDodges=1
      MultiDodgesRemaining=1
 }

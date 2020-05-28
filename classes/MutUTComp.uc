@@ -232,8 +232,7 @@ function ModifyPlayer(Pawn Other)
     }
 
     if (UTComp_xPawn(Other) != none) {
-        UTComp_xPawn(Other).MaxMultiDodges = MaxMultiDodges;
-        UTComp_xPawn(Other).MultiDodgesRemaining = MaxMultiDodges;
+        UTComp_xPawn(Other).MultiDodgesRemaining = RepInfo.MaxMultiDodges;
     }
 
     Super.ModifyPlayer(Other);
