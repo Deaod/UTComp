@@ -47,6 +47,9 @@ var config bool bEnableForwardVoting;
 
 var config int MaxMultiDodges;
 
+var config int MinNetSpeed;
+var config int MaxNetSpeed;
+
 /* ----Known issues ----
    Mutant:  No Bskins/Forcemodel
    Invasion:  No Bskins/forcemodel on bots (but will on players), no warmup, no custom scoreboard
@@ -466,6 +469,9 @@ function SpawnReplicationClass()
     RepInfo.bEnableTimedOvertime=bEnableTimedOvertime;
     RepInfo.bEnableEnhancedNetcode=bEnableEnhancedNetcode;
     RepInfo.bEnableEnhancedNetcodeVoting=bEnableEnhancedNetcodeVoting;
+    RepInfo.MaxMultiDodges = MaxMultiDodges;
+    RepInfo.MinNetSpeed = MinNetSpeed;
+    RepInfo.MaxNetSpeed = MaxNetSpeed;
     RepInfo.bForward = bForward;
     RepInfo.bEnableForwardVoting= bEnableForwardVoting;
     for(i=0; i<VotingGametype.Length && i<ArrayCount(RepInfo.VotingNames); i++)
@@ -978,18 +984,20 @@ static function FillPlayInfo (PlayInfo PlayInfo)
     PlayInfo.AddSetting("UTComp Settings", "bEnableAutoDemoRec", "Enable Serverside Demo-Recording", 1, 1, "Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableTeamOverlay", "Enable Team Overlay", 1, 1, "Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableEnhancedNetcode", "Enable Enhanced Netcode", 1, 1, "Check");
-    PlayInfo.AddSetting("UTComp Settings", "bForward", "Enable the Forward gameplay modification.", 1, 1,"Check");
+    PlayInfo.AddSetting("UTComp Settings", "bForward", "Enable the Forward gameplay modification", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "ServerMaxPlayers", "Voting Max Players",255, 1, "Text","2;0:32",,True,True);
-    PlayInfo.AddSetting("UTComp Settings", "NumGrenadesOnSpawn", "Number of grenades on spawn.",255, 1, "Text","2;0:32",,True,True);
-    PlayInfo.AddSetting("UTComp Settings", "MaxMultiDodges", "Number of additional dodges.",255, 1, "Text","2;0:99",);
+    PlayInfo.AddSetting("UTComp Settings", "NumGrenadesOnSpawn", "Number of grenades on spawn",255, 1, "Text","2;0:32",,True,True);
+    PlayInfo.AddSetting("UTComp Settings", "MaxMultiDodges", "Number of additional dodges",255, 1, "Text","2;0:99",);
+    PlayInfo.AddSetting("UTComp Settings", "MinNetSpeed", "Minimum NetSpeed for Clients",255, 1, "Text","0;0:100000",);
+    PlayInfo.AddSetting("UTComp Settings", "MaxNetSpeed", "Maximum NetSpeed for Clients",255, 1, "Text","0;0:100000",);
 
     PlayInfo.AddSetting("UTComp Settings", "bEnableVoting", "Enable Voting", 1, 1, "Check");
-    PlayInfo.AddSetting("UTComp Settings", "bEnableBrightskinsVoting", "Allow players to vote on Brightskins settings.", 1, 1,"Check");
-    PlayInfo.AddSetting("UTComp Settings", "bEnableWarmupVoting", "Allow players to vote on Warmup setting.", 1, 1,"Check");
-    PlayInfo.AddSetting("UTComp Settings", "bEnableHitsoundsVoting", "Allow players to vote on Hitsounds settings.", 1, 1,"Check");
+    PlayInfo.AddSetting("UTComp Settings", "bEnableBrightskinsVoting", "Allow players to vote on Brightskins settings", 1, 1,"Check");
+    PlayInfo.AddSetting("UTComp Settings", "bEnableWarmupVoting", "Allow players to vote on Warmup setting", 1, 1,"Check");
+    PlayInfo.AddSetting("UTComp Settings", "bEnableHitsoundsVoting", "Allow players to vote on Hitsounds settings", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableTeamOverlayVoting", "Allow players to vote on team overlay setting", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableEnhancedNetcodeVoting", "Allow players to vote on enhanced netcode setting", 1, 1,"Check");
-    PlayInfo.AddSetting("UTComp Settings", "bEnableMapVoting", "Allow players to vote for map changes.", 1, 1,"Check");
+    PlayInfo.AddSetting("UTComp Settings", "bEnableMapVoting", "Allow players to vote for map changes", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "WarmupTime", "Warmup Time",1, 1, "Text","0;0:1800",,True,True);
 
 
@@ -1020,6 +1028,8 @@ static event string GetDescriptionText(string PropName)
         case "bEnableMapVoting": return "Check this to enable voting for Maps.";
         case "WarmupTime": return "Time for warmup. Set this to 0 for unlimited, otherwise it is the time in seconds.";
         case "bForward": return "Check this to enable the Forward gameplay modification.";
+        case "MinNetSpeed": return "Minimum NetSpeed for clients on this server";
+        case "MaxNetSpeed": return "Maximum NetSpeed for clients on this server";
     }
 	return Super.GetDescriptionText(PropName);
 }
@@ -1138,6 +1148,8 @@ defaultproperties
      VotingGametype(8)=(GametypeOptions="?game=XGame.xBombingRun?timelimit=20?goalscore=0?FriendlyFireScale=0,WeaponStay=True?mutator=XWeapons.MutNoSuperWeapon?DoubleDamage=True?GrenadesOnSpawn=4?TimedOverTimeLength=0",GametypeName="Bombing Run")
 
      MaxMultiDodges=1
+     MinNetSpeed=15000
+     MaxNetSpeed=25000
 
      FriendlyName="UTComp Version 1.8"
      Description="A mutator for warmup, brightskins, hitsounds, and various other features."

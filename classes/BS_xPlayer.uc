@@ -206,6 +206,13 @@ event PlayerTick(float deltatime)
         DoubleClickDir = DCLICK_None;
     }
 
+    if (Level.NetMode == NM_Client && RepInfo != none) {
+        if (Player.CurrentNetSpeed > RepInfo.MaxNetSpeed) {
+            SetNetSpeed(RepInfo.MaxNetSpeed);
+        else if (Player.CurrentNetSpeed < RepInfo.MinNetSpeed)
+            SetNetSpeed(RepInfo.MinNetSpeed);
+    }
+
     Super.PlayerTick(deltatime);
 }
 

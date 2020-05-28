@@ -37,6 +37,10 @@ var bool bEnableEnhancedNetCodeVoting;
 var bool bForward;
 var bool bEnableForwardVoting;
 
+var int MaxMultiDodges;
+var int MinNetSpeed;
+var int MaxNetSpeed;
+
 
 replication
 {
