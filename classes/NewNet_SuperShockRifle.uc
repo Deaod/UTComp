@@ -186,10 +186,13 @@ simulated function SpawnBeamEffect(vector HitLocation, vector HitNormal, vector 
     {
         Start.Z = Start.Z - 64.0;
     }
-    if ( (Instigator.PlayerReplicationInfo.Team != None) && (Instigator.PlayerReplicationInfo.Team.TeamIndex == 1) )
+    if ( (Instigator.PlayerReplicationInfo.Team != None) && (Instigator.PlayerReplicationInfo.Team.TeamIndex == 1) ) {
         Beam = Spawn(class'NewNet_BlueSuperShockBeam',,, Start, Dir);
-    else
+        Beam.CoilClass = class'NewNet_Client_ShockBeamCoilBlue';
+    } else {
         Beam = Spawn(class'NewNet_SuperShockBeamEffect',,, Start, Dir);
+        Beam.CoilClass = class'NewNet_Client_ShockBeamCoilB';
+    }
     Beam.RemoteRole = ROLE_None;
     if (ReflectNum != 0) Beam.Instigator = None; // prevents client side repositioning of beam start
     Beam.AimAt(HitLocation, HitNormal);
