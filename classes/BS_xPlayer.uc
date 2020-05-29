@@ -207,7 +207,7 @@ event PlayerTick(float deltatime)
     }
 
     if (Level.NetMode == NM_Client && RepInfo != none) {
-        if (Player.CurrentNetSpeed > RepInfo.MaxNetSpeed) {
+        if (Player.CurrentNetSpeed > RepInfo.MaxNetSpeed)
             SetNetSpeed(RepInfo.MaxNetSpeed);
         else if (Player.CurrentNetSpeed < RepInfo.MinNetSpeed)
             SetNetSpeed(RepInfo.MinNetSpeed);
