@@ -15,6 +15,7 @@ var automated moCheckBox ch_PickupStats;
 var automated moCheckBox ch_InfoBox;
 var automated moCheckBox ch_FootSteps;
 var automated moCheckBox ch_MatchHudColor;
+var automated moCheckBox ch_UseEyeHeightAlgo;
 var automated moCheckBox ch_UseNewNet;
 
 var automated moComboBox co_CrosshairScale;
@@ -29,6 +30,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     ch_PickupStats.Checked(class'UTComp_Scoreboard'.default.bDrawPickups);
     ch_FootSteps.Checked(class'UTComp_xPawn'.default.bPlayOwnFootSteps);
     ch_MatchHudColor.Checked(class'UTComp_HudSettings'.default.bMatchHudColor);
+    ch_UseEyeHeightAlgo.Checked(class'UTComp_Settings'.default.bUseNewEyeHeightAlgorithm);
     ch_UseNewNet.Checked(class'UTComp_Settings'.default.bEnableEnhancedNetCode);
 }
 
@@ -46,6 +48,7 @@ function InternalOnChange( GUIComponent C )
         case ch_PickupStats:  class'UTComp_Scoreboard'.default.bDrawPickups=ch_PickupStats.IsChecked(); break;
         case ch_FootSteps: class'UTComp_xPawn'.default.bPlayOwnFootSteps=ch_FootSteps.IsChecked(); break;
         case ch_MatchHudColor:  class'UTComp_HudSettings'.default.bMatchHudColor=ch_MatchHudColor.IsChecked(); break;
+        case ch_UseEyeHeightAlgo: class'UTComp_Settings'.default.bUseNewEyeHeightAlgorithm=ch_UseEyeHeightAlgo.IsChecked(); break;
         case ch_UseNewNet:  class'UTComp_Settings'.default.bEnableEnhancedNetCode=ch_UseNewNet.IsChecked();
                             BS_xPlayer(PlayerOwner()).TurnOffNetCode(); break;
     }
@@ -71,25 +74,15 @@ function bool InternalOnKeyEvent(out byte Key, out byte State, float delta)
 defaultproperties
 {
 
-     Begin Object Class=GUILabel Name=InfoLabel
-         Caption="--------Information Box--------"
+     Begin Object Class=GUILabel Name=ScoreboardLabel
+         Caption="----------Scoreboard----------"
          TextColor=(B=0,G=200,R=230)
 		WinWidth=1.000000
 		WinHeight=0.060000
 		WinLeft=0.250000
-		WinTop=0.487629
+		WinTop=0.290000
      End Object
-     l_InfoTitle=GUILabel'UTCompv18.UTComp_Menu_Miscellaneous.InfoLabel'
-
-     Begin Object Class=GUILabel Name=GenericLabel
-         Caption="----Generic UT2004 Settings----"
-         TextColor=(B=0,G=200,R=230)
-		WinWidth=1.000000
-		WinHeight=0.060000
-		WinLeft=0.250000
-		WinTop=0.579382
-     End Object
-     l_GenericTitle=GUILabel'UTCompv18.UTComp_Menu_Miscellaneous.GenericLabel'
+     l_ScoreboardTitle=GUILabel'ScoreboardLabel'
 
      Begin Object Class=moCheckBox Name=ScoreboardCheck
          Caption="Use UTComp enhanced scoreboard."
@@ -97,7 +90,7 @@ defaultproperties
 		WinWidth=0.500000
 		WinHeight=0.030000
 		WinLeft=0.250000
-		WinTop=0.360000
+		WinTop=0.330000
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
      ch_UseScoreBoard=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.ScoreboardCheck'
@@ -105,8 +98,8 @@ defaultproperties
      Begin Object Class=moCheckBox Name=StatsCheck
          Caption="Show weapon stats on scoreboard."
          OnCreateComponent=StatsCheck.InternalOnCreateComponent
-         WinTop=0.410000
          WinLeft=0.250000
+         WinTop=0.370000
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
      ch_WepStats=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.StatsCheck'
@@ -114,11 +107,21 @@ defaultproperties
      Begin Object Class=moCheckBox Name=PickupCheck
          Caption="Show pickup stats on scoreboard."
          OnCreateComponent=PickupCheck.InternalOnCreateComponent
-         WinTop=0.460000
          WinLeft=0.250000
+         WinTop=0.410000
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
      ch_PickupStats=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.PickupCheck'
+
+     Begin Object Class=GUILabel Name=InfoLabel
+         Caption="--------Information Box--------"
+         TextColor=(B=0,G=200,R=230)
+		WinWidth=1.000000
+		WinHeight=0.060000
+		WinLeft=0.250000
+		WinTop=0.450000
+     End Object
+     l_InfoTitle=GUILabel'UTCompv18.UTComp_Menu_Miscellaneous.InfoLabel'
 
      Begin Object Class=moCheckBox Name=InfoCheck
          Caption="Show UTComp info box on connect."
@@ -126,10 +129,20 @@ defaultproperties
 		WinWidth=0.500000
 		WinHeight=0.030000
 		WinLeft=0.250000
-		WinTop=0.543505
+		WinTop=0.490000
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
      ch_InfoBox=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.InfoCheck'
+
+     Begin Object Class=GUILabel Name=GenericLabel
+         Caption="----Generic UT2004 Settings----"
+         TextColor=(B=0,G=200,R=230)
+		WinWidth=1.000000
+		WinHeight=0.060000
+		WinLeft=0.250000
+		WinTop=0.530000
+     End Object
+     l_GenericTitle=GUILabel'UTCompv18.UTComp_Menu_Miscellaneous.GenericLabel'
 
      Begin Object Class=moCheckBox Name=FootCheck
          Caption="Play own footstep sounds."
@@ -137,7 +150,7 @@ defaultproperties
 		WinWidth=0.500000
 		WinHeight=0.030000
 		WinLeft=0.250000
-		WinTop=0.633196
+		WinTop=0.570000
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
      ch_FootSteps=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.FootCheck'
@@ -148,31 +161,21 @@ defaultproperties
 		WinWidth=0.500000
 		WinHeight=0.030000
 		WinLeft=0.250000
-		WinTop=0.675774
+		WinTop=0.610000
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
      ch_MatchHudColor=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.HudColorCheck'
 
-     Begin Object Class=moCheckBox Name=NewNetCheck
-         Caption="Enable Enhanced Netcode"
-         OnCreateComponent=NewNetCheck.InternalOnCreateComponent
-		WinWidth=0.500000
-		WinHeight=0.030000
-		WinLeft=0.250000
-		WinTop=0.751134
+     Begin Object Class=moCheckBox Name=UseEyeHeightAlgoCheck
+         Caption="Use New EyeHeight Algorithm"
+         OnCreateComponent=HudColorCheck.InternalOnCreateComponent
+         WinWidth=0.500000
+         WinHeight=0.030000
+         WinLeft=0.250000
+         WinTop=0.650000
          OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
      End Object
-     ch_UseNewNet=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.NewNetCheck'
-
-     Begin Object Class=GUILabel Name=ScoreboardLabel
-         Caption="----------Scoreboard----------"
-         TextColor=(B=0,G=200,R=230)
-		WinWidth=1.000000
-		WinHeight=0.060000
-		WinLeft=0.250000
-		WinTop=0.310309
-     End Object
-     l_ScoreboardTitle=GUILabel'ScoreboardLabel'
+     ch_UseEyeHeightAlgo=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.UseEyeHeightAlgoCheck'
 
      Begin Object Class=GUILabel Name=NewNetLabel
      Caption="-----------Net Code-----------"
@@ -180,8 +183,19 @@ defaultproperties
 		WinWidth=1.000000
 		WinHeight=0.060000
 		WinLeft=0.250000
-		WinTop=0.697833
+		WinTop=0.690000
      End Object
      l_NewNet=GUILabel'NewNetLabel'
+
+     Begin Object Class=moCheckBox Name=NewNetCheck
+         Caption="Enable Enhanced Netcode"
+         OnCreateComponent=NewNetCheck.InternalOnCreateComponent
+		WinWidth=0.500000
+		WinHeight=0.030000
+		WinLeft=0.250000
+		WinTop=0.730000
+         OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
+     End Object
+     ch_UseNewNet=moCheckBox'UTCompv18.UTComp_Menu_Miscellaneous.NewNetCheck'
 
 }
