@@ -67,6 +67,7 @@ var config bool bEnableDarkSkinning;
 var config array<ClanSkinTripple> ClanSkins;
 var config array<string> DisallowedEnemyNames;
 var config bool bEnemyBasedModels;
+var config bool bUseNewEyeHeightAlgorithm;
 
 defaultproperties
 {

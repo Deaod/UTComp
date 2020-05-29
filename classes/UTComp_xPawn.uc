@@ -21,6 +21,11 @@ var byte oldteam;
 var EDoubleClickDir OldDodgeDir;
 var int MultiDodgesRemaining;
 
+// UpdateEyeHeight related
+var float OldBaseEyeHeight;
+var float EyeHeightOffset;
+var vector OldLocation;
+
 replication
 {
   unreliable if (Role==Role_authority)
@@ -877,6 +882,48 @@ simulated function bool ShouldUseModel(string S)
             return false;
     }
     return true;
+}
+
+event UpdateEyeHeight( float DeltaTime )
+{
+    local vector Delta;
+
+    if (class'UTComp_Settings'.default.bUseNewEyeHeightAlgorithm == false) {
+        super.UpdateEyeHeight(DeltaTime);
+        return;
+    }
+
+    if ( Controller == None )
+    {
+        EyeHeight = 0;
+        return;
+    }
+    if ( Level.NetMode == NM_DedicatedServer )
+    {
+        Eyeheight = BaseEyeheight;
+        return;
+    }
+    if ( bTearOff )
+    {
+        EyeHeight = Default.BaseEyeheight;
+        bUpdateEyeHeight = false;
+        return;
+    }
+
+    if (Controller.WantsSmoothedView()) {
+        Delta = Location - OldLocation;
+        if (Abs(Delta.Z) >= 4.0) // Step detection heuristic
+            EyeHeightOffset += FClamp(Delta.Z, -MAXSTEPHEIGHT, MAXSTEPHEIGHT);
+    }
+    OldLocation = Location;
+
+    EyeHeightOffset += BaseEyeHeight - OldBaseEyeHeight;
+    OldBaseEyeHeight = BaseEyeHeight;
+
+    EyeHeightOffset *= (1.0 - FMin(DeltaTime, 0.1)) / Level.TimeDilation;
+    EyeHeight = BaseEyeHeight - EyeHeightOffset;
+
+    Controller.AdjustView(DeltaTime);
 }
 
 defaultproperties
