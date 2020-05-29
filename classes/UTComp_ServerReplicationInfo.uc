@@ -52,7 +52,8 @@ replication
         bEnableMapVoting, bEnableGametypeVoting, VotingNames,
         benableDoubleDamage, ServerMaxPlayers, bEnableTimedOvertime,
         MaxPlayersClone, bEnableAdvancedVotingOptions, VotingOptions, LinePRI, bEnableTimedOvertimeVoting,
-        bEnableEnhancedNetCodeVoting,bEnableEnhancedNetCode, bEnableWarmupVoting, bForward, bEnableForwardVoting;
+        bEnableEnhancedNetCodeVoting,bEnableEnhancedNetCode, bEnableWarmupVoting, bForward, bEnableForwardVoting,
+        MaxMultiDodges, MinNetSpeed, MaxNetSpeed;
 }
 
 defaultproperties
