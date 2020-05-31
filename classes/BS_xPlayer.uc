@@ -267,14 +267,14 @@ simulated function InitializeScoreboard()
        if(class'UTComp_Settings'.default.bUseDefaultScoreboard)
        {
            if(gamereplicationinfo.bTeamGame)
-               NewScoreboardClass=class<Scoreboard>(DynamicLoadObject("UTCompv18.UTComp_ScoreBoardTDM", class'Class'));
+               NewScoreboardClass=class'UTCompv18.UTComp_ScoreBoardTDM';
            else
-               NewScoreboardClass=class<Scoreboard>(DynamicLoadObject("UTCompv18.UTComp_ScoreBoardDM", class'Class'));
+               NewScoreboardClass=class'UTCompv18.UTComp_ScoreBoardDM';
            ClientChangedScoreboard=True;
         }
    }
    else if(ClientChangedScoreBoard && !class'UTComp_Settings'.default.bUseDefaultScoreboard)
-       NewScoreboardClass=class<Scoreboard>(DynamicLoadObject("UTCompv18.UTComp_ScoreBoard", class'Class'));
+       NewScoreboardClass=class'UTCompv18.UTComp_ScoreBoard';
    if(myHUD!=None && NewScoreBoardClass!=None)
         myHUD.SetScoreBoardClass( NewScoreboardClass);
 }
