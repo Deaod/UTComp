@@ -11,6 +11,9 @@ class UTComp_Settings extends Info
     cacheexempt
     hidecategories(Movement,Collision,Lighting,LightColor,Karma,Force);
 
+#exec AUDIO IMPORT FILE="Sounds/HitSound.wav" NAME="HitSound" GROUP="Sounds"
+#exec AUDIO IMPORT FILE="Sounds/HitSoundFriendly.wav" NAME="HitSoundFriendly" GROUP="Sounds"
+
 struct ColoredNamePair
 {
     var Color SavedColor[20];
@@ -75,8 +78,8 @@ defaultproperties
     bStats=true
     DemoRecordingMask="%d-(%t)-%m-%p"
     ScreenShotMask="%d-(%t)-%m-%p"
-    FriendlySound="utcompv17a.Sounds.HitSoundFriendly"
-    EnemySound="utcompv17a.Sounds.HitSound"
+    FriendlySound="utcompv18.Sounds.HitSoundFriendly"
+    EnemySound="utcompv18.Sounds.HitSound"
     bEnableHitSounds=true
     HitSoundVolume=1.0
     bCPMAStyleHitsounds=true
