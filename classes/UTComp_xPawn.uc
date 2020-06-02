@@ -920,7 +920,7 @@ event UpdateEyeHeight( float DeltaTime )
     EyeHeightOffset += BaseEyeHeight - OldBaseEyeHeight;
     OldBaseEyeHeight = BaseEyeHeight;
 
-    EyeHeightOffset *= (1.0 - FMin(DeltaTime, 0.1)) / Level.TimeDilation;
+    EyeHeightOffset *= (1.0 - FMin(DeltaTime, 0.1) * Level.TimeDilation);
     EyeHeight = BaseEyeHeight - EyeHeightOffset;
 
     Controller.AdjustView(DeltaTime);
