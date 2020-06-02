@@ -912,7 +912,8 @@ event UpdateEyeHeight( float DeltaTime )
 
     if (Controller.WantsSmoothedView()) {
         Delta = Location - OldLocation;
-        if (Abs(Delta.Z) >= 4.0) // Step detection heuristic
+        // Step detection heuristic
+        if (Abs(Delta.Z) > DeltaTime * GroundSpeed)
             EyeHeightOffset += FClamp(Delta.Z, -MAXSTEPHEIGHT, MAXSTEPHEIGHT);
     }
     OldLocation = Location;
