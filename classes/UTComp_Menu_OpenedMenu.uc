@@ -199,7 +199,7 @@ DefaultProperties
 		 WinLeft=0.000000
 		 WinTop=0.727502
          TextAlign=TXTA_Center
-         Caption="Visit ut2004.gameamp.com for new versions."
+         Caption="Visit https://GitHub.com/Deaod/UTComp for new versions."
      End Object
      l_Mode(4)=GUILabel'NewVersions'
 
