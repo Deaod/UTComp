@@ -1,0 +1,1592 @@
+<html><head><title>UTComp v1.7a Readme</title></head></html>
+<body>
+<a name="readmetop"></a>
+<center><h2>UTComp v1.7a Readme</h2></center>
+
+<hr>
+<b><font size="+1">Table of Contents</font></b>
+
+<dl>
+<dt>1. Quickstarts
+	<dd>1.1 <a href="#topic11">Player Quickstart</a>
+	<dd>1.2 <a href="#topic12">Server Quickstart</a>
+<dt>2. Player Setup
+	<dd>2.1 <a href="#topic21">Basic Player Setup Information</a>
+	<dd>2.2 <a href="#topic22">Console Commands</a>
+	<dd>2.3 <a href="#topic23">Spectator Console Commands</a>
+	<dd>2.4 <a href="#topic24">Main GUI Setup</a>
+	<dd>2.5 <a href="#topic25">Skins/Models</a>
+	<dd>2.6 <a href="#topic26">Colored Names</a>
+	<dd>2.7 <a href="#topic27">Team Overlay</a>
+	<dd>2.8 <a href="#topic28">Crosshairs</a>
+	<dd>2.9 <a href="#topic29">Hitsounds</a>
+	<dd>2.10 <a href="#topic210">Voting</a>
+	<dd>2.11 <a href="#topic211">Auto Demo/SS</a>
+	<dd>2.12 <a href="#topic212">Miscellaneous</a>
+	<dd>2.13 <a href="#topic213">Clan Arena Gametype</a>
+<dt>3. Server Setup
+	<dd>3.1 <a href="#topic31">Basic Server Setup Information</a>
+	<dd>3.2 <a href="#topic32">Installing the Files</a>
+	<dd>3.3 <a href="#topic33">Modifying your Server ini</a>
+	<dd>3.4 <a href="#topic34">Making sure UTComp loads</a>
+	<dd>3.5 <a href="#topic35">Webadmin</a>
+	<dd>3.6 <a href="#topic36">Server ini advanced settings</a>
+	<dd>3.7 <a href="#topic37">Epic Mapvote Information</a>
+	<dd>3.8 <a href="#topic38">Clan Arena Gametype</a>
+<dt>4. Other
+	<dd>4.1 <a href="#topic41">Enhanced Netcode Information</a>
+	<dd>4.2 <a href="#topic42">Forward Gametype Information</a>
+	<dd>4.3 <a href="#topic43">Changelog</a>
+	<dd>4.4 <a href="#topic44">Known Issues</a>
+	<dd>4.5 <a href="#topic45">FAQ</a>
+	<dd>4.6 <a href="#topic46">Credits</a>
+</dl>
+
+<hr>
+<b><font size="+1"><a name="topic11">1.1 Player Quickstart</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+This version of UTComp is <b>recommended for clients updated to version 3369</b> or higher. Using an older version should work, but it has not been extensively tested.
+	<ul><li>If you downloaded the <b>zip</b> version:
+		<ul><li>Extract the contents of the .zip file to your /UT2004 main folder. Make sure to keep the folder structure intact.
+		<li>Press F5 the first time you join a UTComp server to configure and save your UTComp settings.
+		<li>Press F5 and click on the <i>ready</i> button to start the game.</ul>
+
+	<li>If you downloaded the <b>ut4mod</b> version:
+		<ul><li>Extract the contents of the .zip file anywhere on your hard drive.
+		<li>Double Click the .ut4mod file, and follow the onscreen instructions.
+		<li>Press F5 the first time you join a UTComp server to configure and save your UTComp settings.
+		<li>Press F5 and click on the <i>ready</i> button to start the game.</ul>
+	</ul>
+
+
+<hr>
+<b><font size="+1"><a name="topic12">1.2 Server Quickstart</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+This version of UTComp is <b>recommended for servers updated to version 3369</b> or higher. Using an older version should work, but it has not been extensively tested. We also strongly suggest that server admins, especially on linux and osx, download and use the .zip version.
+	<ul><li>If you downloaded the <b>zip</b> version:
+		<ul><li>Extract the contents of the .zip file to your /UT2004 main folder. Make sure to keep the folder structure intact.
+		<li>In your server ini, (ut2004.ini by default) add the following line anywhere in the [Engine.GameEngine] section:
+			<dl><dd>ServerPackages=utcompv17a</dl>
+		<li>Load the mutator, either with webadmin, with the &quot;host game&quot; interface, or by adding ?Mutator=utcompv17a.MutUTComp to your server command line.</ul>
+	<li>If you downloaded the <b>ut4mod</b> version:
+		<ul><li>Extract the contents of the .zip file anywhere on your hard drive.
+		<li>Double Click the .ut4mod file, and follow the onscreen instructions.
+		<li>In your server ini, (ut2004.ini by default) add the following line anywhere in the [Engine.GameEngine] section:
+			<dl><dd>ServerPackages=utcompv17a</dl>
+		<li>Load the mutator, either with webadmin, with the &quot;host game&quot; interface, or by adding ?Mutator=utcompv17a.MutUTComp to your server command line.</ul>
+	</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic21">2.1 Player Basic Setup Information</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+Instructions on how to install the files can be found in the <a href="#topic11">Player Quickstart</a> section. This <i>Basic Setup</i> section mostly discusses the most important settings for a variety of gametypes. Reading through this should be enough to get a good understanding of UTComp's features. For a full list of everything the mutator does, read the other 2.x Client Setup sections.<p>
+
+<font size="+1" color="#CC0033"><b>Warning:</b></font> This version of UTComp is <b>recommended for clients updated to version 3369</b> or higher. You can download the patch from <a href="http://www.beyondunreal.com/main/ut2004/ut2004essential.php" target="_newwindow">BeyondUnreal</a>. It is still possible to use UTComp with older versions, but most of the testing has been done using version <b>3369</b>, therefore using this version of UTComp on older UT2004 versions is strongly discouraged.<p>
+<ul>	<li><b>Skins/Models</b>
+		<ul type="square"><li>UTComp has three Skins types: <i>Epic Style</i> (normal, not modified skins), <i>Brighter Epic Style</i> (same as normal, but with a glow effect that makes them brighter) and <i>UTComp Style</i>. The last two brightskins types can be disabled by the server. That server setting can also be voted in the Voting menu by players.
+		<li>The brightskins system also contains clanskins. You start by selecting a team, or creating a clanskin (more on that below), and then choosing skin type, skin color, and model for that team/clanskin. This allows players to have different brightskins types on different teams.
+		<li>A potentially confusing setting is the <i>Base on Enemy/Teammate</i> checkbox. By default, this checkbox is not clicked, which means that you can set Brightskins and Models for players on the Red Team, and different ones (preferrably!) for players on the Blue Team. If you enable <i>Base on Enemy/Teammate</i>, you can set up Brightskins and models for Teammates and Enemies, regardless of whether you're in the Blue or Red team.
+		<li>Clanskins are a system that allow you to set a Custom Skin and Model to specific teammates, based on name. For example, if you wanted your teammate [abc]-mrteammate to be in a different skin and model than regular teammates, you would click the "Add" button and type in <i>mrteammate</i>. This will allow you to have different settings for all teammates that have <i>mrteammate</i> in their name. You could also just type in the clan tag <i>[abc]</i>, that way every player in your team with <i>[abc]</i> in their name could have different settings.
+		</ul>
+	<li><b>Colored Names</b>
+		<ul type="square"><li>UTComp fully supports Colored Names and Colored text/death messages. The system to set up your colored name uses a slider to select a letter, and three sliders for color. Basically, you move the <i>letter selection</i> slider under your name to the letter for which you want to change colors, and then select a color from the bottom <i>color</i> sliders.
+		<li>You can save and restore different color names using the provided buttons, for easy access.
+		<li>You can also select where you want colored names to be displayed from the upper checkboxes.
+		</ul>
+	<li><b>Team Overlay</b>
+		<ul type="square"><li>Team Overlay is a feature that draws a window on screen, showing your teammate's locations, health, armor, powerups and current weapon. It's mostly useful for team deathmatch games, giving players more info about their teammate's play, without needing to rely on voice communication and/or teamsay as much.
+		<li>A useful option is &quot;show self&quot;, which, if enabled, will also show yourself in the team overlay. This is useful to quickly compare your health and armor with a teammate before grabbing an armor, for example.
+		<li>Servers can disable the team overlay entirely if they wish. This can also be voted on and off by the players.
+		</ul>
+	<li><b>Crosshairs</b>
+		<ul type="square"><li>Crosshair factory is an option that allows you to make a custom crosshair by combining any crosshairs that you have installed, as well as modifying the color, transparency and size for every crosshair added.
+		<li>The buttons <i>up</i> and <i>down</i> change the order in which the crosshairs are drawn on screen, and in the list in the menus. UTComp draws crosshairs that are on top of the list first, which means they will be "under" crosshairs that are lower in the list. Experimentation might be required for optimal results.
+		</ul>
+	<li><b>Hitsounds</b>
+		<ul type="square"><li>Hitsounds play a &quot;beep&quot; sound when you hit an enemy, giving the player additional feedback to help know when you hit. (especially useful from very long ranges)
+		<li><i>CPMA Style Hitsounds</i> change the hitsound pitch depending on how much damage the shot did. This is recommended, as it brings additional audio feedback to tell how much damage a rocket or flak ball did, as opposed to merely guessing from the distance.
+		<li>Servers can disable hitsounds entirely if they wish. This can also be voted on and off by players on the voting menu, like the Brightskins settings.
+		</ul>
+	<li><b>Voting</b>
+		<ul type="square"><li>UTComp's voting options complement epic's voting by adding a few useful features for competitive play.
+		<li>Every voting options can be disabled by the server, if the server admin doesnt want players to be able to change specific settings.
+		<li>If another player calls a vote, you hear a sound and receive a message telling you to vote. Press F5 to vote <i>Yes</i> or <i>No</i>. If you do not vote, your vote is counted as a <i>No</i>.
+		</ul>
+	<li><b>Auto Demo/SS</b>
+		<ul type="square"><li><i>Auto Demo Recording</i> and <i>Auto Screenshots</i> will automatically take demos and screenshots of every UTComp game you play. This is useful for players who want to keep track of every game they play.
+		</ul>
+	<li><b>Misc</b>
+		<ul type="square"><li>Options to revert to the original Epic scoreboard, as well as choosing which game stats are displayed on the scoreboard, can be found here.
+		<li>The <i>Match Hud Color to skins </i> option will change your hud's color to your team's brightskins color.		
+		<li>The <i>Enable Enhanced Netcode</i> option turns on and off UTComp's <a href="#topic41">Enhanced Netcode</a>. As long as the server has Enhanced Netcode enabled, every player can choose his own netcode setting.</ul>
+	<li><b>Coaching Mode</b>
+		<ul type="square"><li>Coaching mode is a new spectator mode, intended for matches and tournaments. It allows a spectator to see his team's team overlay, and locks his viewpoint on those team members only. Your teamsay messages will also go directly to your teammates.
+		<li>To activate Coaching mode, you have to be already connected as a spectator, and click the Coach Red/Coach Blue button on the main F5 GUI page.
+		<li>Once you set yourself to coach a specific team, you cannot go back to free spectator view until you reconnect.
+		</ul>
+</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic22">2.2 Console Commands</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+These console commands can be typed at any time when connected to a UTComp server. Unless otherwise indicated, these commands can only be used as a player, and not as a spectator.
+
+	<ul>
+	<li><b>adminready</b>
+		<dl><dd>Forces a game to start, during UTComp warmup mode. All players will be automatically set to ready. This command can also be used when spectating.</dl>
+	<li><b>echo</b>
+		<dl><dd>Allows you to print a message on your screen, useful for scripts. For example, <i>echo hello world!</i> would print <i>hello world!</i> on the player's screen. This command can also be used when spectating.</dl>
+	<li><b>getsensitivity</b>
+		<dl><dd>Prints out the current mouse sensitivity in the console. Completes the native Unreal Tournament 2004 setsensitivity feature.</dl>
+	<li><b>mymenu</b>
+		<dl><dd>Opens the UTComp F5 menu. This command can also be used when spectating.</dl>
+	<li><b>notready</b>
+		<dl><dd>Used to remove yourself from "ready" state, in warmup mode. When every player has typed in ready, the game starts.</dl>
+	<li><b>ready</b>
+		<dl><dd>Used to notify the server that you're ready, when in warmup mode. When every player has typed in ready, the game starts.</dl>
+	<li><b>setvolume</b>
+		<dl><dd>Allows modification of the main game volume from 0 to 1. This command can also be used when spectating.</dl>
+	<li><b>voteno</b>
+		<dl><dd>Votes No on the current UTComp vote (doesn't work with Epic's map/kick vote)</dl>
+	<li><b>voteyes</b>
+		<dl><dd>Votes Yes on the current UTComp vote (doesn't work with Epic's map/kick vote)</dl>
+</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic23">2.3 Spectator Console Commands</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+These console commands can be typed only when connected to a UTComp server as a spectator. You cannot use any of these commands as a player.
+
+	<ul>
+	<li><b>gotoitem #</b>
+		<dl><dd>Moves the spectator's viewpoint to a specific powerup. The accepted values are:
+			<dl><dd>50 = Shield Pack +50<br>
+				50a = Shield Pack +50<br>
+				small = Shield Pack +50<br>
+				100 = Super Shield Pack +100<br>
+				100a = Super Shield Pack +100<br>
+				large = Super Shield Pack +100<br>
+				amp = Double Damage<br>
+				dd = Double Damage<br>
+				double = Double Damage
+			</dl>
+		</dl>
+	<li><b>gotoplayer #</b>
+		<dl><dd>Moves the spectator's viewpoint to a specific player, defined by a number.</dl>
+	<li><b>nextblueplayer</b>
+		<dl><dd>Moves the spectator's viewpoint to the next player in the blue team.</dl>
+	<li><b>nextnode</b>
+		<dl><dd>Moves the spectator's viewpoint to the next powernode. Powercores also count as powernodes.</dl>
+	<li><b>nextredplayer</b>
+		<dl><dd>Moves the spectator's viewpoint to the next player in the red team.</dl>
+	<li><b>prevnode</b>
+		<dl><dd>Moves the spectator's viewpoint to the previous powernode. Powercores also count as powernodes.</dl>
+	</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic24">2.4 Main GUI Setup</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+UTComp's <b>G</b>raphical <b>U</b>ser <b>I</b>nterface (GUI) can be used to configure just about everything as a player. It is normally accessed b pressing the F5 key when connected to a UTComp server. If for some reason the mutator doesn't automatically bind your F5 key to that menu, you can type in <i>mymenu</i> in the console to bring it up.<p>
+
+UTComp's main GUI page displays the UTComp version the server is using, as well as the status on a few server side UTComp Variables. It also has two buttons, whose function is different depending on whether you are a player or a spectator.
+<ul>
+	<li><b>Ready</b>
+		<dl><dd>This only shows when you're a player. Clicking on this button sets yourself in <i>ready</i> state during warmup. When every player is in <i>ready</i> state, the game starts. You can check who's ready and who isn't on the scoreboard.</dl>
+	<li><b>Not Ready</b>
+		<dl><dd>This only shows when you're a player. Clicking on this button sets yourself in <i>not ready</i> state during warmup. When every played is in <i>ready</i> state, the game starts. You can check who's ready and who isn't on the scoreboard.</dl>
+	<li><b>Coach Red</b>
+		<dl><dd>This only shows when you're a spectator. Clicking on this button sets you as a coach for the red team, locking your spectator viewpoint to red players only. (You can't watch blue players anymore) It also shows the red team's team overlay. Your teamsay messages will only be seen by the red team. (To prevent players from coaching red and giving info to blue players) Once you're coach for a team, you cannot go back to free spectator mode, or coach the other team, without reconnecting to the server.</dl>
+	<li><b>Coach Blue</b>
+		<dl><dd>This only shows when you're a spectator. Clicking on this button sets you as a coach for the blue team, locking your spectator viewpoint to blue players only. (You can't watch red players anymore) It also shows the blue team's team overlay. Your teamsay messages will only be seen by the blue team. (To prevent players from coaching blue and giving info to red players) Once you're coach for a team, you cannot go back to free spectator mode, or coach the other team, without reconnecting to the server.</dl>
+</ul>
+
+
+<p><hr>
+<b><font size="+1"><a name="topic25">2.5 Skins/Models</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+UTComp brightskins allow you to set bright colored skins to players, to increase visibility. By default, Epic has included &quot;Brightskins&quot; in the game already, but those are quite complicated to set up, (you have to change several options in your ut2004.ini and user.ini) and frankly aren't all that bright. There are three skins styles in UTComp:
+<i>Epic Style</i>, which are default normal UT2004 skins, <i>Brighter Epic Style</i>, which take the regular Epic Style skins but adds a "glow" effect, or <i>UTComp Style</i>, which allow you to select brightskins color with Red/Green/Blue sliders. Note that in gametypes that aren't team based (deathmatch), players will show as the Blue/Enemy Skins.
+<p>
+UTComp Models allows you to lock the models on teammates and enemies to a specific player model, regardless of what model those players picked. Just like brightskins, models can be set on a red team/blue team basis, or on a Teammate/enemy basis. &quot;Epic Force models&quot; can be set without the UTComp mutator through ini file modification, but it's got two major drawbacks: You can't use every model built in the game, and you can't force a different model for teammates and for enemies. UTComp's forcemodel implementation allows for both. Note that in gametypes that aren't team based (deathmatch), players will always show up on the Blue/Enemy Model.
+<ul>
+	<li><b>Enemy Based Skins</b>
+		<dl><dd>If checked, you can set a skin for your own team, and one for the enemy team, regardless of whether they are blue or red. If unchecked, skins will be set based on red team / blue team basis.</dl>
+	<li><b>Enemy Based Models</b>
+		<dl><dd>If checked, you can set a model for your own team, and one for the enemy team, regardless of whether they are blue or red. If unchecked, models will be set based on red team / blue team basis.</dl>
+	<li><b>Darken dead bodies</b>
+		<dl><dd>If checked, skins on dead player bodies will switch to a darker skin, to make it easy to tell who's dead and who isnt. (Other than the obvious fact that they are lying on the ground, and not moving.)</dl>
+	<li><b>Team Selection Box</b>
+		<dl><dd>This allows the selection of which team settings should be modified. This will automatically change from Red Team/Blue Team to Teammates and Enemies if <i>Enemy Based Skins/Models</i> is checked. If any clanskins were added, they will also show up here.</dl>
+	<li><b>Clanskins Controls</b>
+		<dl><dd>UTComp clanskins are an extension to Brightskins and models, which allow players to set a different skin and model to specific teammates, based on their name. To set one, click the add button, and type in the name of the player for which you want different skin/model settings. This name doesn't need to be fully typed, for example if the player is called abc-monkey, you could just type in <i>monk</i> and it would automatically apply those settings to every player who have <i>monk</i> in their name. To delete a clanskins entry, select it in the Team Selection Box, and click delete.</dl>
+	<li><b>Skin Type Selection Box</b>
+		<dl><dd>This allows the selection of which skin type will be used on the specified Team or Clanskin. Note that if one of the skin types (<i>Utcomp Style</i>, or <i>Brighter Epic Style</i>) is disabled, it will automatically default to the next one in descending order of brigtness.</dl>
+	<li><b>Skin Color Selection Box</b>
+		<dl><dd>This box is automatically disabled if UTComp Style Skins were selected in the skin type selection box. If Epic Style or Brighter Epic Style is selected, this box allows to select which color you want. The available options are Red, Blue, Purple, Bright Red, Bright Blue, Bright Purple, DM, Bright DM. The DM skin options will give the default color that you would get on a regular non-UTComp UT2004 server in deathmatch. This color is different for every model.</dl>
+	<li><b>Skin Color Selection Sliders</b>
+		<dl><dd>This box is automatically disabled if Epic Style skins or Brighter Epic Style Skins were selected in the skin type selection box. If UTComp Style Skins are selected, those sliders allow the user to set any skin color on a Red/Green/Blue scale.</dl>
+	<li><b>Force This Model</b>
+		<dl><dd>If checked, all players in the selected team (or with the selected clanskin) will show as the model specified in the model selection box. This only allows stock UT2004 models: trying to force to a custom model will use the default <i>Arclite</i> model.</dl>
+	<li><b>Force Model Selection box</b>
+		<dl><dd>Allows selection of which model will be used, if <i>Force This Model</i> was checked. Note that model names can be selected in the dropdown box, and also typed manually.</dl>		
+</ul>
+
+
+<p><hr>
+<b><font size="+1"><a name="topic26">2.6 Colored Names</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+Colored names in UTComp use an &quot;override&quot; system, which basically ignores what your actual name is. To set colors, you set specific colors to letters in your name, for example, you set your first letter to red, your second to blue, and so on. When you change your actual name, (either through the <i>setname</i> console command or in UT2004 menus) the color scheme stays. You can also use colors in actual typed messages, through color codes.
+<ul>
+	<li><b>Show colored names in chat messages</b>
+		<dl><dd>Shows other player's colored names on screen in chat messages.</dl>
+	<li><b>Show colored names in scoreboard</b>
+		<dl><dd>Shows other player's colored names on the scoreboard.</dl>
+	<li><b>Show colored text in chat messages (Q3 style)</b>
+		<dl><dd>This will display colors in messages that players type, based on &quot;color codes&quot; that you type in your messages. To make it work, you use the ^ character and a number. For example, if you wanted to say &quot;<font color="#CC0033">Hello</font> <font color="#3333FF">World!</font>&quot;, you would press your say key, and type ^1Hello ^4World!. Everything that appears after the color code will use that color. The colors are:		
+				<dl><dd>0 = Black
+				<dd>1 = Red
+				<dd>2 = Green
+				<dd>3 = Yellow
+				<dd>4 = Dark Blue
+				<dd>5 = Pink
+				<dd>6 = Light Blue
+				<dd>7 = White</dl></dl>
+	<li><b>Show colored enemy names on targetting</b>
+		<dl><dd>Shows other player's colored names when putting your crosshair on them. This is disabled in the Mutant gametype, due to Mutant names normally showing in other colors by default.</dl>
+	<li><b>Death message color</b>
+		<dl><dd>Controls the colors in which death messages are displayed. <i>Disabled</i> will completely disable colored names in death messages, <i>Colored Names</i> will use each player's colors, and <i>Red/Blue Colored Names</i> will always display red/blue colors in death messages (based on team), regardless of what colors the players set their names to.</dl>
+	<li><b>Letter Selection</b>
+		<dl><dd>Allows the selection, through a slider, of the letter for which you want to change color.</dl>
+	<li><b>Letter Color</b>
+		<dl><dd>Allows the player to set a specific color for the letter selected above, in Red/Green/Blue format.</dl>
+	<li><b>Saved colored names selection box</b>
+		<dl><dd>Lets the player select a previously saved color name, for loading or deleting purposes.</dl>
+	<li><b>Save</b>
+		<dl><dd>Saves the current colored name to disk, for future restoration.</dl>
+	<li><b>Delete</b>
+		<dl><dd>Deletes the colored name selected in the selection box from disk.</dl>
+	<li><b>Use this name</b>
+		<dl><dd>Restores the colored name selected in the selection box as the current colored name.</dl>
+	<li><b>Reset entire name to white</b>
+		<dl><dd>Resets the current colored name to default white settings.</dl>
+</ul>
+
+
+<p><hr>
+<b><font size="+1"><a name="topic27">2.7 Team Overlay</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+UTComp's Team Overlay allows players to get detailed info on what other players are doing in the game, by displaying their current location, health, armor, powerups and weapon used. Coaches can also see and take advantage of the team overlay, to give additionnal info and tips to the players they're currently coaching. Team overlays can be turned off entirely serverside, and can also be voted on or off by clients.
+<ul>
+
+	<li><b>Enable Team Overlay</b>
+		<dl><dd>Allows the player to enable or disable his own team overlay.</dl>
+	<li><b>Show Self</b>
+		<dl><dd>If enabled, you will show up on your own screen on the team overlay. If disabled, only your teammates will be shown.</dl>
+	<li><b>Enable Icons</b>
+		<dl><dd>If enabled, armors and health icons will be shown in the first row. This can be disabled to make the overlay slightly smaller.</dl>
+	<li><b>Horizontal Location</b>
+		<dl><dd>Allows modification of the overlay window's location on screen, on the X axis. The higher the slider, the more the overlay will show on the right side of the screen. Note that if you set this too high, it might not fit in entirely in the screen at certain resolutions.</dl>
+	<li><b>Vertical Location</b>
+		<dl><dd>Allows modification of the overlay window's location on screen, on the Y axis. The higher the slider, the lower the overlay will show on the screen. Note that if you set this too high, it might not fit in entirely in the screen at certain resolutions.</dl>
+	<li><b>Size</b>
+		<dl><dd>Allows modification of the size of the overlay window. Increasing this will scale everything up (text and icons), making things slightly easier to read, but obviously taking more screen space. Decreasing this has the opposite effect.</dl>
+	<li><b>Background Color</b>
+		<dl><dd>Changes the Team Overlay window's Background Color, using red/green/blue sliders.</dl>
+	<li><b>Location Color</b>
+		<dl><dd>Changes the color that player locations are displayed in the Team Overlay, using red/green/blue sliders.</dl>
+	<li><b>Name Color</b>
+		<dl><dd>Changes the color that player names are displayed in the Team Overlay, using red/green/blue sliders.</dl>
+</ul>
+
+
+<p><hr>
+<b><font size="+1"><a name="topic28">2.8 Crosshairs</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+UTComp's crosshair system allows players to create all kinds of custom crosshairs, by combining various shapes, and adjusting their color, transparency, size and position. This creates an almost unlimited number of potential crosshairs. Users have to <i>add</i> shapes one by one, setting their parameters to the preferred values. The order in which shapes appear in the final crosshair can be modified. Also, preview windows are available to show players what their current custom crosshair looks like: note that is it not a 100% accurate preview.
+<ul>
+	<li><b>Use Crosshair Factory</b>
+		<dl><dd>Enables the custom crosshair system. If disabled, your normal UT2004 crosshairs will be used.</dl>
+	<li><b>Crosshair Size Increase</b>
+		<dl><dd>If enabled, your crosshair's size will not temporarily increase while the player is picking up an item. This can be used regardless of whether the custom crosshair system is used or not.</dl>
+	<li><b>Add</b>
+		<dl><dd>Adds a new shape to the custom crosshair system. By default, this is a blank, undefined shape.</dl>
+	<li><b>Delete</b>
+		<dl><dd>Deletes the selected shape from the custom crosshair system.</dl>
+	<li><b>Up</b>
+		<dl><dd>Moves the currently selected part higher in the parts list. The lower a part is on the list, the later it is drawn on screen. This means if you want a part to be on top of other parts, it needs to be lowest on the list.</dl>
+	<li><b>Down</b>
+		<dl><dd>Moves the currently selected part lower in the parts list. The lower a part is on the list, the later it is drawn on screen. This means if you want a part to be on top of other parts, it needs to be lowest on the list.</dl>
+	<li><b>Part selection box</b>
+		<dl><dd>Selects the shape the currently selected part will use. All of the stock UT2004 crosshairs show up here, as well as any custom crosshairs installed, and custom UTComp "shapes" shipped with the mutator.</dl>
+	<li><b>Red/Green/Blue Sliders</b>
+		<dl><dd>Selects the color of the currently selected part.</dl>
+	<li><b>Alpha</b>
+		<dl><dd>Controls the opacity of the currently selected part. The higher the slider, the more opaque the part will be. The lower, the more transparent.</dl>
+	<li><b>Size</b>
+		<dl><dd>Controls the size of the currently selected part.</dl>
+	<li><b>Left</b>
+		<dl><dd>Allows modification of the currently selected part's horizontal screen position. The higher the slider, the more the part move to the right. The lower, the more it will move to the left.</dl>
+	<li><b>Up</b>
+		<dl><dd>Allows modification of the currently selected part's vertical screen position. The higher the slider, the more the part move to the bottom of the screen. The lower, the more it will move to the top.</dl>
+	<li><b>Preview Windows</b>
+		<dl><dd>The upper preview window shows a preview of the currently selected part's appearance. The lower one shows a preview of the entire custom crosshair, with all the parts together.</dl>
+</ul>
+
+
+<p><hr>
+<b><font size="+1"><a name="topic29">2.9 Hitsounds</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+Hitsounds are a feature that play a &quot;beep&quot; type sound when you succesfully hit an enemy with any weapon. Line of sight hitsounds only play when you can see the enemy on your screen, while regular hitsounds will play even if you fire a rocket down a hallway randomly, and hit an opponent 15 seconds later while you're in a completely different part of the level.Optionally, <a href="http://www.promode.org" target="_new">CPMA</a> type hitsounds can be enabled, which modify the &quot;beep&quot; sound pitch depending on how much damage a shot you fired did to the enemy. For example, a minigun bullet does very little damage, and plays a very high pitched sound, while a lightning gun headshot would play a low pitched sound due to the very high damage. (Think about double damage+redeemer...) This is especially useful for splash-damage weapons whose damage isnt constant, (grenades, shock cores/combos, flak balls, rockets) as you can guess from the sound how much damage you've done. (As opposed to having to guess from the distance of the hit relative to the enemy's position)
+<ul>
+	<li><b>Enable Hitsounds</b>
+		<dl><dd>Enables or disables the hitsounds system.</dl>
+	<li><b>Hitsound Volume</b>
+		<dl><dd>Allows the player to set how loud hitsounds should play.</dl>
+	<li><b>CPMA Style Hitsounds</b>
+		<dl><dd>Enables or disables hitsounds that change pitch according to the damage the shot did, as described above in the Hitsounds description</dl>
+	<li><b>Pitchmodifier</b>
+		<dl><dd>Allows modification of the Pitch on CPMA hitsounds. The higher the scroll bar, the  higher the pitch modification.</dl>
+	<li><b>Friendly Hitsound Fike</b>
+		<dl><dd>For custom friendly hitsounds. Type in the name of the sound file in <i>packagename.nameofsound</i> format.</dl>
+	<li><b>Enemy Hitsound File</b>
+		<dl><dd>For custom enemy hitsounds. Type in the name of the sound file in <i>packagename.nameofsound</i> format.</dl>
+</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic210">2.10 Voting</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+UTComp's voting system allows players to switch maps and gametypes, along with basic rule configuration, and UTComp setting configuration. The main Voting page is separated into three pages: <i>Change Map</i> should be used when players simply want to change maps or restart the current map, <i>Gametype</i> is for more complicated voting that allows a change in gametype and game rules, while <i>Settings</i> allows vote on various UTComp-specific settings.<P>
+<b>Map Vote</b><br>
+<ul>
+	<li>Map Selection Box
+		<dl><dd>Allows selection of the map the player wants to switch to.</dl>
+	<li>Map Name
+		<dl><dd>Allows players to type in a map name manually, instead of clicking the map in the <i>Map Selection Box</i>. This also allows <i>Short Map Names</i>, see the <a href="#topic43">FAQ</a> section for information about these.</dl>
+	<li>Change Map
+		<dl><dd>Calls a vote to switch to the map selected.</dl>
+	<li>Restart Current Map
+		<dl><dd>Calls a vote to quickly restart the current map played, without having to reload everything on the server and client sides.</dl>
+</ul>
+
+<b>Gametype Vote</b><br>
+
+<ul>
+	<li>Map Selection Box
+		<dl><dd>Allows selection of the map the player wants to switch to.</dl>
+	<li>Refresh Maps
+		<dl><dd>This refreshes the current map list from the server. This is only useful if you open up the voting pages right after connecting to the server, before you received all the map info. It should quickly send the remaining maps in the maplists that were not sent.</dl>
+	<li>Gametype
+		<dl><dd>Allows selection of the gametype to be played. Servers can have custom gametypes here, refer to your server admin for explanation on any custom gametypes defined.</dl>
+	<li>Max Players
+		<dl><dd>Controls the maximum number of players that will be let into the game after the map switch. Note that the number after Max: represents the maximum number of players that the server will allow, and therefore, allow you to vote for.</dl>
+	<li>Map Name
+		<dl><dd>Allows players to type in a map name manually, instead of clicking the map in the <i>Map Selection Box</i>. This also allows <i>Short Map Names</i>, see the <a href="#topic43">FAQ</a> section for information about these.</dl>
+	<li>Advanced Options
+		<dl><dd>This lets the player change various game rules. If this box isn't checked, these rules will default to the accepted competitive values for every game type listed.</dl>
+	<li>Superweapons
+		<dl><dd>Toggles superweapons ON and OFF. Checking this box enables superweapons as normal, unchecking removes every superweapon pickup from the game.</dl>
+	<li>DD
+		<dl><dd>Toggles Double Damage ON and OFF. Checking this box enables double damage as normal, unchecking removes double damage powerups from the game.</dl>
+	<li>Weaponstay
+		<dl><dd>Toggles Weapon Stay ON and OFF. Checking this box will make the weapons always stay at their default locations, even if picked up by a player. Unchecking will make weapons disappear after they've been picked up, and respawn after 27.5 seconds.</dl>
+	<li>OT Length
+		<dl><dd>Controls how long Timed Overtime will take if both players/teams have the same score at the end of a game. Setting this to 0 will use Unreal Tournament 2004's normal sudden death overtime setting.</dl>
+	<li>Adren
+		<dl><dd>Toggles adrenaline ON and OFF. Checking this box enables adrenaline as normal, unchecking removes adrenaline item pickups from the game, and also doesn't give players adrenaline for kills and killing sprees. This has no effect in Assault and Onslaught gametypes, as it is always disabled.</dl>
+	<li>Goal Score
+		<dl><dd>Changes the number of points required to win a game. In Deathmatch game types, this means the number of frags required to win. In other game types, this can mean other things. (flag caps, etc.)</dl>
+	<li>Timelimit
+		<dl><dd>Changes the Time Limit until a game ends. In the score is still tied after the time limit is reached, sudden death overtime starts. This works differently depending on the gametype.</dl>
+	<li>Grenades
+		<dl><dd>Changes the number of grenades players will spawn with at the start of a game or after dying.</dl>
+	<li>Call Vote
+		<dl><dd>Calls a vote for the currently selected settings.</dl>
+</ul>
+
+<b>UTComp Settings</b><br>
+
+<ul>
+	<li>Skins
+		<dl><dd>Calls a vote for a new server side Brightskins type. Choices are Epic Style, Brighter Epic Style, and UTComp Style. This setting takes effect instantly after the vote passes.</dl>
+	<li>Hitsounds
+		<dl><dd>Calls a vote for a new server side Hitsounds type. Choices are Disabled, Line of Sight, or Everywhere. This setting takes effect instantly after the vote passes.</dl>
+	<li>Team Overlay
+		<dl><dd>Calls a vote for a new server side Team Overlay setting. This can be enabled or disabled. This setting takes effect instantly after the vote passes.</dl>
+	<li>Warmup
+		<dl><dd>Calls a vote to disable or enable warmup mode. This setting requires a map change (not a <i>map restart</i>) to take effect.</dl>
+	<li>Enhanced Netcode
+		<dl><dd>Calls a vote for a new server side Enhanced Netcode setting. This can be enabled or disabled. This setting requires a map change (not a <i>map restart</i>) to take effect.</dl>
+	<li>Forward Mode
+		<dl><dd>Calls a vote for enabling or disabling the <a href="#topic42">Forward Gametype</a>. This setting requires a map change (not a <i>map restart</i>) to take effect.</dl>
+</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic211">2.11 Auto Demo/SS</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+<ul>
+	<li><b>Automatically Record a demo of each match</b>
+		<dl><dd>If enabled, demos will automatically record when a game starts.</dl>
+	<li><b>Demo Mask</b>
+		<dl><dd>Changes the names of the demo recorded. The percentages in the name are intelligent variables that will modify the demo's name depending on current game conditions. %d will add the current date, %t will add the current time in a 24 hour HH:MM format, %p will add the names of the players in the game and %m will add the current map's name.</dl>
+	<li><b>Automatically take a screenshot at the end of each match</b>
+		<dl><dd>If enabled, screenshots will be automatically taken at the end of each game played, with the scoreboard up.</dl>
+	<li><b>Screenshot Mask</b>
+		<dl><dd>Changes the names of the screenshot taken. The percentages in the name are intelligent variables that will modify the screenshot's name depending on current game conditions. %d will add the current date, %t will add the current time in a 24 hour HH:MM format, %p will add the names of the players in the game and %m will add the current map's name.</dl>
+</ul>
+
+
+<p><hr>
+<b><font size="+1"><a name="topic212">2.12 Miscellaneous</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+<ul>
+	<li><b>Use UTComp enhanced scoreboard</b>
+		<dl><dd>If enabled, the enhanced UTComp scoreboard will be used. If disabled, Epic's default scoreboard will be used instead.</dl>
+	<li><b>Show weapon stats on scoreboard</b>
+		<dl><dd>If enabled, statistics for your weapons will be displayed on the scoreboard. This can be enabled for both the UTComp enhanced scoreboard, or the regular Epic scoreboard. Tracked statistics are shots hit, shots fired, hit percentage and damage given, for every weapon. (minus shield gun) The left column indicates primary fire, the second indicates secondary fire. Total damage given and received for all weapons combined is also tracked.</dl>
+	<li><b>Show pickup stats on scoreboard</b>
+		<dl><dd>If enabled, statistics for item pickups will be displayed on the scoreboard. This can be enabled for both the UTComp enhanced scoreboard, or the regular Epic scoreboard. Tracked item pickups are actions per minute, Double Damage pickups taken (<i>dd</i>), total health taken, small shields taken, super shields taken and total adrenaline taken.</dl>
+	<li><b>Disable Adrenaline Combos</b>
+		<dl><dd>This button opens up a subpage, allowing players to disable unwanted specific adrenaline combos, in order to not accidentally hit them during gameplay. Booster, Invisibily, Speed and Berserk can be disabled this way.</dl>
+	<li><b>Play Own Footstep sounds</b>
+		<dl><dd>If enabled, your own footstep sounds will be played. If not, you cannot hear your own footstep's sounds. Note that this has no effect on what other players hear: removing your own footstep sounds will <b>not</b> make your footsteps silent to other players. This merely removes your own sounds to yourself, to make it easier to focus on other, more relevant, game sounds. Note that you have to suicide or get killed at least once for this setting to take effect.</dl>
+	<li><b>Match hud color to skins</b>
+		<dl><dd>If enabled, your entire HUD's colors will change from the default red/blue to the color you have selected for your team's brightskins.</dl>
+	<li><b>Enable Enhanced Netcode</b>
+		<dl><dd>Enables or disables UTComp's Enhanced Netcode. As long as the server has Enhanced Netcode enabled, every player can choose his own netcode setting. See the <a href="#topic41">Enhanced Netcode</a> section for more information.</dl>
+</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic213">2.13 Clan Arena Gametype</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+New since version 1.6 is a Clan Arena Gametype, similar to other Arena gametypes in various games.
+
+<ul>
+	<li>Clan Arena is played on DM maps.
+	<li>Clan Arena awards one point to the team that survives the end of a round.
+	<li>To win a round, players have to kill all enemies.
+	<li>Once a player dies, he goes to spectator mode until the round is over.
+	<li>Players do not drop weapons when they die.
+	<li>Individually, one point is given to players for every 100 points of damage they inflict to their enemies. One point is also given for every kill.
+	<li>Players start with 100 Shield and 150 Health at the start of a round.
+	<li>Players start with all Weapons and Maximum ammo at the start of a round.
+	<li>All Weapon and Item pickups are removed from the map.  
+</ul>
+
+Particularities of this Clan Arena implementation is that rounds have an actual time limit. (which defaults to 2 minutes) Once that timelimit is hit, players will start losing health progressively, eventually dying. This is to make sure that rounds cannot last forever as in most other Clan Arena implementations.
+
+<p><hr>
+<b><font size="+1"><a name="topic31">3.1 Basic Server Setup Information</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+This server setup section has step-by-step instructions on how to set up UTComp on your server, as well as a list of settings  that are likely to be changed. This is <b>not</b> a generic <i>Unreal Tournament 2004</i> server setup guide. I recommend reading the <a href="http://www.unrealadmin.org/forums/forumdisplay.php?f=56" target="_newwindow">Unreal Admin Page Unreal Tournament 2004 Forums</a> if you need help on generic UT2004 server setup.<p>
+
+<font size="+1" color="#CC0033"><b>Warning:</b></font> This version of UTComp is <b>recommended for servers updated to version 3369</b> or higher. You can download the patch from <a href="http://www.beyondunreal.com/main/ut2004/ut2004essential.php" target="_newwindow">BeyondUnreal</a>. It is still possible to use UTComp on server running and older version of UT2004, but most of the testing has been done using version <b>3369</b>, therefore using this version of UTComp on a server with an older UT2004 version is strongly discouraged.
+
+<p><hr>
+<b><font size="+1"><a name="topic32">3.2 Installing the files</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+	<ul><li>If you downloaded the <b>zip</b> version:
+		<ul><li>Extract the contents of the .zip file to your /UT2004 main folder. Make sure to keep the folder structure.</ul>
+	<li>If you downloaded the <b>ut4mod</b> version (not recommended for servers):
+		<ul><li>Extract the contents of the .zip file anywhere on your hard drive.
+		<li>Double Click the .ut4mod file, and follow the onscreen instructions.</ul>
+	</ul>
+Note that the ut4mod version will not work on linux or osx, unless you use ucc to manually extract the files from the .ut4mod file. It will probably not work on the stand-alone win32 dedicated server package either. We therefore strongly recommend using the zip version for servers.<p>
+
+<p><hr>
+<b><font size="+1"><a name="topic33">3.3 Modifying your server ini</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+Adding a Serverpackage line to your server's <i>ini</i> file is required for UTComp to work properly on a version <b>3186</b>(original UT2004 version) server. If you fail to add that line, players will freeze on the loading screen when they try to connect. It is not required on servers running more recent versions of UT2004, but <i>if you don't add the line, you will not be able to record serverside demos on your server</i>. Your server ini is called <i>ut2004.ini</i> by default. Rented servers often change this, ask your game server company for more info if they do. The line you need to add is in the <b>[Engine.GameEngine]</b> section. You should see a list of ServerPackage= lines there already, add a new one, which needs to be exactly:<p>
+ServerPackages=utcompv17a<p>
+Note that if you're hosting your server on linux, the ServerPackages line is case sensitive, which means if you write ServerPackages=UtCoMpv17a, it might not work work. We intentionally distribute the mutator's files in lower case names to make this easy.<br>
+If you're upgrading from a previous version of UTComp, it is recommended to remove ServerPackages= lines from old versions: if you don't, players will automatically download every version of UTComp that has its own ServerPackages= line, even if its not used anymore.
+
+<p><hr>
+<b><font size="+1"><a name="topic34">3.4 Making sure the mutator loads</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+For UTComp to work, it needs to be loaded as a mutator on your server. There are five ways to do that:
+
+<ol>
+	<li>If you set up your server with the &quot;Host Game&quot; interface, select &quot;UTComp version 1.7a&quot; in the mutator list.
+	<li>Using Webadmin, in the Mutators section, click in &quot;UTComp version 1.7a&quot; and restart the map.
+	<li>Using Webadmin, in the Server console section, type in servertravel DM-DE-Ironic?Mutator=utcompv17a.MutUTComp
+	<li>In game, log in as admin, and type in admin servertravel DM-DE-Ironic?Mutator=utcompv17a.MutUTComp
+	<li>On the server command line, add in ?mutator=utcompv17a.MutUTComp
+</ol>
+If you want to double-check that the mutator loaded properly, start your server (it should start properly at this point), and check the Server Info in the Server Browser. This information is in the lower right corner, once you've selected your server. There should be an entry called Mutator, with the value MutUTComp, and another entry called UTComp Version, with the value 1.7a.
+
+<p><hr>
+<b><font size="+1"><a name="topic35">3.5 Webadmin Settings</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+Some of the basic UTComp server settings can be configured directly in Webadmin. They are under Defaults, UTComp Settings. Some settings might require a map restart to take effect.
+<ul>
+
+	<li><b>Allow players to vote for map changes</b>
+		<dl><dd>If checked, players can vote to change maps. If not, players cannot vote to change maps. This also disables Gametype Voting, therefore, players cannot vote to change gametypes either if unchecked.</dl>
+	<li><b>Allow players to vote on Brightskins settings</b>
+		<dl><dd>If checked, players can vote on the brightskins type. If not, players cannot vote on the brightskins type.</dl>
+	<li><b>Allow players to vote on Hitsounds settings</b>
+		<dl><dd>If checked, players can vote on the the server hitsounds setting. If not, players cannot vote on this setting.</dl>
+	<li><b>Allow players to vote on Warmup setting</b>
+		<dl><dd>If checked, players can vote on the the server <i>Enable Warmup</i> setting. If not, players cannot vote on this setting.</dl>
+	<li><b>Allow players to vote for Enhanced Netcode changes</b>
+		<dl><dd>If checked, players can vote for the <i>Enable Enhanced Netcode</i> setting. If not, players cannot vote on this setting.</dl>
+	<li><b>Allow players to vote on Team Overlay setting</b>
+		<dl><dd>If checked, players can vote on the the server <i>Enable Team Overlay</i> setting. If not, players cannot vote on this setting.</dl>
+	<li><b>Enable Double Damage</b>
+		<dl><dd>If checked, the double damage powerup will appear in the maps as normal. If not, double damage will always be disabled.</dl>
+	<li><b>Enable Enhanced Netcode</b>
+		<dl><dd>If checked, the server will have Enhanced Netcode enabled. Players will be able to choose whether they wish to use it or not. If unchecked, Enhanced Netcode will always be disabled.</dl>
+	<li><b>Enable Serverside Demo Recording</b>
+		<dl><dd>If checked, servers will automatically record server-side demos of each match. Make sure you have plenty of free hard drive space if you enable this!</dl>
+	<li><b>Enable Team Overlay</b>
+		<dl><dd>If checked, players can see their own team overlay if they have it enabled in their player-side settings. If not, players cannot see team overlays.</dl>
+	<li><b>Enable Voting</b>
+		<dl><dd>If checked, players can use UTComp's voting system. If not, the entire UTComp voting system will be disabled. If turned off, this overrides all the <i>Allow players to vote on [something] setting.</i> commands.</dl>
+	<li><b>Enable Warmup</b>
+		<dl><dd>If checked, warmup mode will be used before a game starts. If not, epic's <i>Press Fire to Ready</i> system will be used.</dl>
+	<li><b>Enable the Forward gameplay modification.</b>
+		<dl><dd>If checked, the game will be played with <a href="#topic42">Forward rules</a>. If not, classic UT2004 rules will be used.</dl>
+	<li><b>Brightskins Mode</b>
+		<dl><dd>Controls the server's brightskins types that will be allowed for players. Note that this is progressive: selecting Brighter Epic Style enables Epic Style and Brighter Epic Style, while selecting UTComp style enables Epic Style, Brighter Epic Style, and UTComp Style. Disables will disable every brightskin type.</dl>
+	<li><b>Hitsounds Mode</b>
+		<dl><dd>Controls the server's hitsounds mode setting. Line of Sight hitsounds will only play a sound if the player can see his opponent while hitting them, while everywhere will always play hitsounds after a hit.</dl>
+	<li><b>Number of grenades on spawn</b>
+		<dl><dd>Controls the server's Grenades on Spawn setting. This determines how many grenades players will spawn with at the start of a game, or after dying.</dl>
+	<li><b>Voting Max Players</b>
+		<dl><dd>Limits the number of players that can be voted through UTComp's &quot;Max players&quot; voting box. This is useful for rented servers, if you don't want players to vote for a MaxPlayers number higher than you're paying for.</dl>
+	<li><b>Warmup Time</b>
+		<dl><dd>Timelimit for warmup mode in seconds. If this is set to 0, warmup time will be unlimited, and will go as long as players dont ready up.</dl>
+</ul>		
+
+<p><hr>
+<b><font size="+1"><a name="topic36">3.6 Server ini Advanced Setup</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+All of these settings are listed in the [utcompv17a.MutUTComp] section of your server ini. You need to start your server at least once for the [utcompv17a.MUTUTComp] section to be created, along with its default settings. 
+<ul>
+	<li><b>bEnableVoting</b> (default: true)
+		<dl><dd>Enables or disables UTComp's voting system
+			<dl><dd>True = UTComp voting system enabled
+			<dd>False = UTComp voting system disabled</dl>
+		</dl>
+
+	<li><b>bEnableBrightskinsVoting</b> (default: true)
+		<dl><dd>Enables or disables brightskins voting in UTComp's voting system. This setting has no effect if bEnableVoting is set to false.
+			<dl><dd>True = Allow players to vote on the server's brightskins setting
+			<dd>False = Do not Allow players to vote on the server's brightskins setting</dl>
+		</dl>
+
+	<li><b>bEnableHitsoundsVoting</b> (default: true)
+		<dl><dd>Enables or disables hitsounds voting in UTComp's voting system. This setting has no effect if bEnableVoting is set to false.
+			<dl><dd>True = Allow players to vote on the server's hitsounds setting
+			<dd>False = Do not Allow players to vote on the server's hitsounds setting</dl>
+		</dl>
+
+	<li><b>bEnableWarmupVoting</b> (default: true)
+		<dl><dd>Enables or disables warmup voting in UTComp's voting system. This setting has no effect if bEnableVoting is set to false.
+			<dl><dd>True = Allow players to vote on the server's warmup setting
+			<dd>False = Do not Allow players to vote on the server's warmup setting</dl>
+		</dl>
+
+	<li><b>bEnableTeamOverlayVoting</b> (default: true)
+		<dl><dd>Enables or disables Team Overlay voting in UTComp's voting system. This setting has no effect if bEnableVoting is set to false.
+			<dl><dd>True = Allow players to vote on the server's brightskins setting
+			<dd>False = Do not Allow players to vote on the server's brightskins setting</dl>
+		</dl>
+
+	<li><b>bEnableMapVoting</b> (default: true)
+		<dl><dd>Enables or disables UTComp's map voting system. Note that if this is disabled, it also disables UTComp's gametype voting system. This setting has no effect if bEnableVoting is set to false.
+			<dl><dd>True = Allow players to vote for new maps
+			<dd>False = Do not Allow players to vote for new maps</dl>
+		</dl>
+
+	<li><b>bEnableGametypeVoting</b> (default: true)
+		<dl><dd>Enables or disables UTComp's gametype voting system. This setting has no effect if bEnableVoting is set to false.
+			<dl><dd>True = Allow players to vote for new gametypes
+			<dd>False = Do not Allow players to vote for new gametypes</dl>
+		</dl>
+
+	<li><b>bEnableTimedOvertimeVoting</b> (default: true)
+		<dl><dd>Enables or disables Timed Overtime voting in UTComp's voting system. This setting has no effect if bEnableVoting is set to false.
+			<dl><dd>True = Allow players to vote on the server's Timed Overtime setting
+			<dd>False = Do not Allow players to vote on the server's Timed Overtime setting</dl>
+		</dl>
+
+	<li><b>VotingPercentRequired</b> (default: 51.000000)
+		<dl><dd>Controls the percentage of players that need to vote yes on a new vote for the vote to pass. If the percentage of players who voted yes does not equal or exceed the percentage of total players defined in <i>VotingPercentRequired</i> during the <i>VotingTimeLimit</i>, the vote will not pass and time out.
+		</dl>
+
+	<li><b>VotingTimeLimit</b> (default: 30.000000)
+		<dl><dd>Controls the number of seconds that UTComp votes will wait until they time out.
+		</dl>
+
+	<li><b>bEnableDoubleDamage</b> (default: true)
+		<dl><dd>Enables or disables the double damage item pickup from the map. This setting makes <i>NoDoubleDamage</i> mutators useless on UTComp servers.
+			<dl><dd>True = Double Damage appears as normal
+			<dd>False = Double Damage is removed</dl>
+		</dl>
+
+	<li><b>EnableBrightskinsMode</b> (default: 3)
+		<dl><dd>Changes the server's brightskins-type settings.
+			<dl><dd>1 = Epic Style Skins Enabled
+			<dd>2 = Epic Style Skins and Brighter Epic Style Skins Enabled
+			<dd>3 = Epic Style Skins, Brighter Epic Style Skins, and UTComp Style Skins Enabled</dl>
+		<dd>Note that this setting takes priority over the Client's settings. If you disable a brightskins type serverside, the clients cannot use this brightskins type.
+		</dl>
+
+	<li><b>bEnableClanSkins</b> (default: true)
+		<dl><dd>Enables or disables the server's UTComp's clanskins system setting.
+			<dl><dd>True = Player defined Clanskins will be shown
+			<dd>False = Played defined Clanskins will not be shown</dl>
+		<dd>Note that this setting takes priority over the Client's settings. If you disable a clanskins serverside, the clients cannot use clanskins.
+		</dl>
+
+	<li><b>bEnableTeamOverlay</b> (default: true)
+		<dl><dd>Enables or disables the server's Team Overlay setting.
+			<dl><dd>True = Team Overlay Enabled
+			<dd>False = Team Overlay Disabled</dl>
+		<dd>Note that this setting takes priority over the Client's settings. If you disable the team overlay on the server, clients and coaches cannot see the overlay, no matter what setting they use.
+		</dl>
+
+	<li><b>EnableHitSoundsMode</b> (default: 1)
+		<dl><dd>Changes the server's hitsounds settings.
+			<dl><dd>0 = Hitsounds disabled
+			<dd>1 = Hitsounds enabled, but Line of Sight only
+			<dd>2 = Hitsounds fully enabled</dl>
+		<dd>Note that this setting takes priority over the Client's settings. If you disable hitsounds on the server, clients will not hear hitsounds, no matter what setting they use.
+		</dl>
+
+	<li><b>bEnableScoreboard</b> (default: true)
+		<dl><dd>Enables or disables the server's UTComp Enhanced Scoreboard setting.
+			<dl><dd>True = UTComp Scoreboard Enabled
+			<dd>False = UTComp Scoreboard Disabled</dl>
+		<dd>Note that this setting takes priority over the Client's settings. If you disable UTComp's enhanced Scoreboard on the server, clients will not be able to use the Enhanced Scoreboard, no matter what setting they use.
+		</dl>
+
+	<li><b>bEnableWarmup</b> (default: true)
+		<dl><dd>Enables or disables Warmup Mode.
+			<dl><dd>True = Warmup Enabled
+			<dd>False = Warmup Disabled</dl>
+		</dl>
+
+	<li><b>WarmupReadyPercentRequired</b> (default: 100.000000)
+		<dl><dd>Controls the percentage of total players that need to ready up for the game to start. For example, the default setting of 100 means 100% of the players have to ready up for the game to start. Setting this to 50 would require half of the players to ready up to start a game. This setting has no effect if warmup is disabled.
+		</dl>
+
+	<li><b>bEnableWeaponStats</b> (default: true)
+		<dl><dd>Enables or disables the weapon stats showing on the client's scoreboards.
+			<dl><dd>True = Players can see their Weapon Stats on their scoreboards
+			<dd>False = Players cannot see their Weapon Stats on their scoreboards</dl>
+		<dd>Note that this setting takes priority over the Client's settings. If you disable Weapon stats on the server, clients will not be able to see their weapon stats on the scoreboard, no matter what setting they use.
+		</dl>
+
+	<li><b>bEnablePowerupStats</b> (default: true)
+		<dl><dd>Enables or disables the item pickup stats showing on the client's scoreboards.
+			<dl><dd>True = Players can see their item pickup Stats on their scoreboards
+			<dd>False = Players cannot see their item pickup Stats on their scoreboards</dl>
+		<dd>Note that this setting takes priority over the Client's settings. If you disable item pickup stats on the server, clients will not be able to see their item pickup stats on the scoreboard, no matter what setting they use.
+		</dl>
+
+	<li><b>bShowTeamScoresInServerBrowser</b> (default: true)
+		<dl><dd>This setting will add a fake <i>Red Team Score</i> and <i>Blue Team Score</i> entry to the player list, that only shows in the server browser, displaying the current score for both teams.
+			<dl><dd>True = Show team scores in server browser
+			<dd>False = Do not show team scores in server browser</dl>
+		</dl>
+
+	<li><b>ServerMaxPlayers</b> (default: 12)
+		<dl><dd>Limits the number of clients that can be voted through UTComp's &quot;Max players&quot; voting box. This is useful for rented servers, if you don't want clients to vote for a MaxPlayers number higher than you're paying for.
+		</dl>
+
+	<li><b>bEnableAdvancedVotingOptions</b> (default: true)
+		<dl><dd>Enables or disables Advanced Gametype Options voting in UTComp's voting system
+			<dl><dd>True = Advanced Gamtype Options voting Enabled
+			<dd>False = Advanced Gamtype Options voting Disabled</dl>
+		</dl>
+
+	<li><b>bEnableAutoDemoRec</b> (default: false)
+		<dl><dd>Enables or disables automatic server side demo recording. This is disabled by default, to save on disk space for servers. (Recording a demo of every single game played on a server ends up taking quite a lot of hard disk space!)
+			<dl><dd>True = Server side auto demo recording Enabled
+			<dd>False = Server side auto demo recording Disabled</dl>
+		</dl>
+
+	<li><b>AutoDemoRecMask</b> (default: %d-%t-%p-%m)
+		<dl><dd>Changes the names of the demo recorded. The percentages in the name are intelligent variables that will modify the demo's name depending on current game conditions. %d will add the current date, %t will add the current time in a 24 hour HH:MM format, %p will add the names of the players in the game and %m will add the current map's name.
+		</dl>
+
+	<li><b>EnableWarmupWeaponsMode</b> (default: 1)
+		<dl><dd>Controls which weapons are given to players during warmup.
+			<dl><dd>0 = Players spawn with default weapons (shield gun and assault rifle) during warmup
+			<dd>1 = Players spawn with every weapon in the current map with full ammunition during warmup
+			<dd>2 = Players spawn with shield gun, assault rifle, bio rifle, shock rifle, link gun, minigun, flak cannon, rocket launcher and lightning gun, with full ammunition during warmup
+			<dd>2 = Players spawn with shield gun, assault rifle, bio rifle, shock rifle, link gun, minigun, flak cannon, rocket launcher, lightning gun, grenade launcher, mine layer and avril with full ammunition during warmup</dl>
+		</dl>
+
+	<li><b>WarmupTime</b> (default: 0)
+		<dl><dd>Timelimit for warmup mode in seconds. If this is set to 0, warmup will continue as long as the percentage of players who readied up is lower than the server's <i>WarmupReadyPercentRequired</i> setting. If not, warmup will automatically end after the number of seconds defined, regardless of player's ready states.
+		</dl>
+
+	<li><b>WarmupHealth</b> (default: 199)
+		<dl><dd>Controls the health players spawn with during warmup mode.
+		</dl>
+
+	<li><b>bForceMapVoteMatchPrefix</b> (default: true)
+		<dl><dd>Controls whether players can vote on maps from different gametypes than they are currently using in the map vote page.
+			<dl><dd>True = Players can only vote for maps in the current gametype
+			<dd>False = Players can vote on any map installed on the server, regardless of gametype</dl>
+		</dl>	
+
+	<li><b>bEnableTimedOvertime</b> (default: False)
+		<dl><dd>Controls Timed overtime. When enabled, if a game is tied after the timelimit is hit, the game will keep going for a number of seconds. (defined in <i>TimedOverTimeLength</i>)  If the game is still tied after the Timed Overtime ends, the game will then switch to UT2004's default Sudden Death Overtime, in which the first player who gets a frag wins.
+			<dl><dd>True = Timed Overtime Enabled
+			<dd>False = Timed Overtime Disabled, default Sudden Death Overtime will be used</dl>
+		</dl>	
+
+	<li><b>TimedOverTimeLength</b> (default: 300)
+		<dl><dd>When enabled, if a game is tied after the timelimit is hit, the game will keep going for a number of seconds. If the game is still tied after the Timed Overtime ends, the game will then switch to UT2004's default Sudden Death Overtime, in which the first player who gets a frag wins. Setting this to 0 will go directly to Sudden Death OT.
+		</dl>	
+
+	<li><b>NumGrenadesOnSpawn</b> (default: 4)
+		<dl><dd>Sets the number of grenades players spawn with at the start of a game, of after dying.
+		</dl>	
+
+	<li><b>bForward</b> (default: False)
+		<dl><dd>Enables or disables Forward mode. See <a href="#topic42">Forward Mode Information</a> section for more information.
+			<dl><dd>True = Forward Mode Enabled
+			<dd>False = Forward Mode Disabled</dl>
+		</dl>
+
+	<li><b>bEnableForwardVoting</b> (default: true)
+		<dl><dd>Enables or disables voting for the Forward Gametype in UTComp's voting system. This setting has no effect if bEnableVoting is set to false.
+			<dl><dd>True = Allow players to vote for the Forward Gametype
+			<dd>False = Do not Allow players to vote for the Forward Gametype</dl>
+		</dl>
+
+	<li><b>bShieldFix</b> (default: True)
+		<dl><dd>If set to true, this fixes a bug in UT2004 which sometimes makes shield not absorb damage properly when the player getting shot has both a large and a small shield. If set to false, the default buggy UT2004 behavior is used.
+			<dl><dd>True = Shield bug fixed.
+			<dd>False = Default UT2004 code used, shield bug still present.</dl>
+		</dl>
+
+	<li><b>bEnableEnhancedNetCode</b> (default: False)
+		<dl><dd>Controls Enhanced Netcode. See <a href="#topic41">Enhanced Netcode Information</a> section for more information.
+			<dl><dd>True = Enhanced Netcode Enabled
+			<dd>False = Enhanced Netcode Disabled</dl>
+		</dl>	
+
+	<li><b>bEnableEnhancedNetCodeVoting</b> (default: true)
+		<dl><dd>Enables or disables Enhanced Netcode voting in UTComp's voting system. This setting has no effect if bEnableVoting is set to false.
+			<dl><dd>True = Allow players to vote on the server's Enhanced Netcode setting
+			<dd>False = Do not Allow players to vote on the server's Enhanced Netcode setting</dl>
+		</dl>
+
+	<li><b>AlwaysUseThisMutator</b> (default: utcompv17a.mututcomp)
+		<dl><dd>Mutators defined by this setting will always be loaded during UTComp Gametype Voting. To add new mutators, add a new AlwaysUseThisMutator= line, with the proper mutator name. (Example: AlwaysUseThisMutator=xgame.mutnoadrenaline would always load the no adrenaline mutator on every gametype)
+		</dl>
+
+	<li><b>VotingGameType</b>
+		<dl><dd>Allows you to modify the default gametypes for UTComp Gametype voting, or add new gametypes, up to a maximum of 15. If, for example, you wanted to add a new &quot;Team Deathmatch With GoalScore 10&quot; gametype, you would create a new VotingGametType= line at the end of the VotingGameType= list, and configure the proper settings. Example:<p>
+<i>VotingGametype=(GametypeOptions="?game=xgame.xteamgame?timelimit=15?<b>goalscore=10</b>?minplayers=0?Mutator=xweapons.mutnosuperweapon?FriendlyfireScale=100?weaponstay=False",GametypeName="<b>Team Deathmatch With GoalScore 10</b>")
+</i><p>
+This system is very flexible, and allows for just about any combination of settings to be voted. If you want to disable a mode from the voting options, just delete the appropriate VotingGameType= line.
+		</dl>
+
+	<li><b>bAllowRestartVoteEvenIfMapVotingIsTurnedOff</b> (default: false)
+		<dl><dd>If set to true, players will be able to call a vote for quick map restarts even if bEnableMapVoting is set to false.
+			<dl><dd>True = Players can vote for a quick map restart without map voting enabled.
+			<dd>False = Map Voting has to be enabled for players to be able to call quick map restarts.</ul>
+		</dl>
+
+
+<p><hr>
+<b><font size="+1"><a name="topic37">3.7 Epic Mapvote Information</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+For server admins relying on Epic's Map Vote utility to change Gametypes and settings, you can now configure some of UTComp's settings through that by adding the following information to your GameConfig= lines in [xVoting.XVotingHandler] in your server's ini. For example, this is the stock Webadmin-generated line for Team Deathmatch:<p>
+
+<i>GameConfig=(GameClass="XGame.xTeamGame",Prefix="DM",Acronym="TDM",GameName="Team DeathMatch",Mutators=,Options=)</i><p>
+
+The Options= parameter can be configured with the following settings:<p>
+<ul>
+	<li>BrightSkinsMode
+	<li>HitSoundsMode
+	<li>EnableTeamOverlay
+	<li>EnableWarmup
+	<li>DoubleDamage
+	<li>TimedOverTimeLength
+	<li>GrenadesOnSpawn
+	<li>EnableEnhancedNetCode
+	<li>Forward
+
+</ul>
+
+These values accept the same parameters than in the [utcompv17a.MUTUTComp] section, refer to the documentation above for settings. Here's an example of a modified TDM line that would always turn on Double Damage, and Team Overlay:<p>
+
+<i>GameConfig=(GameClass="XGame.xTeamGame",Prefix="DM",Acronym="TDM",GameName="Team DeathMatch",Mutators=,Options=EnableOverlay=True,DoubleDamage=True)</i><p>
+These values can also be passed as parameters in a regular servertravel line, as an admin, or in the server console / webadmin. For example, you could type <i>servertravel dm-antalus?doubledamage=True?EnableTeamOverlay=False</i>, which would change the map to DM-Antalus, enable Double Damage and disable Team Overlays.
+
+<p><hr>
+<b><font size="+1"><a name="topic38">3.8 Clan Arena Gametype</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+New since version 1.6 is a Clan Arena Gametype, similar to other Arena gametypes in various games.
+
+<ul>
+	<li>Clan Arena is played on DM maps.
+	<li>Clan Arena awards one point to the team that survives the end of a round.
+	<li>To win a round, players have to kill all enemies.
+	<li>Once a player dies, he goes to spectator mode until the round is over.
+	<li>Players do not drop weapons when they die.
+	<li>Individually, one point is given to players for every 100 points of damage they inflict to their enemies. One point is also given for every kill.
+	<li>Players start with 100 Shield and 150 Health at the start of a round.
+	<li>Players start with all Weapons and Maximum ammo at the start of a round.
+	<li>All Weapon and Item pickups are removed from the map. 
+</ul>
+
+Particularities of this Clan Arena implementation is that rounds have an actual time limit. (which defaults to 2 minutes) Once that timelimit is hit, players will start losing health progressively, eventually dying. This is to make sure that rounds cannot last forever as in most other Clan Arena implementations.
+
+There are multiple ways to set up a Clan Arena server:
+<ol>
+	<li>If you set up your server with the &quot;Host Game&quot; interface, select &quot;UTComp Clan Arena 1.7a&quot; as the gametype.
+	<li>Using Webadmin, under Current Game, select &quot;UTComp Clan Arena 1.7a&quot; and click Switch.
+	<li>Using Webadmin, in the Server console section, type in servertravel DM-DE-Ironic?game=utcompv17a.UTComp_ClanArena
+	<li>In game, log in as admin, and type in admin servertravel DM-DE-Ironic?game=utcompv17a.UTComp_ClanArena
+	<li>On the server command line, add in ?game=utcompv17a.UTComp_ClanArena
+	<li>As a player, vote for UTComp Clan Arena 1.7a in the Gametype Voting page.
+</ol>
+
+Including UTComp as a mutator is not necessary if you intend to use Clan Arena, as it will be loaded automatically. Warmup cannot be entirely disabled in Clan Arena: if the server has warmup enabled, a short 30-second Time-Limited warmup will be used instead.<p>
+
+Also, a new category will appear in your server ini, called UTCompv17a.UTComp_ClanArena. Most of the settings in there are the regular settings that you use normally to configure any gametype. (timelimit, goalscore, etc.)
+
+<p><hr>
+<b><font size="+1"><a name="topic41">4.1 Enhanced Netcode Information</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+First of all, technically the word <i>netcode</i> is a tad misleading: UTComp's Enhanced Netcode does not have <i>any</i> impact on the actual network data being sent between clients and servers. The better word would be predictive weapon firing. However, due to the fact that gaming communities typically refer to this as netcode, we decided to use a term that players would easily be able to identify. Please do not write us angry emails claiming Enhanced Netcode isn't really netcode: we know.<p>
+
+As opposed to past "netcode" modifying mutators for the Unreal Tournament series, our netcode does not decide anything clientside that would normally be decided server side, or change the position players are displayed at. Our netcode works similar to Half-Life's, by having the server remain the ultimate authority.<p>
+
+The entire point of this is to remove the aim differences between various pings: while many players can deal with "lagged" fire, (having to lead targets depending on their pings) several players cannot, or would rather not if they had the option. Players using Enhanced Netcode can simply fire directly at targets, regardless of their ping.<p>
+
+Technical facts about Enhanced Netcode:<p>
+
+<b>Hitscan Weapons</b>:<br>
+How it works: The client draws its own client effects. The client sends info to the server. The server decides if the player would have hit if he were not lagged.<p>
+
+The immediate downside is 'through the wall' hits. These are not nearly as noticable in UT as you might imagine. Most experience with it comes from counter-strike, where the movement caused by damage is also reverted to 0 ping conditions. What this means is, that unlike CS, you won't get stuck behind a wall being hit over and over. You will be hit only if you would have been hit versus a lower pinger. This is currently capped at 350 milliseconds.<p>
+
+Another downside is that the client may register hits, or misses that will not actually register on the server. These are rather infrequent, but will happen nonetheless. The majority of these come from already existing innaccuracies in UT's netcode. In ut2004, when you fire a shot, the shot is not only not guaranteed to be fired when you shot, but also is not guaranteed to be even aiming in the same direction, or from the same place as you shot. For example, if you move your mouse *QUICKLY* from left to right or up to down. There is basically a random cone of fire, even on weapons like the shock rifle and lightning gun, and even on lan. This is why snap-shots are so innacurate in ut2004. Basically, the errors are made more visibly noticable.<p>
+
+<b>Projectile Weapons</b>:<br>
+Projectiles are reverted much like the hitscan weapns, but are currently limited to 75ms. You cannot be hit behind a wall by the projectiles.<p>
+
+Downsides: The immediate downside is that the projectiles are actually slightly harder to dodge vs a higher pinger. However, the magnitude of this effect is equal to the effect that the high pinger feels from the lower pingers projectiles. For example in the case of a 10 pinger vs a 75 pinger, they will both have equal difficulty in dodging projectiles, the approximate difficulty of a 85 ping player. Above 75 ping, the lower ping player has an advantage in dodging.<p>
+
+<b>Shock Combos</b>:<br>
+Your own shock balls are moved forward approximately as far as your ping, so that you do not have to lead them.<p>
+
+Downsides: The shock ball will look to be in a slightly different position when the actual combo explosion occurs. This is only visible to the firer, and has no real impact on play, but it looks wrong.<p>
+
+Other facts about Enhanced Netcode:
+<ul>
+<li>If the server has Enhanced Netcode enabled, every player can decide whether they want to use Enhanced Netcode or not. Players who prefer the regular UT2004 netcode can simply check an option in their F5, Miscellaneous menu and revert back to the normal netcode. This will have no impact on other players. Server admins who prefer not to use Enhanced Netcode can disable it entirely for all players by either changing the setting in their server.ini, or by voting the option off via the Voting-->  Gametype --> Settings menu.
+<li>Enhanced Netcode is in most cases as accurate than the normal netcode is. However, many effects now take place on the client instead of the server. This has the direct result of causing some innacuracies that would normally be transparent to the player, visible.
+<li>Enhanced Netcode does not make it any "easier" to hit targets. It only makes it so that you don't have to fire ahead of opponents. For players who are unable to effectively adjust to their pings, it will make a difference, but it's not going to give them any better accuracies than they would get under lan conditions.
+<li>Enhanced Netcode does not favor higher ping players. However, if those players had difficulties aiming in front of their targets to compensate for their ping times, it will obviously minimize their usual ping disadvantage. As much as we'd like to make things 100% even regardless of pings, this just isn't possible. For now, minimizing higher ping disadvantages is as good as we can do.
+<li>Enhanced Netcode will not currently work with custom weapon mutators. So, for the time being, you would be best served to only use the enhanced Netcode with the standard weapon loadout.
+</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic42">4.2 Forward Gametype Information</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+Forward is a simple gameplay reinterpratation of UT2004, with a simple goal of creating a fun and exciting gameplay experience. The game reinterprets movement and weapons, but also introduces some general gameplay tweaks. While forward is playable in any of the stock UT2004 gametypes, it has been balanced mostly with duel play and clan arena in mind. Go in with an open mind and enjoy yourself!<p>
+
+<b>Movement</b><br>
+<ul>
+<li>The movement can be best described as quake-style bunnyhopping with an unreal twist. There are two major additions to the standard UT2004 arsenal of movement -- Midair Dodging and Bunnyhopping.
+<li>Midair Dodging is simply the ability to pull off any of the moves normally available at any point.
+<li>Bunnyhopping is the ability to maintain speed gained by jumping quickly upon hitting the ground. While bunnyhopping, one can take advantage of the terrain, getting height boosts off angled terrain and reorienting their path while sliding on the ground.
+<li>These movement techniques can be used together in order to acheive even faster speeds than either of them alone. 
+</ul>
+
+<b>Weapons</b><br>
+<ul>
+<li>The standard UT2004 weapons have been altered to increase the speed and intensity of fights, and give fights a new airborne element.
+<li>Most weapons have been given increased knockback or increased damage output.
+<li>The shieldgun has been reworked so that its defensive use is 'earned' by offensive play. 
+</ul>
+
+<b>Other notable gameplay changes</b><br>
+<ul><li>
+<li>All the powerup respawn times have been decreased to complement the increased speed of movement.
+<li>The double damage powerup is replaced with a mini-keg-o-health in duel games.
+<li>Players spawn with all weapons, but with limited ammo which can be replenished by weapon pickups.
+<li>To maintain the element of surprise, most audio cues during movement have been removed.
+<li>Players are rewarded for attempting difficult midair shots. If someone is popped into the air by weapon fire, projectiles are given a damage bonus. 
+</ul>
+
+We have found that due to the different gameplay dynamics, some maps which were unusable in regular UT2004 duel play are quite enjoyable when playing forward! We most enjoyed DM-DE-Grendelkeep, DM-Campgrounds2004 variants, DM-Corrugation and DM-
+DE-Ironic. DM-Antalus, DM-Rankin, DM-Goliath, and DM-Goose2k4 are also recommended. 
+
+<p><hr>
+<b><font size="+1"><a name="topic43">4.3 Changelog</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+v1.7a:
+<ul>
+<li>Significantly improved enhanced netcode accuracy.
+<li>Added the ability to view other players stats on the server via the scoreboard.
+<li>Added forward gametype as a votable option.
+<li>Added server side option to fix Epic's small shield absorption bug.
+<li>Fixed movement error from v1.6a due to old test code.
+<li>Added option for players to disable their own specific adrenaline combos.
+<li>Servertravel parameters will now work on initial loading of game.
+<li>Fixed Show Colored names when targeting enemy players option.
+<li>Fixed scoreboard spectator box being too large with UTComp scoreboard disabled.
+<li>Fixed GUI setting your current name to your first saved colored name's colors when you load the colored names menu the first time.
+<li>Saving a colored name does not automatically change your name to this name when connecting to a server anymore.
+<li>Fixed auto demo recording not working in assault under certain conditions.
+<li>Added serverside option to allow quick map restart votes when map voting is disabled.
+<li>Minor GUI fixes.
+</ul>
+<p>
+
+v1.6a:
+<ul>
+<li>Added Lightning Gun and Sniper Rifle headshots to weapon stats.
+<li>Voting now show the name of the player who started the vote.
+<li>Coach Mode now defaults to and forces First Person view.
+<li>Spectators with admin rights can now call new votes and participate in voting.
+<li>Adminready now always works as a spec.
+<li>Fixed Vehicle fire hitsounds not playing with scoreboard stats disabled.
+<li>Added "Enable Enhanced Netcode" and "Allow players to vote on Enhanced Netcode" settings to Webadmin.
+<li>Fixed ?EnableEnhancedNetcode? command line parameter.
+<li>Fixed link primary projectiles sometimes not hitting with Enhanced Netcode. 
+<li>Added EnhancedNetcode? variable in serverinfo.
+<li>Fixed recusion crashes with UTComp and Epic's Arena mutator.
+<li>Fixed Clan Arena sometimes letting players join teams during rounds.
+<li>Fixed exploit in Clan Arena allowing people to spectate in free float mode after dying.
+<li>Fixed vertical aim occasionally being disabled after spawning in Clan Arena.
+<li>Fixed Clan Arena clock being garbled in overtime.
+<li>Fixed weapons spawning in Clan Arena allowing players to get ammo after they run out.
+<li>Clan Arena and Duel servers now show on their appripriate server browser gametype categories.
+<li>Added short map names for DM-1on1-Roughinery-FPS, DM-Deck17-FPS, DM-1on1-Lea and DM-Campgrounds2004-G1E? to mapvote.
+<li>Very minor GUI improvements
+</ul>
+<p>
+
+v1.6:
+<ul>
+<li>Enhanced netcode now defaults off serverside.
+<li>Added "Enhanced Netcode=Enabled" message to Onjoin Box if Enhanced Netcode is enabled.
+<li>Fixed bug in Enhanced Netcode causing projectiles to not collide with static meshes at very close ranges.
+<li>Fixed GetWeapon binds not working with standard binds when using enhanced netcode.
+<li>Colored names on enemy targetting disabled by default.
+<li>Adrenaline taken stat now reports 2 as it should.
+<li>Red/Blue Team Score in the player list will no longer report a ping.
+<li>Voting failed message is now different if a vote timed out or voted no.
+<li>GUI now grey outs warmup voting when warmup voting is disabled serverside.
+</ul>
+<p>
+
+v1.6 Beta8:
+<ul>
+<li>Fixed issue with mutnosuperweapons combined with enhanced netcode
+<li>Fixed issue causing Bio Rifle primary fire visuals to be off on very low pings
+</ul>
+<p>
+
+v1.6 Beta7:
+<ul>
+<li>Re-Added an improved version of the enhanced netcode.
+<li>Fixed bug causing settings to sometimes not save
+<li>Flak primary hitsounds will now group together to form one hitsound if CPMA hitsounds are enabled.
+<li>SpecViewGoal? in coachmode now allows you to see your own flag/ball carrier.
+</ul>
+<p>
+
+v1.6 Beta6:
+<ul>
+<li>Removed enhanced netcode.
+<li>Fixed bug causing everyone to skin as enemy color when spectating if skins were set to enemy/teammate based.
+</ul>
+<p>
+
+v1.6 Beta5:
+<ul>
+<li>Fixed bug which was causing some hitscan weapons to hit more often than they should have.
+<li>Improved projectile hit detection.
+<li>Fixed bug causing projectiles to explode for direct hits well after they had been dodged.
+<li>Fixed bug causing shock-combos to be overly hard to dodge.
+<li>Fixed bug causing crouching to fail, and by consequence, falling off of ledges.
+<li>Fixed bug causing warping under certain circumstances, especially in close range fights.
+<li>Fixed bug causing weapons to not respawn when used in combination with MutUseLightining.
+<li>Fixed bug causing shock projectiles to be slightly off-target (and by consequence, making combos akward)
+</ul>
+<p>
+
+v1.6 Beta3 :
+<ul>
+<li>Fixed bug with projectile weapons not hitting properly with Enhanced Netcode and Antitcc enabled. 
+</ul>
+<p>
+
+v1.6 Beta2 :
+<ul>
+<li>Added new Enhanced Netcode.
+<li>Added Clan Arena Gametype.
+<li>Added option to control the number of grenades players start with.
+<li>Added average team pings to the scoreboard.
+<li>Hitsounds will now play in first person spectator view.
+<li>Colored names now show when targetting enemy players.
+<li>Added RTS-Style actions per minute statistic to scoreboard.
+<li>Added flood protection to Voting Yes/No messages.
+<li>UTComp Duel Mode servers now have a [Duel] tag in front of their name.
+<li>Added getsensitivity console command.
+<li>Added client and server options to enable/disable enhanced netcode.
+<li>Added server side enhanced netcode vote to settings voting.
+<li>Added Webadmin entries for Enhanced Netcode, Enhanced Netcode Voting and Grenades on Spawn.
+<li>Added grenades on spawn to gametype voting page.
+<li>Move timed overtime to gametype voting, now accepts numerical values. (as opposed to on/off)
+<li>When selecting a gametype in gametype voting, the maxplayers box will automatically default to a reasonable number.
+<li>Added options to toggle whether UTComp Duel and Clan Arena servers have their respective [Duel] and [CA] tags appearing in front of the server names.
+<li>Fixed bug which made it impossible for spectators to switch players and move around after a quick map restart.
+<li>Fixed bug with Timed Overtime in which certain seconds were left out on the game clock.
+<li>Fixed bug causing Warmup to cause choppyness with the Low gravity mutator.
+<li>Fixed admin forced votes stopping further votes from being started
+<li>Fixed bug causing UTComp to remove itself from the server on certain gametype votes.
+<li>Fixed bug with Line of Sight hitsounds not playing with hitscan weapons in some situations.
+<li>Fixed bug with Line of Sight hitsounds not playing when a player disabled all stats.
+<li>Fixed bug in brightskins menu when selecting a model on a custom clanskin entry.
+<li>Re-Fixed first blood not resetting after warmup is over.
+<li>Fixed bug with using certain numbers in colored names breaking chat messages.
+<li>Minor GUI and Webadmin Changes.
+</ul>
+<p>
+
+v1.5a:
+<ul>
+<li>Fixed server logging UTComp_Pawn error messages
+<li>Added TimedOverTimeLength and EnableTimedOverTime server command line parameters
+<li>Other minor bug fixes
+</ul>
+<p>
+
+v1.5:
+<ul>
+<li>Fixed advanced gametype voting with alternate localizations (ex. german)
+<li>Fixed some voting options being disabled in voting menu even if the server allowed them
+<li>Removed spaces from query variables for version and linespots(for filtering in ASE etc)
+</ul>
+<p>
+
+v1.5 Beta1:
+<ul>
+<li>Added Duel Mode with lines(BETA)
+<li>Added timed overtime option
+<li>Server Admins calling new votes will now pass automatically
+<li>Added Flood Protection to voting messages
+<li>Fixed server autodemorec sometimes failing to record due to overly long demo names
+<li>Fixed Line of Sight hitsounds sometimes not playing with weapon stats disabled
+<li>Fixed adminready console command sometimes not working
+<li>Re-Added messages when players go ready and not ready
+<li>Fixed "player voted" message happening when specs vote through the console
+<li>Fixed bug causing sounds for players being forced to human male
+<li>Player Highlighting color now matches the client's skin settings
+<li>Chat messages can now be used during pauses
+<li>Fixed bug allowing colored names longer than regular name character limit
+<li>Fixed minor issues with Custom Gametypes voting
+</ul>
+<p>
+
+v1.4b:
+<ul>
+<li>Fixed game sometimes starting on its own with no players in time-limited warmup
+<li>Fixed UT2004 bug where skins would sometimes not show properly in onslaught
+<li>Added Editor's Choice Bonus Pack models to forcemodel
+<li>Added Editor's Choice Bonus Pack vehicle icons in team overlay
+<li>Added Editor's Choice Bonus Pack vehicle statistics in stats
+</ul>
+<p>
+
+v1.4a:
+<ul>
+<li>Fixed 100a/50a pickup stats not accumulating.
+<li>UTV Playercontroller names now changed to be in line with what is expected by ut2004s4.
+<li>Mistakenly reported that ?EnableOverlay= was a servertravel argument, the correct argument is ?EnableTeamOverlay=
+<li>Fixed hitting advanced options in gametype voting menu re-selecting the first map in the map list.
+</ul>
+
+v1.4:
+<ul>
+<li>Fixed bug with specs not always showing on scoreboard
+<li>Added preview window to brightskins
+<li>Separated Enemy/Teammate based skins and Enemy/Teammate based models
+<li>Map list in voting now only shows maps for the current or selected gametype.
+<li>Added serverside option to allow map votes on any map, regardless of current gametype.
+<li>Fixed Team Overlay settings not always updating instantly
+<li>Fixed double damage not always showing properly on team overlay
+<li>Added hud message during warmup
+<li>Fixed first red player's name not showing in server side auto demorec
+<li>Fixed some vehicle and superweapon stats not being named properly
+<li>Fixed serverside autodemorec when warmup is disabled
+<li>Improved item pickup scoreboard stats
+</ul>
+<p>
+
+v1.4 beta3:
+<ul>
+<li>Added map list to voting system
+<li>Separated Map Vote and Gametype Vote Pages
+<li>Added various game rules to the Gametype Vote Pages
+<li>Added more game types (Assault, Double Domination, Bombing Run) to the default gametypes
+<li>Fixed players sometimes being switched to spectators at the start of a new game
+<li>Fixed serverside autodemorec listing spectators as part of the red team
+<li>Fixed UTComp scoreboard not changing there are more than 10 players in non-team gametypes
+<li>Fixed a few servertravel options not working (?warmup and ?DD)
+<li>Fixed some short map names not working in voting
+</ul>
+<p>
+
+v1.4 beta2:
+<ul>
+<li>Fixed excessive server CPU utilisation bug
+<li>Fixed spectators needing to ready up to start matches
+<li>Added new crosshairs to the custom crosshair system
+<li>Added option to match hud colors to brightskins settings
+<li>Fixed skins resetting to "epic style" on the red/teammate team after map switches
+<li>Fixed net not working properly in scoreboard
+<li>Fixed the vote message window displaying nothing for some votes
+<li>Chat will now show with scoreboard up if stats are turned off
+<li>Maximum number of saved colored names increased from 255 to a few millions
+<li>Fixed Team Overlay vote not working
+<li>Fixed overlapping stats on certain resolutions
+<li>Fixed colored name menu not always showing all letters in long names
+<li>Bots will now re-add themselves in net games after warmup
+<li>Re-Added webadmin settings
+<li>Re-Added warmuphealth server side command
+<li>Re-Added Red/Blue team scores in the serverbrowser
+<li>Removed case sensitivity from clanskins
+<li>On join info box message now updates based on your bound key for the UTComp menu
+<li>Added Static mutators to options for voting
+<li>Added bShowTeamScoresInServerBrowser server side variable
+<li>Added server side variable (WarmupReadyPercentRequired) to control % of players who need to ready up to start a game
+<li>Added VotingTimeLimit server side variable
+<li>Added VotingPercentRequired server side variable
+<li>Fixed Mapvoting menu not disabling when bEnableMapVoting is set to false
+<li>Fixed bugs with Spaceship vehicles in Assault
+<li>Added ?BrightSkinsMode, ?HitSoundsMode, ?EnableOverlay, ?EnableWarmup and ?DoubleDamage servertravel parameters
+<li>Minor change to the Colors GUI Page
+
+</ul>
+<p>
+
+v1.4 beta1:
+<ul>
+<li>Major GUI modifications
+<li>Added custom crosshairs system
+<li>Added option to remove crosshair size increase during item pickups
+<li>Added colored names saving and restoring (up to 255)
+<li>Added Assault, Last Man Standing and Invasion support.
+<li>Brightskins types can now be changed separately for both teams, as well as defined clanskins
+<li>Added regular DM skins as an option for bright skins
+<li>Added unlimited clanskins definitions
+<li>Clanskins now search through the entire name for the letters typed, instead of just the beginning
+<li>Force Model can also be changed separately for both teams and clanskins
+<li>Fixed (hopefully) brightskins with non-standard models
+<li>Fixed autodemorec not working with warmup off
+<li>Added on-connect information box
+<li>Added item pickup stats on scoreboard
+<li>Added stats for vehicle damage.
+<li>Added options to turn stats on and off in the scoreboard.
+<li>Fixed stats not working with instagib and custom weapon mutators
+<li>Fixed coaches being able to see enemy team beacons and health
+<li>Fixed quick map restarts not stopping autodemorec
+<li>Fixed quick map restarts not working in onslaught
+<li>Server hitsounds mode now defaults to line of sight
+<li>Added option to only give weapons that are in the map played during warmup
+<li>Improved warmup countdown
+<li>Fixed server side demos with %p in the demo mask are now named properly.
+<li>Mutator name is now MutUTComp again, fixing filters. (All previous UTComp versions used this, but 1.3b accidentally didn't) 
+</ul>
+<p>
+
+v1.3b:
+<ul>
+<li>Re-Enabled Autodemorec on servers not using warmup
+<li>Fixed colored names sometimes not updating properly 
+<li>Added colored names option to Epic's Scoreboard
+<li>Added several new short map names to map voting (mostly for CBP2 maps)
+<li>Added Red and Blue Team scores to server browser
+<li>Onslaught Gametype Voting now defaults to NoSuperWeapons
+<li>Added preliminary (use at your own risk) Assault and Last Man Standing support (without warmup)
+</ul>
+<p>
+
+v1.3:
+<ul>
+<li>Added Darken Skins on Death option
+<li>Added Team Overlay
+<li>Added Coaching Mode
+<li>Added option to disable Team Overlay Serverside and as a vote
+<li>Added Quick Map Restart option
+<li>Added Total Damage Received to stats
+<li>Clock now keeps going in overtime
+<li>Spectators can now talk to each other with say_team in the 1v1/FFA Game Type
+<li>Disabled UT2004's colored name exploit (UTComp's still work)
+<li>Fixed various issues with nonstandard skins and brightskins
+<li>Fixed Team Deathmatch Timelimits using the wrong value in voting
+<li>Fixed Color effects (purple/green/yellow) when you hit an enemy not always displaying
+<li>Fixed bug with shock balls disappearing due to disabling UTComp without a server restart
+<li>Added Clientside option to disable UTComp's scoreboard
+<li>UTV2004S is now included in UTComp. (see <a href="#faq">FAQ</a> for info)
+<li>Clanskins names aren't case sensitive anymore
+<li>Minor tweaks to GUI
+</ul>
+<p>
+
+v1.3 RC1:
+<ul>
+<li>Added brighter Epic Brightskins
+<li>Fixed players respawning with shield gun or translocator
+<li>Fixed UTComp brightskins not working properly with the new patch's DX9 renderer
+<li>Skins now update instantly when you change teams in every brightskins type without players needing to die
+<li>Fixed skins sometimes not working properly in demo playback
+<li>Added &quot;crosshairscale&quot; and &quot;bplayownfootsteps&quot; settings to Miscellaneous menu
+<li>Added new spectator console commands
+<li>Fixed autodemorec sometimes overwriting demos
+<li>Colored names now update instantly
+<li>Fixed colored names sometimes not working when using the setname command
+<li>Added short map names for mapvoting. (see <a href="#faq">FAQ</a> for info)
+<li>Fixed server lag for a few seconds after a UTComp vote is called
+<li>Fixed Maxplayers sometimes not changing during a mapvote, after it was changed in webadmin
+<li>Fixed player shadows setting sometimes not saving correctly when using UTComp
+<li>Added serverside command to disable UTComp's scoreboard
+<li>Scoreboard now reverts to Epic's in high player count FFA games
+<li>Changed the security level on &quot;Voting Max players&quot; in webadmin to 255
+<li>Announcer now counts down properly when warmup ends
+<li>Minor tweaks to GUI
+</ul>
+<p>
+
+v1.2:
+<ul>
+<li>Fixed flag icon not showing in scoreboard after warmup in CTF.
+<li>Voting now works during post-game scoreboard intermission
+<li>Players now respawn with Assault Rifle selected instead of Shield Gun (as it should)
+<li>Fixed the translocator's camera feature sometimes activating after dying
+<li>Fixed autodemorec not working if your name has a &quot;?&quot; character
+<li>Fixed the F5 button sometimes not binding properly
+<li>Some of the major UTComp server settings can now be set up via webadmin
+<li>&quot;First Blood&quot; award now resets correctly after warmup
+<li>Minor tweaks to GUI
+<li>More graphical tweaks to scoreboard
+</ul>
+<p>
+
+v1.2 RC3:
+<ul>
+<li>Fixed Onslaught not resetting weapons properly after warmup ended
+<li>Fixed players not being able to join the game if they joined as a spectator first
+<li>Fixed scoreboard not showing if players are ready/not ready
+<li>If brightskins are disabled serverside, the shock/shield/lg etc. hit-graphics will return to the defaults
+<li>Fixed autodemorec not working with nonstandard characters ( [ ] / \ = + < > : ; )
+<li>Maps that have their defaultgametype set as "mutant" (example: dm-1on1-sprit) will no longer cause UTComp to disable.
+<li>Clients will now always show with team colored skins in the Deathmatch gametype if UTComp skins are disabled
+<li>Deathmatch scoreboard will show your name as the last place player, even if you're too low to be normally shown
+<li>Added new console commands for spectators in Onslaught
+<li>Many minor GUI and scoreboard graphical tweaks
+</ul>
+<p>
+
+v1.2 RC2:
+<ul><li>Fixed a bunch of client side settings not saving</ul>
+<p>
+
+v1.2 RC1:
+<ul>
+<li>Completely redesigned F5 GUI
+<li>Completely new scoreboard with weapon stats, spectators, and net efficiency
+<li>Added Full colored names support
+<li>Fixed clientside AutoDemorec not working in v1.1a
+<li>Fixed spectators being able to call new votes
+<li>Fixed spectators causing warmup to end prematurely
+<li>Fixed Brightskins in Onslaught (hopefully they work 100% this time)
+<li>Fixed a bug with diseappearing turrets in onslaught
+<li>Fixed a bug with goalscore 1 in Capture The Flag
+<li>Made the default public text chat spam protection time less restrictive
+<li>Added option to disable UTComp brightskins serverside
+<li>Added option to force epic skins clientside with red, blue, and purple colorchoice.
+<li>Added serverside option to disable Double Damage (bEnableDoubleDamage=false)
+<li>Added vote on serverside UTComp brightskin settings
+<li>Added vote on serverside hitsounds setting
+<li>Added vote to enable/disable Warmup
+<li>Added vote to enable/disable Double Damage
+<li>Displays a message when someone votes yes or no in UTComp voting
+<li>Increased maximum number of Gametypes in voting to 10
+<li>Added serverside AutoDemorec
+<li>Added serverside option to limit the maximum players in voting
+<li>Added a check to automatically disable UTComp in Assault, Invasion, Last Man Standing and Mutant gametypes
+<li>Added a check to disable warmup in CTF-Bollwerk2004-Pro due to a bug with ut2003 Jump Boots
+<li>Serverside settings are stored in your server ini instead of utcomp.ini
+</ul>
+<p>
+
+v1.1a:
+<ul>
+<li>Fixed timer randomly staying to 00:00 after warmup
+</ul>
+<p>
+
+v1.1:
+<ul>
+<li>Fixed powerups sometimes not spawning at the correct times after a game started
+<li>Removed team overlay temporarily due to bugs
+<li>Added option to disable head brightskins serverside
+<li>Warmup now works in Onslaught
+<li>Fixed team hitsounds
+<li>Fixed warmup scoreboard, doesn't show kills anymore
+<li>Fixed adrenaline after warmup
+<li>Fixed the clock in time-limited warmup mode, it now shows the correct time before a game starts
+<li>Fixed the <i>Deathmatch 1v1 with LG</i> gametype to also remove superweapons (not possible with epic's lightning guns mutator)
+<li>Fixed the ESC key sometimes not working in the GUI
+<li>Minor tweaks to brightskins
+</ul>
+<p>
+
+v1.0b:
+<ul>
+<li>Added option to disable team overlays serverside
+</ul>
+<p>
+
+v1.0:
+<ul>
+<li>Changed the Mutator Name to UTComp
+<li>Added Warmup Mode
+<li>Added Customizable Voting
+<li>Fixed Stats on auto-screenshot
+<li>Added screenshot mask
+<li>Fixed Translator overlay effect
+<li>Fixed Custom hitsounds not saving
+</ul>
+<p>
+
+TCM v1.0c:
+<ul>
+<li>Removed custom-texture support
+<li>Improved Clan-Member highlighting
+<li>Added auto demorecording
+<li>Added auto screenshots
+<li>Added a new stats page
+<li>Improved CPMA-style hitsounds
+<li>Added support for custom hitsounds
+<li>Added hitsound volume control
+<li>(Hopefully) got rid of any random skins not being colored
+</ul>
+<p>
+
+TCM v1.0b:
+<ul>
+<li>Updated Brightskins with support for custom textures
+<li>Added head coloring for brightskins
+<li>Added Clan-Member Highlighting (Clanskins)
+<li>Added support for Many Forcemodel Choices
+</ul>
+<p>
+
+TCM V1.0a: 
+<ul>
+<li>Completely new BrightSkins implimentation
+<li>Removed Vehicle Brightskins
+</ul>
+<p>
+
+TempCompMod V1.0:
+<ul>
+<li>Initial Release
+</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic44">4.4 Known Issues</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+<ul>
+	<li>In Onslaught, if you have "Show Map" set to either "Immediately" or "When body is still", your Escape menu will pop up when the game countdown starts after warmup. You have to manually close it with ESC before the game starts, it does not go away on its own.
+	<li>The Core health in warmup on ONS-Dawn displays 56% instead of 100%. This is because the mod automatically heals the core back to 5000 health every second on warmup to prevent it from being destroyed, yet ONS-Dawn's powercore has 9000 HP instead of 5000, for some reason. This doesn't affect gameplay: when the game starts, it goes back to its original 9000. This behavior will also happen on custom maps that use non-standard core healths.
+	<li>If Epic's mapvote is configured to automatically open after a game, and players call a quick restart, Epic's mapvote will not be cancelled and the map will switch anyway after its timeout expires.
+	<li>Brightskins and Force Model does not work in the invasion and mutant game types.
+	<li>UTComp's enhanced scoreboard is disabled automatically in assault. The standard Epic scoreboard with colored names and stats will be used instead.
+	<li>Both the UTComp enhanced scoreboard and the Epic scoreboard with colored names and stats are disabled in the Last Man Standing and Invasion game types. The regular Epic scoreboards will be used instead.
+	<li>Colored names when targetting players are disabled in the mutant gametype. This is intentionnal, due to the fact that the regular mutant gametype already shows the mutant's name in a different color.
+	<li>Enhanced Netcode doesn't work with custom weapon mutators. This is discussed in section 4.1, <a href="#topic41">Enhanced Netcode Information</a>.
+</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic45">4.5 FAQ</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+<ul>
+	<li>Why do I have all the weapons?
+		<dl><dd>You're in warmup mode. Just press F5 and click ready, and get every player to do so, and the game will start. Having all the weapons is a good way to warmup.</dl>
+	<li>Does UTComp work with Anticheat mutators?
+		<dl><dd>Yes. UTComp should work with the latest versions of Antitcc and UTSecure. However, due to the constantly evolving nature of both UTComp and anticheat mutators, it is possible that conflicts might occur in the future. Refer to the UTComp webpage and forums for up to date information about AntiTCC/UTSecure/UTComp combinations.</dl>
+	<li>Does UTComp work with other mutators?
+		<dl><dd>Maybe. While Unreal Tournament 2004's mutator system should technically allow any combination of mutators to work, in practice things aren't that easy. Mutators that replace the player controller or pawn classes are almost guaranteed not to work with UTComp, due to UTComp mostly relying on these. Other mutators might work, but sometimes with reduced feature sets, if some features conflict with ours.</dl>
+	<li>Does UTComp work with custom gametypes and mods?
+		<dl><dd>Probably not. UTComp has not been tested with either of these, but its <i>very</i> likely that mods replace classes UTComp needs.</dl>
+	<li>But, isn't Clan Arena a gametype?
+		<dl><dd>Yeah, but we obviously tested it with UTComp. On that note, we recommend using as little custom mutators as possible when using UTComp Clan Arena: the gametype does very deep changes to core gameplay classes, and it's quite likely that custom mutators might cause conflicts. We know for sure that AntiTCC works, but we can't make any promises for anything else.</dl>
+	<li>Okay, so what default game types DO work?
+		<dl><dd>Deathmatch, Team Deathmatch, Capture The Flag, Onslaught, Double Domination and Bombing Run are fully tested and working as intended. Assault works properly, but the UTComp enhanced scoreboard will be automatically disabled for compatibility. As for other game types, they have minor issues that push them into "unsupported" status, but they should still work relatively well: Last Man Standing has scoreboard issues, brightskins and forcemodel won't work properly in Mutant, and Invasion has scoreboard issues, as well as brightskins and forcemodel issues. This mutator's main focus is in competitive gametypes (hence the name UTComp), which means we have to focus our development and testing time on gametypes that are played competitively. Sadly, fixing these game types would require significant time investments that would be, in our opinion, better put into enhancing features in game types that are actually played.</dl>
+	<li>Why are you guys making your own gametypes anyway? It's supposed to be a competitive mutator!
+		<dl><dd>We're well aware of this, but we feel the gametypes we added were natural extensions to the feature set that UTComp already had. Plus, if you don't like them, you don't have to use them.</dl>
+	<li>Map voting is already built in the game!
+		<dl><dd>We know. But one of the issues with Epic's mapvoting is that it uses the default settings for various gametypes when you switch gametypes. This isnt a problem for casual play, but it is for competitive play: You can't expect server admins to setup every setting on every gametype to their accepted competitive values, especially for gametypes they rarely use. With UTComp's voting, it automatically defaults to the accepted competition settings for every supported gametype, effectively making it possible to use any gametype on any UTComp server, regardless of whether the admin took the trouble in setting them up or not.</dl>
+	<li>Why did you change the name of the mutator from TCM to UTComp?
+		<dl><dd>TCM stood for <i>TempCompMod</i>, which was a mutator built as a temporary replacement until the TTM crew would release TTM2004. For various reasons, we came to the conclusion that our mutator was mature enough to be a considered a full featured mutator, and a name change was needed to reflect that. Another reason is that there was confusion between TCM and TTM. This isn't the case anymore.</dl>
+	<li>Do you guys have anything to do with Q3Comp or QWComp?
+		<dl><dd>Other than the fact that the names are similar, no. Those were great mods, however :)</dl>
+	<li>I already use my F5 key for something. Now this mutator bound it to pop up the UTComp menu automatically!
+		<dl><dd>If you want to, you can change the key UTComp uses for its menu through the configure controls menu. The entry for UTComp menu should be at the very bottom. Note that this wont work if you downloaded the mutator off a game server. You need to download it in zip or ut4mod format from the webpage and install it manually for that option to show.</dl>
+	<li>Can I have a list of <i>short map names</i> for voting?</li>
+		<dl><dd>Glad you asked. By the way, short map names allow you to simply type in a few letters when you vote to a new map, instead of typing the entire map name. Here's the list: (More maps will most definitely be added in the future, when/if the competitive community starts using more custom maps)<br>
+			<table width=65% border=1>
+			<tr bgcolor="#CCCC99"><td width=50%>Full Map Name</td><td width=90%>Short Map name</td></tr>
+			<tr><td>DM-1on1-Irondust</td><td>iron irondust</td></tr>
+			<tr><td>DM-1on1-Lea</td><td>lea</td></tr>
+			<tr><td>DM-1on1-Roughinery</td><td>rough roughinery</td></tr>
+			<tr><td>DM-1on1-Roughinery-FPS</td><td>roughfps rough-fps</td></tr>
+			<tr><td>DM-1on1-Spirit</td><td>spirit</td></tr>
+			<tr><td>DM-1on1-Squader</td><td>squader</td></tr>
+			<tr><td>DM-1on1-Trite</td><td>trite</td></tr>
+			<tr><td>DM-Antalus</td><td>ant antalus</td></tr>
+			<tr><td>DM-CBP2-Achilles</td><td>ach achil achilles</td></tr>
+			<tr><td>DM-CBP2-Archipelago</td><td>archipel archipelago</td></tr>
+			<tr><td>DM-CBP2-Azures</td><td>azures</td></tr>
+			<tr><td>DM-CBP2-Buliwyf</td><td>buli buliwyf</td></tr>
+			<tr><td>DM-CBP2-Drakonis</td><td>drak drakonis</td></tr>
+			<tr><td>DM-CBP2-Griffin</td><td>griff griffin</td></tr>
+			<tr><td>DM-CBP2-Kadath</td><td>kadath</td></tr>
+			<tr><td>DM-CBP2-Kerosene</td><td>kero kerosene</td></tr>
+			<tr><td>DM-CBP2-Khrono</td><td>khrono</td></tr>
+			<tr><td>DM-CBP2-KillbillyBarn</td><td>killbb killbillybarn</td></tr>
+			<tr><td>DM-CBP2-Koma</td><td>koma</td></tr>
+			<tr><td>DM-CBP2-KroujKran</td><td>krouj kroujkran</td></tr>
+			<tr><td>DM-CBP2-Masurao</td><td>masu masurao</td></tr>
+			<tr><td>DM-CBP2-Meitak</td><td>meitak</td></tr>
+			<tr><td>DM-CBP2-Niflheim</td><td>nifl niflheim</td></tr>
+			<tr><td>DM-CBP2-Reconstruct</td><td>recon reconstruct</td></tr>
+			<tr><td>DM-CBP2-Summit</td><td>summit</td></tr>
+			<tr><td>DM-CBP2-TelMecoMEX</td><td>telmeco telmecomex</td></tr>
+			<tr><td>DM-CBP2-Tempest</td><td>temp tempest</td></tr>
+			<tr><td>DM-CBP2-TensileSteel</td><td>tensile tensilesteel</td></tr>
+			<tr><td>DM-CBP2-Torkenstein</td><td>tork torken torkenstein</td></tr>
+			<tr><td>DM-CBP2-Tydal</td><td>tydal</td></tr>
+			<tr><td>DM-Campgrounds2004-G1E</td><td>camp campgrounds dm6</td></tr>
+			<tr><td>DM-Compressed</td><td>comp compressed</td></tr>
+			<tr><td>DM-Corrugation</td><td>corr corrugation</td></tr>
+			<tr><td>DM-Curse4</td><td>curse curse4</td></tr>
+			<tr><td>DM-Deck17</td><td>deck deck17</td></tr>
+			<tr><td>DM-Deck17-FPS</td><td>deckfps deck-fps</td></tr>
+			<tr><td>DM-DE-Grendelkeep</td><td>gren grendel grendelkeep</td></tr>
+			<tr><td>DM-DE-Ironic</td><td>ironic</td></tr>
+			<tr><td>DM-DE-Osiris2</td><td>osi osiris osiris2</td></tr>
+			<tr><td>DM-Desertisle</td><td>desert desertisle</td></tr>
+			<tr><td>DM-Flux2</td><td>flux flux2</td></tr>
+			<tr><td>DM-Gael</td><td>gael</td></tr>
+			<tr><td>DM-Goliath</td><td>gol goliath</td></tr>
+			<tr><td>DM-Goose2k4</td><td>goose goose2k4</td></tr>
+			<tr><td>DM-Insidious</td><td>ins insidious</td></tr>
+			<tr><td>DM-Irondeity</td><td>irondeity</td></tr>
+			<tr><td>DM-Morpheus3</td><td>morph morpheus morpheus3</td></tr>
+			<tr><td>DM-Rankin</td><td>ran rank rankin</td></tr>
+			<tr><td>DM-Rrajigar</td><td>rra rrajigar</td></tr>
+			<tr><td>CTF-1on1-Joust</td><td>joust</td></tr>
+			<tr><td>CTF-Avaris</td><td>avaris</td></tr>
+			<tr><td>CTF-BollwerkRuins2004-PRO</td><td>boll&nbsp;bollwerk</td></tr>
+			<tr><td>CTF-BridgeOfFate</td><td>bridge</td></tr>
+			<tr><td>CTF-CBP2-Bahera</td><td>bah bahe bahera</td></tr>
+			<tr><td>CTF-CBP2-Botanic</td><td>botanic</td></tr>
+			<tr><td>CTF-CBP2-Decadence</td><td>deca decadence</td></tr>
+			<tr><td>CTF-CBP2-Deep</td><td>deep</td></tr>
+			<tr><td>CTF-CBP2-Gazpacho</td><td>gaz gazpacho</td></tr>
+			<tr><td>CTF-CBP2-Pistola</td><td>pist pistola</td></tr>
+			<tr><td>CTF-CBP2-Skorbut</td><td>sko skorb skorbut</td></tr>
+			<tr><td>CTF-Chrome</td><td>chrome</td></tr>
+			<tr><td>CTF-Citadel</td><td>cit citadel</td></tr>
+			<tr><td>CTF-December</td><td>dec december</td></tr>
+			<tr><td>CTF-Face3</td><td>face3</td></tr>
+			<tr><td>CTF-FaceClassic</td><td>face faceclassic</td></tr>
+			<tr><td>CTF-Geothermal</td><td>geo</td></tr>
+			<tr><td>CTF-January</td><td>jan january</td></tr>
+			<tr><td>CTF-Lostfaith</td><td>lost lostfaith</td></tr>
+			<tr><td>CTF-Magma</td><td>magma</td></tr>
+			<tr><td>CTF-Maul</td><td>maul</td></tr>
+			<tr><td>CTF-Orbital2</td><td>orb orbital orbital2</td></tr>
+			<tr><td>CTF-Smote</td><td>smote</td></tr>
+			<tr><td>CTF-Twintombs</td><td>twintombs</td></tr>
+			<tr><td>ONS-ArcticStronghold</td><td>arc arctic arcticstronghold</td></tr>
+			<tr><td>ONS-Aridoom</td><td>ari aridoom</td></tr>
+			<tr><td>ONS-Ascendancy</td><td>asc ascend ascendancy</td></tr>
+			<tr><td>ONS-CBP2-Argento</td><td>argento</td></tr>
+			<tr><td>ONS-CBP2-Brassed</td><td>brass brassed</td></tr>
+			<tr><td>ONS-CBP2-Mirage</td><td>mirage</td></tr>
+			<tr><td>ONS-CBP2-Pasargadae</td><td>pasar pasargadae</td></tr>
+			<tr><td>ONS-CBP2-Tropica</td><td>trop tropica</td></tr>
+			<tr><td>ONS-CBP2-Valarna</td><td>val valarna</td></tr>
+			<tr><td>ONS-CBP2-Yorda</td><td>yorda</td></tr>
+			<tr><td>ONS-Crossfire</td><td>cross crossfire</td></tr>
+			<tr><td>ONS-Dawn</td><td>dawn</td></tr>
+			<tr><td>ONS-Dria</td><td>dria</td></tr>
+			<tr><td>ONS-Frostbite</td><td>frost frostbite</td></tr>
+			<tr><td>ONS-Icarus</td><td>icarus</td></tr>
+			<tr><td>ONS-Primeval</td><td>prim prime primeval</td></tr>
+			<tr><td>ONS-Redplanet</td><td>red redplanet</td></tr>
+			<tr><td>ONS-Severance</td><td>sev severance</td></tr>
+			</table>
+			</dl>
+	<li>Were all the questions in this FAQ really asked frequently?</li>
+		<dl><dd>No.</dl>
+	<li>"Something" doesn't work!</li>
+		<dl><dd>Did you read all the questions in the FAQ, as well as the potentially relevant settings in this readme file? (Try searching for keywords in your web broweser) If the answer to your question is not mentionned anywhere, you can ask on the UTComp forums. (Contact info at the bottom of this page) Please try and make sure that your UT server is working properly: most of the questions we get are simply generic UT server misconfigurations. If you need any info on setting up a UT server, I suggest reading the tutorials on <a href="http://www.unrealadmin.org" target="_new">The Unreal Admin Page</a>.</dl>
+</ul>
+
+<p><hr>
+<b><font size="+1"><a name="topic46">4.6 Credits</a></font></b>
+<font size="-2"><a href="#readmetop">Back to Top</a></font><p>
+
+<b>The Crew</b><br>
+<table width=99% align="center" border="0">
+<tr><td width="25%">Lead Programming, Design</td><td>Aaron "Lotus" Everitt</td></tr>
+<tr><td>Lead Design, Documentation</td><td>Jo&euml;l "dnx3" Moffatt</td></tr>
+<tr><td>Programming, Graphics</td><td>Anthony "ono" Pilger</td></tr>
+<tr><td>Team Overlay Design</td><td>Adam "Heywood" Booth</td></tr>
+
+</table>
+<p>
+
+<b>Contact info</b><br>
+<table width=99% align="center" border="0">
+<tr><td>WWW</td><td><a href="http://ut2004.gameamp.com/ut2004/viewutcomp">http://ut2004.gameamp.com/ut2004/viewutcomp</a></td></tr>
+<tr><td width="0.1%">IRC</td><td><b>#dz</b>, on <b>irc.enterthegame.com</b>.<a href="irc://irc.enterthegame.com/dz">[mirc6 link]</a></td></tr>
+</table>
+<br>
+Note that we are not online 24/7, and therefore cannot answer IRC questions at all times. We strongly recommend posting on the UTComp Forums on the UTComp webpage if you have questions or feedback.<br>
+<font size="-1">Documentation sadly written entirely in notepad.</font>
+
+</body>
+</html>
