@@ -1131,7 +1131,7 @@ defaultproperties
 
      bShowTeamScoresInServerBrowser=True
      ServerMaxPlayers=12
-     AlwaysUseThisMutator(0)="UTCompv18.mututcomp"
+     AlwaysUseThisMutator(0)="UTCompv18.MutUTComp"
      AutoDemoRecMask="%d-(%t)-%m-%p"
      EnableWarmupWeaponsMode=1
      WarmupHealth=199
