@@ -918,7 +918,8 @@ event UpdateEyeHeight( float DeltaTime )
     }
     OldLocation = Location;
 
-    EyeHeightOffset += BaseEyeHeight - OldBaseEyeHeight;
+    if (Controller.WantsSmoothedView())
+        EyeHeightOffset += BaseEyeHeight - OldBaseEyeHeight;
     OldBaseEyeHeight = BaseEyeHeight;
 
     EyeHeightOffset *= (1.0 - FMin(20.0*DeltaTime/Level.TimeDilation, 1.0));
