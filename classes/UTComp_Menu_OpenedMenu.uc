@@ -13,7 +13,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
    // local mutator mut;
 
-    l_Mode[2].Caption="UTComp Version"$class'Gameinfo'.Static.MakeColorCode(GoldColor)$" 1.8";
+    l_Mode[2].Caption=class'MutUTComp'.default.FriendlyVersionPrefix $ class'Gameinfo'.Static.MakeColorCode(GoldColor) @ class'MutUTComp'.default.FriendlyVersionNumber;
 
 
   /*  for ( mut=PlayerOwner().Level.Game.BaseMutator; mut!=None; mut=mut.NextMutator )

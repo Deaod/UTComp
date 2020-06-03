@@ -936,8 +936,8 @@ function GetServerDetails( out GameInfo.ServerResponseLine ServerState )
 
 	i = ServerState.ServerInfo.Length;
 	ServerState.ServerInfo.Length = i+2;
-	ServerState.ServerInfo[i].Key = "UTComp_Version";
-	ServerState.ServerInfo[i].Value = "1.8";
+	ServerState.ServerInfo[i].Key = FriendlyVersionPrefix;
+	ServerState.ServerInfo[i].Value = FriendlyVersionNumber;
 	ServerState.ServerInfo[i+1].Key = "Enhanced Netcode";
 	ServerState.ServerInfo[i+1].Value = string(bEnhancedNetCodeEnabledAtStartOfMap);
 }
