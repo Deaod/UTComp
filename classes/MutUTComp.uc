@@ -74,6 +74,8 @@ var bool bHasInteraction;
 var string origcontroller;
 var class<PlayerController> origcclass;
 
+var string FriendlyVersionPrefix;
+var string FriendlyVersionNumber;
 
 /*    List Of Features to be completed(see utcomp_v2.txt for details)
 ========Not Started========
@@ -1150,6 +1152,8 @@ defaultproperties
      MaxNetSpeed=25000
 
      FriendlyName="UTComp Version 1.8"
+     FriendlyVersionPrefix="UTComp Version"
+     FriendlyVersionNumber="1.8"
      Description="A mutator for warmup, brightskins, hitsounds, and various other features."
      bNetTemporary=True
      bAlwaysRelevant=True
