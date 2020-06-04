@@ -5,7 +5,7 @@ class Forward_MiniSuperHealthPack extends Forward_HealthPack
 HideDropDown
 CacheExempt;
 
-#exec OBJ LOAD FILE=MiniSuperHealth.usx PACKAGE=UTCompv18
+#exec OBJ LOAD FILE=StaticMeshes/MiniSuperHealth.usx PACKAGE=UTCompv18
 
 
 static function StaticPrecache(LevelInfo L)

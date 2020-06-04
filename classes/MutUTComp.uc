@@ -1,6 +1,6 @@
 class MutUTComp extends Mutator;
 
-#exec OBJ LOAD FILE=minimegatex.utx PACKAGE=UTCompv18
+#exec OBJ LOAD FILE=Textures/minimegatex.utx PACKAGE=UTCompv18
 
 var config bool bEnableVoting;
 var config bool bEnableBrightskinsVoting;
