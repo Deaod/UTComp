@@ -12,15 +12,10 @@ for /f "delims=" %%X IN ('dir /B /A /S *') DO (
 :FoundPkgName
 pushd %BUILD_DIR%
 
-:: clean up old version so whats there is never stale
-del System\%PACKAGE_NAME%.u
-del System\%PACKAGE_NAME%.ucl
-del System\%PACKAGE_NAME%.int
-del System\%PACKAGE_NAME%.u.uz2
-
 cd ..\System
 
 :: make sure to always rebuild the package
+:: New package GUID, No doubts about staleness
 del %PACKAGE_NAME%.u
 del %PACKAGE_NAME%.ucl
 
@@ -29,15 +24,18 @@ ucc make
 :: dont do the post-process steps if compilation failed
 if ERRORLEVEL 1 goto cleanup
 
-:: Merges packages loaded using #exec OBJ LOAD into the .u
-ucc packageflag %PACKAGE_NAME%.u %BUILD_DIR%System\%PACKAGE_NAME%.u +BrokenLinks
 :: Generate compressed file for redirects
-ucc compress %BUILD_DIR%System\%PACKAGE_NAME%.u
+ucc compress %PACKAGE_NAME%.u
+
 :: Dump i18n strings
+del %PACKAGE_NAME%.int
 ucc dumpint %BUILD_DIR%System\%PACKAGE_NAME%.u
 
-copy %PACKAGE_NAME%.int %BUILD_DIR%System >NUL
-copy %PACKAGE_NAME%.ucl %BUILD_DIR%System >NUL
+:: copy to release location
+copy %PACKAGE_NAME%.u     %BUILD_DIR%System >NUL
+copy %PACKAGE_NAME%.ucl   %BUILD_DIR%System >NUL
+copy %PACKAGE_NAME%.int   %BUILD_DIR%System >NUL
+copy %PACKAGE_NAME%.u.uz2 %BUILD_DIR%System >NUL
 
 :cleanup
 popd
