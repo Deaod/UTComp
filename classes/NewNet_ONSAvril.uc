@@ -5,5 +5,5 @@ class NewNet_ONSAvril extends ONSAvril
 
 DefaultProperties
 {
-    PickupClass=Class'UTCompv18.NewNet_ONSAvrilPickup'
+    PickupClass=Class'UTCompv18a.NewNet_ONSAvrilPickup'
 }

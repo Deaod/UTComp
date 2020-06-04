@@ -500,27 +500,27 @@ function AddGameSpecificInventory(Pawn p)
     local inventory inv;
     if(!class'MutUTComp'.default.bEnableEnhancedNetCode)
     {
-        p.CreateInventory("UTCompv18.UTComp_ShieldGun");
-        p.CreateInventory("UTCompv18.UTComp_AssaultRifle");
-        p.CreateInventory("UTCompv18.UTComp_BioRifle");
-        p.CreateInventory("UTCompv18.UTComp_MiniGun");
-        p.CreateInventory("UTCompv18.UTComp_ShockRifle");
-        p.CreateInventory("UTCompv18.UTComp_LinkGun");
-        p.CreateInventory("UTCompv18.UTComp_FlakCannon");
-        p.CreateInventory("UTCompv18.UTComp_RocketLauncher");
-        p.CreateInventory("UTCompv18.UTComp_SniperRifle");
+        p.CreateInventory("UTCompv18a.UTComp_ShieldGun");
+        p.CreateInventory("UTCompv18a.UTComp_AssaultRifle");
+        p.CreateInventory("UTCompv18a.UTComp_BioRifle");
+        p.CreateInventory("UTCompv18a.UTComp_MiniGun");
+        p.CreateInventory("UTCompv18a.UTComp_ShockRifle");
+        p.CreateInventory("UTCompv18a.UTComp_LinkGun");
+        p.CreateInventory("UTCompv18a.UTComp_FlakCannon");
+        p.CreateInventory("UTCompv18a.UTComp_RocketLauncher");
+        p.CreateInventory("UTCompv18a.UTComp_SniperRifle");
    }
    else
    {
-        p.CreateInventory("UTCompv18.UTComp_ShieldGun");
-        p.CreateInventory("UTCompv18.NewNet_AssaultRifle");
-        p.CreateInventory("UTCompv18.NewNet_BioRifle");
-        p.CreateInventory("UTCompv18.NewNet_MiniGun");
-        p.CreateInventory("UTCompv18.NewNet_ShockRifle");
-        p.CreateInventory("UTCompv18.NewNet_LinkGun");
-        p.CreateInventory("UTCompv18.NewNet_FlakCannon");
-        p.CreateInventory("UTCompv18.NewNet_RocketLauncher");
-        p.CreateInventory("UTCompv18.NewNet_SniperRifle");
+        p.CreateInventory("UTCompv18a.UTComp_ShieldGun");
+        p.CreateInventory("UTCompv18a.NewNet_AssaultRifle");
+        p.CreateInventory("UTCompv18a.NewNet_BioRifle");
+        p.CreateInventory("UTCompv18a.NewNet_MiniGun");
+        p.CreateInventory("UTCompv18a.NewNet_ShockRifle");
+        p.CreateInventory("UTCompv18a.NewNet_LinkGun");
+        p.CreateInventory("UTCompv18a.NewNet_FlakCannon");
+        p.CreateInventory("UTCompv18a.NewNet_RocketLauncher");
+        p.CreateInventory("UTCompv18a.NewNet_SniperRifle");
    }
    for(inv=p.Inventory; inv!=None; inv=inv.inventory)
    {
@@ -604,7 +604,7 @@ DefaultProperties
      GoalScore=8
      GameName="UTComp Clan Arena 1.8"
      bAllowWeaponThrowing=false
-     SecondaryMutatorClass="UTCompv18.MutUTComp"
+     SecondaryMutatorClass="UTCompv18a.MutUTComp"
      Round_Health = 150
      Round_Armor = 100
      Description = "No Powerups, No Distractions, Full Weapon and armor Load! Kill the enemy team before they kill yours. Dead players are out until the round is over."

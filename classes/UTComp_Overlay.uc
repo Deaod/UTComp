@@ -2,7 +2,7 @@
 
 //-----------------------------------------------------------
 // Part of TeamOverlay by Adam 'Heywood' Booth - heywood@malevolence.com.au
-// altered/recoded by Aaron 'Lotus' Everitt for use in UTCompv18
+// altered/recoded by Aaron 'Lotus' Everitt for use in UTCompv18a
 //-----------------------------------------------------------
 class UTComp_Overlay extends Interaction;
 

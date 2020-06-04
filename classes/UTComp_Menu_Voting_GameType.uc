@@ -315,7 +315,7 @@ defaultproperties
          OnKeyType=MapInputEditBox.InternalOnKeyType
          OnKeyEvent=MapInputEditBox.InternalOnKeyEvent
      End Object
-     eb_MapInput=GUIEditBox'UTCompv18.UTComp_Menu_Voting_GameType.MapInputEditBox'
+     eb_MapInput=GUIEditBox'UTCompv18a.UTComp_Menu_Voting_GameType.MapInputEditBox'
 
      Begin Object Class=GUINumericEdit Name=MaxPlayersNE
          MinValue=2
@@ -325,7 +325,7 @@ defaultproperties
 		WinTop=0.414046
          OnDeActivate=MaxPlayersNE.ValidateValue
      End Object
-     ne_NumPlayers=GUINumericEdit'UTCompv18.UTComp_Menu_Voting_GameType.MaxPlayersNE'
+     ne_NumPlayers=GUINumericEdit'UTCompv18a.UTComp_Menu_Voting_GameType.MaxPlayersNE'
 
      Begin Object Class=GUIComboBox Name=MapInputComboBox
 		WinWidth=0.250000
@@ -335,7 +335,7 @@ defaultproperties
 		OnChange=InternalOnChange
          OnKeyEvent=MapInputComboBox.InternalOnKeyEvent
      End Object
-     co_GameTypeList=GUIComboBox'UTCompv18.UTComp_Menu_Voting_GameType.MapInputComboBox'
+     co_GameTypeList=GUIComboBox'UTCompv18a.UTComp_Menu_Voting_GameType.MapInputComboBox'
 
      Begin Object Class=GUIButton Name=quickrestartButton
         bVisible=false
@@ -347,7 +347,7 @@ defaultproperties
          OnClick=UTComp_Menu_Voting_GameType.InternalOnClick
          OnKeyEvent=quickrestartButton.InternalOnKeyEvent
      End Object
-     bu_QuickRestart=GUIButton'UTCompv18.UTComp_Menu_Voting_GameType.quickrestartButton'
+     bu_QuickRestart=GUIButton'UTCompv18a.UTComp_Menu_Voting_GameType.quickrestartButton'
 
      Begin Object Class=GUIButton Name=ChangeMapButton
          Caption="Call Vote"
@@ -358,7 +358,7 @@ defaultproperties
          OnClick=UTComp_Menu_Voting_GameType.InternalOnClick
          OnKeyEvent=ChangeMapButton.InternalOnKeyEvent
      End Object
-     bu_ChangeMap=GUIButton'UTCompv18.UTComp_Menu_Voting_GameType.ChangeMapButton'
+     bu_ChangeMap=GUIButton'UTCompv18a.UTComp_Menu_Voting_GameType.ChangeMapButton'
 
      Begin Object Class=GUILabel Name=MapNameLabel
          Caption="Map Name"
@@ -368,7 +368,7 @@ defaultproperties
 		WinLeft=0.352313
 		WinTop=0.451250
      End Object
-     l_MapName=GUILabel'UTCompv18.UTComp_Menu_Voting_GameType.MapNameLabel'
+     l_MapName=GUILabel'UTCompv18a.UTComp_Menu_Voting_GameType.MapNameLabel'
 
      Begin Object Class=GUILabel Name=gametypeLabel
          Caption="Gametype"
@@ -378,7 +378,7 @@ defaultproperties
 		WinLeft=0.353875
 		WinTop=0.349704
      End Object
-     l_GameType=GUILabel'UTCompv18.UTComp_Menu_Voting_GameType.gametypeLabel'
+     l_GameType=GUILabel'UTCompv18a.UTComp_Menu_Voting_GameType.gametypeLabel'
 
      Begin Object Class=GUILabel Name=MaxPlayersLabe
          Caption="Max Players"
@@ -388,7 +388,7 @@ defaultproperties
 		WinLeft=0.353438
 		WinTop=0.400713
      End Object
-     l_MaxPlayers=GUILabel'UTCompv18.UTComp_Menu_Voting_GameType.MaxPlayersLabe'
+     l_MaxPlayers=GUILabel'UTCompv18a.UTComp_Menu_Voting_GameType.MaxPlayersLabe'
 
      Begin Object class=GUIListBox name=MapListBox
 		WinWidth=0.214061
@@ -450,7 +450,7 @@ defaultproperties
 		WinTop=0.598331
          OnDeActivate=GoalScoreNE.ValidateValue
      End Object
-     ne_GoalScore=GUINumericEdit'UTCompv18.UTComp_Menu_Voting_GameType.GoalScoreNE'
+     ne_GoalScore=GUINumericEdit'UTCompv18a.UTComp_Menu_Voting_GameType.GoalScoreNE'
 
      Begin Object Class=GUINumericEdit Name=timelimitNE
         MinValue=1
@@ -460,7 +460,7 @@ defaultproperties
 		WinTop=0.648331
         OnDeActivate=timelimitNE.ValidateValue
      End Object
-     ne_timelimit=GUINumericEdit'UTCompv18.UTComp_Menu_Voting_GameType.timelimitNE'
+     ne_timelimit=GUINumericEdit'UTCompv18a.UTComp_Menu_Voting_GameType.timelimitNE'
 
 
     Begin Object Class=GUINumericEdit Name=GrenadeNE
@@ -472,7 +472,7 @@ defaultproperties
 		MaxValue=8
         OnDeActivate=GrenadeNE.ValidateValue
      End Object
-     ne_grenades=GUINumericEdit'UTCompv18.UTComp_Menu_Voting_GameType.grenadeNE'
+     ne_grenades=GUINumericEdit'UTCompv18a.UTComp_Menu_Voting_GameType.grenadeNE'
 
      Begin Object Class=GUINumericEdit Name=OvertimeNE
         MinValue=0
@@ -483,7 +483,7 @@ defaultproperties
 		MaxValue = 10
         OnDeActivate=OvertimeNE.ValidateValue
      End Object
-     ne_Overtime=GUINumericEdit'UTCompv18.UTComp_Menu_Voting_GameType.OvertimeNE'
+     ne_Overtime=GUINumericEdit'UTCompv18a.UTComp_Menu_Voting_GameType.OvertimeNE'
 
 
 
@@ -496,7 +496,7 @@ defaultproperties
 		WinLeft=0.598313
 		WinTop=0.636583
      End Object
-     l_timelimit=GUILabel'UTCompv18.UTComp_Menu_Voting_GameType.timelimitLabel'
+     l_timelimit=GUILabel'UTCompv18a.UTComp_Menu_Voting_GameType.timelimitLabel'
 
      Begin Object Class=GUILabel Name=grenadeLabel
          Caption="Grenades"
@@ -506,7 +506,7 @@ defaultproperties
 		WinLeft=0.598313
 		WinTop=0.685449
      End Object
-     l_grenades=GUILabel'UTCompv18.UTComp_Menu_Voting_GameType.grenadeLabel'
+     l_grenades=GUILabel'UTCompv18a.UTComp_Menu_Voting_GameType.grenadeLabel'
 
      Begin Object Class=GUILabel Name=OvertimeLabel
          Caption="OT Length"
@@ -516,7 +516,7 @@ defaultproperties
 		WinLeft=0.346750
 		WinTop=0.683387
      End Object
-     l_OverTime=GUILabel'UTCompv18.UTComp_Menu_Voting_GameType.OvertimeLabel'
+     l_OverTime=GUILabel'UTCompv18a.UTComp_Menu_Voting_GameType.OvertimeLabel'
 
 
      Begin Object Class=GUILabel Name=GoalScoreLabel
@@ -527,7 +527,7 @@ defaultproperties
 		WinLeft=0.598313
 		WinTop=0.584500
      End Object
-     l_GoalScore=GUILabel'UTCompv18.UTComp_Menu_Voting_GameType.GoalScoreLabel'
+     l_GoalScore=GUILabel'UTCompv18a.UTComp_Menu_Voting_GameType.GoalScoreLabel'
 
     Begin Object Class=GUIButton Name=RefreshButton
         Caption="Refresh Maps"

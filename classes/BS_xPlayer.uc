@@ -267,14 +267,14 @@ simulated function InitializeScoreboard()
        if(class'UTComp_Settings'.default.bUseDefaultScoreboard)
        {
            if(gamereplicationinfo.bTeamGame)
-               NewScoreboardClass=class'UTCompv18.UTComp_ScoreBoardTDM';
+               NewScoreboardClass=class'UTCompv18a.UTComp_ScoreBoardTDM';
            else
-               NewScoreboardClass=class'UTCompv18.UTComp_ScoreBoardDM';
+               NewScoreboardClass=class'UTCompv18a.UTComp_ScoreBoardDM';
            ClientChangedScoreboard=True;
         }
    }
    else if(ClientChangedScoreBoard && !class'UTComp_Settings'.default.bUseDefaultScoreboard)
-       NewScoreboardClass=class'UTCompv18.UTComp_ScoreBoard';
+       NewScoreboardClass=class'UTCompv18a.UTComp_ScoreBoard';
    if(myHUD!=None && NewScoreBoardClass!=None)
         myHUD.SetScoreBoardClass( NewScoreboardClass);
 }
@@ -2340,8 +2340,8 @@ function UpdateRotation(float DeltaTime, float maxPitch)
 defaultproperties
 {
 
-     UTCompMenuClass="UTCompv18.UTComp_Menu_OpenedMenu"
-     UTCompVotingMenuClass="UTCompv18.UTComp_Menu_VoteInProgress"
+     UTCompMenuClass="UTCompv18a.UTComp_Menu_OpenedMenu"
+     UTCompVotingMenuClass="UTCompv18a.UTComp_Menu_VoteInProgress"
      redmessagecolor=(B=64,G=64,R=255,A=255)
      greenmessagecolor=(B=128,G=255,R=128,A=255)
      bluemessagecolor=(B=255,G=192,R=64,A=255)

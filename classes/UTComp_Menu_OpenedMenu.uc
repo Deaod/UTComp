@@ -19,7 +19,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
   /*  for ( mut=PlayerOwner().Level.Game.BaseMutator; mut!=None; mut=mut.NextMutator )
 	if ( mut.IsA('Forward_Mutator') )
 	{
-         i_UTCompLogo.Image = texture'UTCompv18.ForwardLogo';
+         i_UTCompLogo.Image = texture'UTCompv18a.ForwardLogo';
          return;
 	}
   */
@@ -187,7 +187,7 @@ DefaultProperties
 		WinHeight=0.125000
 		WinLeft=0.312500
 		WinTop=0.307113
-        Image=Texture'UTCompv18.UTCompLogo'
+        Image=Texture'UTCompv18a.UTCompLogo'
      End Object
      i_UTCompLogo=GUIImage'UTCompLogo'
 

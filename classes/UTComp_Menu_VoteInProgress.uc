@@ -128,7 +128,7 @@ defaultproperties
          OnClick=UTComp_Menu_VoteInProgress.InternalOnClick
          OnKeyEvent=VoteYesButton.InternalOnKeyEvent
      End Object
-     bu_VoteYes=GUIButton'UTCompv18.UTComp_Menu_VoteInProgress.VoteYesButton'
+     bu_VoteYes=GUIButton'UTCompv18a.UTComp_Menu_VoteInProgress.VoteYesButton'
 
      Begin Object Class=GUIButton Name=votenoButton
          Caption="Vote No"
@@ -139,7 +139,7 @@ defaultproperties
          OnClick=UTComp_Menu_VoteInProgress.InternalOnClick
          OnKeyEvent=votenoButton.InternalOnKeyEvent
      End Object
-     bu_VoteNo=GUIButton'UTCompv18.UTComp_Menu_VoteInProgress.votenoButton'
+     bu_VoteNo=GUIButton'UTCompv18a.UTComp_Menu_VoteInProgress.votenoButton'
 
      Begin Object Class=GUILabel Name=VoteLabel0
          TextAlign=TXTA_Center
@@ -147,34 +147,34 @@ defaultproperties
          WinTop=0.350000
          Caption="--- Vote in progress ---"
      End Object
-     l_Vote(0)=GUILabel'UTCompv18.UTComp_Menu_VoteInProgress.VoteLabel0'
+     l_Vote(0)=GUILabel'UTCompv18a.UTComp_Menu_VoteInProgress.VoteLabel0'
 
      Begin Object Class=GUILabel Name=VoteLabel1
          TextAlign=TXTA_Center
          TextColor=(B=255,G=255,R=255)
          WinTop=0.400000
      End Object
-     l_Vote(1)=GUILabel'UTCompv18.UTComp_Menu_VoteInProgress.VoteLabel1'
+     l_Vote(1)=GUILabel'UTCompv18a.UTComp_Menu_VoteInProgress.VoteLabel1'
 
      Begin Object Class=GUILabel Name=VoteLabel2
          TextAlign=TXTA_Center
          TextColor=(B=255,G=255,R=255)
          WinTop=0.450000
      End Object
-     l_Vote(2)=GUILabel'UTCompv18.UTComp_Menu_VoteInProgress.VoteLabel2'
+     l_Vote(2)=GUILabel'UTCompv18a.UTComp_Menu_VoteInProgress.VoteLabel2'
 
      Begin Object Class=GUILabel Name=VoteLabel3
          TextAlign=TXTA_Center
          TextColor=(B=255,G=255,R=255)
          WinTop=0.500000
      End Object
-     l_Vote(3)=GUILabel'UTCompv18.UTComp_Menu_VoteInProgress.VoteLabel3'
+     l_Vote(3)=GUILabel'UTCompv18a.UTComp_Menu_VoteInProgress.VoteLabel3'
 
       Begin Object Class=GUILabel Name=VoteLabel4
          TextAlign=TXTA_Center
          TextColor=(B=255,G=255,R=255)
          WinTop=0.550000
      End Object
-     l_Vote(4)=GUILabel'UTCompv18.UTComp_Menu_VoteInProgress.VoteLabel4'
+     l_Vote(4)=GUILabel'UTCompv18a.UTComp_Menu_VoteInProgress.VoteLabel4'
 
 }
