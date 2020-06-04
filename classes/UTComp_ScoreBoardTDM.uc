@@ -335,7 +335,6 @@ simulated event UpdateScoreBoard(Canvas Canvas)
 	else
 		MaxScaling = 2.125;
 	PlayerBoxSizeY = FClamp((1+(Canvas.ClipY*0.80 - 0.67 * MessageFoot))/MaxPlayerCount - BoxSpaceY, PlayerBoxSizeY, MaxScaling * YL);
-	//bDisplayMessages = (MaxPlayerCount < (Canvas.ClipY - MessageFoot)/(PlayerBoxSizeY + BoxSpaceY));
 	bDisplayMessages=!class'UTcomp_ScoreBoard'.default.bDrawStats;
     RedPlayerCount = Min(RedPlayerCount,MaxPlayerCount);
 	BluePlayerCount = Min(BluePlayerCount,MaxPlayerCount);
@@ -345,16 +344,6 @@ simulated event UpdateScoreBoard(Canvas Canvas)
 		BluePlayerCount -= 1;
 	HeaderOffsetY = 1.4*YL + IconSize;
 
-/*
-	// draw center U
-	if ( Canvas.ClipX >= 512 )
-	{
-		Canvas.DrawColor = 0.75 * HUDClass.default.WhiteColor;
-		ScoreBackScale = Canvas.ClipX/1024;
-		Canvas.SetPos(0.5 * Canvas.ClipX - 128 * ScoreBackScale, HeaderOffsetY - 128 * ScoreBackScale);
-		Canvas.DrawTile( ScoreboardU, 256*ScoreBackScale, 128*ScoreBackScale, 0, 0, 256, 128);
-	}
-*/
 	// draw title
 	Canvas.Style = ERenderStyle.STY_Normal;
 	DrawTitle(Canvas, HeaderOffsetY, (MaxPlayerCount+1)*(PlayerBoxSizeY + BoxSpaceY), PlayerBoxSizeY);
@@ -534,8 +523,6 @@ function DrawTeam(int TeamNum, int PlayerCount, int OwnerOffset, Canvas Canvas, 
         else
             playername[i] = PRIArray[i].PlayerName;
 		Canvas.StrLen(playername[i], XL, YL);
-	/*	if ( XL > MaxNamePos )
-			playername[i] = left(playername[i], MaxNamePos/XL * len(PlayerName[i]));*/
 	}
 	if ( OwnerOffset >= PlayerCount )
 	{
@@ -549,8 +536,6 @@ function DrawTeam(int TeamNum, int PlayerCount, int OwnerOffset, Canvas Canvas, 
         else
             playername[OwnerOffset] = PRIArray[OwnerOffset].PlayerName;
 		Canvas.StrLen(playername[OwnerOffset], XL, YL);
-		/*if ( XL > MaxNamePos )
-			playername[OwnerOffset] = left(playername[OwnerOffset], MaxNamePos/XL * len(PlayerName[OwnerOffset]));*/
 	}
 
 	if ( Canvas.ClipX < 512 )
@@ -886,7 +871,7 @@ function DrawStats(Canvas C)
     C.StrLen(" 100% / 100%", BoxSizeX, BoxSizeY);
     C.Style=5;
     BorderSize=1.0;
-    StartPosX=(0.05*C.ClipX/*-(2.5*boxSizeX+borderSize)*/);
+    StartPosX=(0.05*C.ClipX);
     StartPosY=(C.ClipY*0.9150);
     StartPosY-=BoxSizeY;
     C.StrLen("/", textOffsetX, textOffsetY);

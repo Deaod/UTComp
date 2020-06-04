@@ -300,7 +300,6 @@ simulated event UpdateScoreBoard(Canvas Canvas)
 		MaxScaling = 2.125;
 	PlayerBoxSizeY = FClamp((1+(Canvas.clipy*0.80 - 0.67 * MessageFoot))/PlayerCount - BoxSpaceY, PlayerBoxSizeY, MaxScaling * YL);
 
-	//bDisplayMessages = (PlayerCount <= (Canvas.ClipY - MessageFoot)/(PlayerBoxSizeY + BoxSpaceY));
 	bDisplayMessages=!class'UTcomp_ScoreBoard'.default.bDrawStats;
     HeaderOffsetY = 3 * YL;
 	BoxWidth = 0.9375 * Canvas.ClipX;
@@ -718,7 +717,7 @@ function DrawStats(Canvas C)
     C.StrLen(" 100% / 100%", BoxSizeX, BoxSizeY);
     C.Style=5;
     BorderSize=1.0;
-    StartPosX=(0.05*C.ClipX/*-(2.5*boxSizeX+borderSize)*/);
+    StartPosX=(0.05*C.ClipX);
     StartPosY=(C.ClipY*0.9150);
     StartPosY-=BoxSizeY;
     C.StrLen("/", textOffsetX, textOffsetY);

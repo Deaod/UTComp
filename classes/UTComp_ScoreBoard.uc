@@ -1,21 +1,13 @@
 
 
 class UTComp_ScoreBoard extends UTComp_ScoreBoardDM;
-//#exec texture Import File=textures\UTCompLogo.TGA Name=UTCompLogo Mips=Off Alpha=1
 #exec texture Import File=textures\UTCompLogo.TGA Name=UTCompLogo Mips=Off Alpha=1
 #exec texture Import File=textures\forward_logo.dds name=ForwardLogo Mips=Off Alpha=1 LodSet=5
 #exec texture Import File=textures\ScoreboardText.TGA Name=ScoreboardText Mips=Off Alpha=1
-//const MAXPLAYERS=32;
 
-var font MainFont, NotReducedFont, sortareducedfont, ReducedFont /*SmallerFont*/,SoTiny;
-//var PlayerReplicationInfo PRIArray[MAXPLAYERS];
-//var float FPHTime;
-//var localized string SkillLevel[8];
-//var localized string FooterText;
-//var localized string OutText;
-//var localized string OutFireText;
-var localized string /*MaxLives, FragLimit,*/ fraglimitteam /*FPH, GameType,MapName, Restart, Continue, Ended, TimeLimit, Spacer*/;
-//var localized string FragLimitTeam;
+var font MainFont, NotReducedFont, sortareducedfont, ReducedFont, SoTiny;
+
+var localized string  fraglimitteam ;
 var int TmpFontSize ;
 var float tmp1,tmp2,tmp3;
 var UTComp_Warmup uWarmup;
@@ -25,36 +17,36 @@ var config bool bDrawPickups;
 
 function DrawTitle2(Canvas Canvas)
 {
-	local string titlestring,scoreinfostring,RestartString;
+    local string titlestring,scoreinfostring,RestartString;
     local float xl,yl,Full, Height, Top, MedH, SmallH;
-  	local float TitleXL,ScoreInfoXL;
+    local float TitleXL,ScoreInfoXL;
 
     Canvas.Font = HUDClass.static.GetMediumFontFor(Canvas);
     Canvas.StrLen("W",xl,MedH);
-	Height = MedH;
-	Canvas.Font = HUDClass.static.GetConsoleFont(Canvas);
+    Height = MedH;
+    Canvas.Font = HUDClass.static.GetConsoleFont(Canvas);
     Canvas.StrLen("W",xl,SmallH);
     Height += SmallH;
 
-	Full = Height;
+    Full = Height;
     Top  = Canvas.ClipY-8-Full;
 
-	TitleString		= GetTitleString();
-	ScoreInfoString = GetDefaultScoreInfoString();
+    TitleString     = GetTitleString();
+    ScoreInfoString = GetDefaultScoreInfoString();
 
-	Canvas.StrLen(TitleString, TitleXL, YL);
-	Canvas.DrawColor = HUDClass.default.GoldColor;
+    Canvas.StrLen(TitleString, TitleXL, YL);
+    Canvas.DrawColor = HUDClass.default.GoldColor;
 
-	if ( UnrealPlayer(Owner).bDisplayLoser )
-		ScoreInfoString = class'HUDBase'.default.YouveLostTheMatch;
-	else if ( UnrealPlayer(Owner).bDisplayWinner )
-		ScoreInfoString = class'HUDBase'.default.YouveWonTheMatch;
+    if ( UnrealPlayer(Owner).bDisplayLoser )
+        ScoreInfoString = class'HUDBase'.default.YouveLostTheMatch;
+    else if ( UnrealPlayer(Owner).bDisplayWinner )
+        ScoreInfoString = class'HUDBase'.default.YouveWonTheMatch;
     else if ( PlayerController(Owner).IsDead() )
-	{
-		RestartString = GetRestartString();
+    {
+        RestartString = GetRestartString();
         ScoreInfoString = RestartString;
-	}
-	Canvas.StrLen(ScoreInfoString,ScoreInfoXL,YL);
+    }
+    Canvas.StrLen(ScoreInfoString,ScoreInfoXL,YL);
 
     Canvas.Font = NotReducedFont;
     Canvas.SetDrawColor(255,150,0,255);
@@ -66,64 +58,64 @@ function DrawTitle2(Canvas Canvas)
     Canvas.Font = HUDClass.static.GetMediumFontFor(Canvas);
     Canvas.StrLen(ScoreInfoString,ScoreInfoXL,YL);
     Canvas.SetPos( (Canvas.ClipX/2) - (ScoreInfoXL/2), Top + (Full/2) - (YL/2));
-	Canvas.DrawText(ScoreInfoString);
+    Canvas.DrawText(ScoreInfoString);
 }
 
 function String GetRestartString()
 {
-	local string RestartString;
+    local string RestartString;
 
-	RestartString = Restart;
-	if ( PlayerController(Owner).PlayerReplicationInfo.bOutOfLives )
-		RestartString = OutFireText;
-	else if ( Level.TimeSeconds - UnrealPlayer(Owner).LastKickWarningTime < 2 )
-		RestartString = class'GameMessage'.Default.KickWarning;
-	return RestartString;
+    RestartString = Restart;
+    if ( PlayerController(Owner).PlayerReplicationInfo.bOutOfLives )
+        RestartString = OutFireText;
+    else if ( Level.TimeSeconds - UnrealPlayer(Owner).LastKickWarningTime < 2 )
+        RestartString = class'GameMessage'.Default.KickWarning;
+    return RestartString;
 }
 
 
 function String GetTitleString()
 {
-	local string titlestring;
+    local string titlestring;
 
-	if ( Level.NetMode == NM_Standalone )
-	{
-		if ( Level.Game.CurrentGameProfile != None )
-			titlestring = SkillLevel[Clamp(Level.Game.CurrentGameProfile.BaseDifficulty,0,7)];
-		else
-			titlestring = SkillLevel[Clamp(Level.Game.GameDifficulty,0,7)];
-	}
-	else if ( (GRI != None) && (GRI.BotDifficulty >= 0) )
-		titlestring = SkillLevel[Clamp( GRI.BotDifficulty,0,7)];
+    if ( Level.NetMode == NM_Standalone )
+    {
+        if ( Level.Game.CurrentGameProfile != None )
+            titlestring = SkillLevel[Clamp(Level.Game.CurrentGameProfile.BaseDifficulty,0,7)];
+        else
+            titlestring = SkillLevel[Clamp(Level.Game.GameDifficulty,0,7)];
+    }
+    else if ( (GRI != None) && (GRI.BotDifficulty >= 0) )
+        titlestring = SkillLevel[Clamp( GRI.BotDifficulty,0,7)];
 
-	return titlestring@GRI.GameName$MapName$Level.Title;
+    return titlestring@GRI.GameName$MapName$Level.Title;
 }
 function String GetDefaultScoreInfoString()
 {
-	local String ScoreInfoString;
+    local String ScoreInfoString;
 
-	if ( GRI.MaxLives != 0 )
-		ScoreInfoString = MaxLives@GRI.MaxLives;
-	else if ( GRI.GoalScore != 0 )
-	{
-       if(!GRI.bTeamGame)
-		   ScoreInfoString = FragLimit@GRI.GoalScore;
-	   else
-	       ScoreInfoString = FragLimitTeam@GRI.GoalScore;
+    if ( GRI.MaxLives != 0 )
+        ScoreInfoString = MaxLives@GRI.MaxLives;
+    else if ( GRI.GoalScore != 0 )
+    {
+        if(!GRI.bTeamGame)
+            ScoreInfoString = FragLimit@GRI.GoalScore;
+        else
+            ScoreInfoString = FragLimitTeam@GRI.GoalScore;
     }
     if ( GRI.TimeLimit != 0 )
-		ScoreInfoString = ScoreInfoString@spacer@TimeLimit$FormatTime(GRI.RemainingTime);
-	else
-		ScoreInfoString = ScoreInfoString@spacer@FooterText@FormatTime(GRI.ElapsedTime);
+        ScoreInfoString = ScoreInfoString@spacer@TimeLimit$FormatTime(GRI.RemainingTime);
+    else
+        ScoreInfoString = ScoreInfoString@spacer@FooterText@FormatTime(GRI.ElapsedTime);
 
-	return ScoreInfoString;
+    return ScoreInfoString;
 }
 
 
 simulated function DrawTCMBar(Canvas C , float Scale)
 {
     // Border
-	C.SetPos(0,0);
+    C.SetPos(0,0);
     C.Style=5;
     C.SetDrawColor(255,255,255,180);
     C.DrawTileStretched(material'Engine.BlackTexture',C.ClipX,C.ClipY*0.066);
@@ -143,14 +135,14 @@ simulated function DrawTeamInfoBox(Canvas C,float StartX, float StartY,int TeamN
     NewBoxYscale = (( C.ClipY*0.055)*mPlayerCount)+C.ClipY*0.035;
     C.Style=5;
     if(TeamNum==0)
-       C.SetDrawColor(0,0,255,35);
+        C.SetDrawColor(0,0,255,35);
     else if(TeamNum == 1)
-      C.SetDrawColor(255,0,0,35);
+        C.SetDrawColor(255,0,0,35);
     else
-      C.SetDrawColor(150,150,150,35);
+        C.SetDrawColor(150,150,150,35);
 
     // Main Colored background
-   	C.SetPos(C.ClipX *StartX,C.ClipY*StartY);
+    C.SetPos(C.ClipX *StartX,C.ClipY*StartY);
     C.DrawTileStretched(material'Engine.WhiteTexture',C.ClipX*0.472,NewBoxYscale);
 
 
@@ -163,14 +155,14 @@ simulated function DrawTeamInfoBox(Canvas C,float StartX, float StartY,int TeamN
     for(i=0;i<mPlayerCount;i++)
     {
         if(bDraw)
-        {// Seperators
+        { // Seperators
             bDraw=false;
             C.SetDrawColor(255,255,255,30);
             C.SetPos(C.ClipX *StartX,NewPosY);
             C.DrawTileStretched(material'Engine.WhiteTexture',C.ClipX*0.472,C.ClipY*0.055);
         }
         else
-          bDraw=true;
+            bDraw=true;
 
         NewPosY += (C.ClipY*0.055);
     }
@@ -196,11 +188,11 @@ simulated function DrawTeamInfoBox(Canvas C,float StartX, float StartY,int TeamN
 
 simulated event UpdateScoreBoard(Canvas C)
 {
-   	local PlayerReplicationInfo PRI, OwnerPRI;
-   	local PlayerReplicationInfo RedPRI[MAXPLAYERS], BluePRI[MaxPlayers], SPecPRI[MaxPlayers];
-	local int i, BluePlayerCount, RedPlayerCount, RedOwnerOffset, BlueOwnerOffset,/* MaxPlayerCount*/ maxTiles, numspecs, j;
-	local float MyScale;
-	local bool bOwnerDrawn;
+    local PlayerReplicationInfo PRI, OwnerPRI;
+    local PlayerReplicationInfo RedPRI[MAXPLAYERS], BluePRI[MaxPlayers], SPecPRI[MaxPlayers];
+    local int i, BluePlayerCount, RedPlayerCount, RedOwnerOffset, BlueOwnerOffset, maxTiles, numspecs, j;
+    local float MyScale;
+    local bool bOwnerDrawn;
         // Fonts
     MainFont     = HUDClass.static.GetMediumFontFor(C);
     NotReducedFont  = GetSmallerFontFor (C,TmpFontSize);
@@ -208,78 +200,78 @@ simulated event UpdateScoreBoard(Canvas C)
     ReducedFont  = GetSmallerFontFor (C,3);
     SmallerFont  = GetSmallerFontFor (C,4);
     SoTiny       = GetSmallerFontFor (C,5);
-   	maxTiles=8;
+    maxTiles=8;
     if(Owner!=None)
-	   OwnerPRI = PlayerController(Owner).PlayerReplicationInfo;
-	RedOwnerOffset = -1;
-	BlueOwnerOffset = -1;
+       OwnerPRI = PlayerController(Owner).PlayerReplicationInfo;
+    RedOwnerOffset = -1;
+    BlueOwnerOffset = -1;
 
     if(!GRI.bTeamGame && GRI.PRIArray.Length>10)
     {
-       for (i=0; i<GRI.PRIArray.Length; i++)
-	   {
-		   PRI = GRI.PRIArray[i];
-		   if(!PRI.bOnlySpectator)
-		       j++;
-	   }
-       if(j>10)
-       {
-           Super.UpdateScoreBoard(C);
-           return;
-       }
+        for (i=0; i<GRI.PRIArray.Length; i++)
+        {
+            PRI = GRI.PRIArray[i];
+            if(!PRI.bOnlySpectator)
+                j++;
+        }
+        if(j>10)
+        {
+            Super.UpdateScoreBoard(C);
+            return;
+        }
     }
     for (i=0; i<GRI.PRIArray.Length; i++)
-	{
-		PRI = GRI.PRIArray[i];
+    {
+        PRI = GRI.PRIArray[i];
 
         if(PRI.bOnlySpectator)
         {
-               specPRI[numSpecs]=PRI;
-               numSpecs++;
+            specPRI[numSpecs]=PRI;
+            numSpecs++;
         }
         if ( (!PRI.bOnlySpectator || PRI.bWaitingPlayer) )
-		{
-			if(PRI.Team==None)
+        {
+            if(PRI.Team==None)
             {
                 if ( RedPlayerCount < MAXPLAYERS )
-				{
-					RedPRI[RedPlayerCount] = PRI;
-					if ( PRI == OwnerPRI )
-						RedOwnerOffset = RedPlayerCount;
-					RedPlayerCount++;
-				}
-			}
+                {
+                    RedPRI[RedPlayerCount] = PRI;
+                    if ( PRI == OwnerPRI )
+                        RedOwnerOffset = RedPlayerCount;
+                    RedPlayerCount++;
+                }
+            }
             else if ( PRI.Team.TeamIndex == 0 )
-			{
-				if ( RedPlayerCount < MAXPLAYERS )
-				{
-					RedPRI[RedPlayerCount] = PRI;
-					if ( PRI == OwnerPRI )
-						RedOwnerOffset = RedPlayerCount;
-					RedPlayerCount++;
-				}
-			}
-			else if ( BluePlayerCount < MAXPLAYERS )
-			{
-				BluePRI[BluePlayerCount] = PRI;
-				if ( PRI == OwnerPRI )
-					BlueOwnerOffset = BluePlayerCount;
-				BluePlayerCount++;
-			}
-		}
-	}
+            {
+                if ( RedPlayerCount < MAXPLAYERS )
+                {
+                    RedPRI[RedPlayerCount] = PRI;
+                    if ( PRI == OwnerPRI )
+                        RedOwnerOffset = RedPlayerCount;
+                    RedPlayerCount++;
+                }
+            }
+            else if ( BluePlayerCount < MAXPLAYERS )
+            {
+                BluePRI[BluePlayerCount] = PRI;
+                if ( PRI == OwnerPRI )
+                    BlueOwnerOffset = BluePlayerCount;
+                BluePlayerCount++;
+            }
+        }
+    }
 
     MyScale = C.ClipX/1600;
     DrawTCMBar(C,MyScale);
     DrawTitle2(C);
     if(GRI.bTeamGame)
     {
-       DrawTeamInfoBox(C,0.02,0.12,1,MyScale,Min(RedPlayerCount, maxTiles));  // RedTeam
-       DrawTeamInfoBox(C,0.514,0.12,0,MyScale,Min(BluePlayerCount, maxTiles)); // BlueTeam
+        DrawTeamInfoBox(C,0.02,0.12,1,MyScale,Min(RedPlayerCount, maxTiles));  // RedTeam
+        DrawTeamInfoBox(C,0.514,0.12,0,MyScale,Min(BluePlayerCount, maxTiles)); // BlueTeam
     }
     else
     {
-       DrawTeamInfoBox(C,0.252, 0.12, 2,MyScale, Min(RedPlayerCount, maxTiles)); // Deathmatch Team
+        DrawTeamInfoBox(C,0.252, 0.12, 2,MyScale, Min(RedPlayerCount, maxTiles)); // Deathmatch Team
     }
     C.SetDrawColor(255,255,255,255);
 
@@ -301,7 +293,7 @@ simulated event UpdateScoreBoard(Canvas C)
     }
 
     if ( ((FPHTime == 0) || (!UnrealPlayer(Owner).bDisplayLoser && !UnrealPlayer(Owner).bDisplayWinner))
-		&& (GRI.ElapsedTime > 0) )
+        && (GRI.ElapsedTime > 0) )
 
     FPHTime = GRI.ElapsedTime;
 
@@ -316,7 +308,7 @@ simulated event UpdateScoreBoard(Canvas C)
                 else
                     DrawPlayerInformation(C,RedPRI[i],C.ClipX*(0.003),(C.ClipY*0.055)*i,MyScale);
                 if (RedPRI[i]==OwnerPRI)
-                     bOwnerDrawn=True;
+                    bOwnerDrawn=True;
              }
         }
     }
@@ -331,7 +323,7 @@ simulated event UpdateScoreBoard(Canvas C)
                 else
                     DrawPlayerInformation(C,RedPRI[i],C.Clipx*0.236,(C.ClipY*0.055)*i,MyScale);
                 if (RedPRI[i]==OwnerPRI)
-                     bOwnerDrawn=True;
+                    bOwnerDrawn=True;
             }
         }
     }
@@ -344,7 +336,7 @@ simulated event UpdateScoreBoard(Canvas C)
             else
                 DrawPlayerInformation(C,BluePRI[i],C.ClipX*0.496,(C.ClipY*0.055)*i,MyScale);
             if (BluePRI[i]==OwnerPRI)
-                 bOwnerDrawn=True;
+                bOwnerDrawn=True;
         }
     }
     DrawStats(C);
@@ -352,10 +344,10 @@ simulated event UpdateScoreBoard(Canvas C)
 
     if(numSpecs>0)
     {
-       ArrangeSpecs(specPRI);
-       for (i=0; i<numspecs && specPRI[i]!=None; i++)
-          DrawSpecs(C, SpecPRI[i], i);
-       DrawSpecs(C,None,i);
+        ArrangeSpecs(specPRI);
+        for (i=0; i<numspecs && specPRI[i]!=None; i++)
+            DrawSpecs(C, SpecPRI[i], i);
+        DrawSpecs(C,None,i);
     }
 }
 
@@ -372,8 +364,8 @@ simulated function string GetAverageTeamPing(byte team)
     {
         if(!GRI.PRIArray[i].bOnlySpectator && GRI.PRIArray[i].Team!=None && GRI.PRIArray[i].Team.TeamIndex == team)
         {
-           Avg+=GRI.PRIArray[i].Ping;
-           NumSamples++;
+            Avg+=GRI.PRIArray[i].Ping;
+            NumSamples++;
         }
     }
     if(NumSamples == 0)
@@ -390,7 +382,7 @@ simulated function DrawPlayerInformation(Canvas C, PlayerReplicationInfo PRI, fl
     local UTComp_PRI uPRI;
     local string AdminString;
     local float oldClipX;
-   	if(Owner!=None)
+    if(Owner!=None)
        OwnerPRI = PlayerController(Owner).PlayerReplicationInfo;
 
     uPRI=class'UTComp_Util'.static.GetUTCompPRI(PRI);
@@ -406,23 +398,21 @@ simulated function DrawPlayerInformation(Canvas C, PlayerReplicationInfo PRI, fl
 
     if(default.benablecolorednamesonscoreboard && uPRI!=None && uPRI.ColoredName !="")
     {
-      C.DrawTextClipped(uPRI.ColoredName$AdminString);
+        C.DrawTextClipped(uPRI.ColoredName$AdminString);
     }
     else
     {
-       C.SetDrawColor(255,255,255,255);
-       C.DrawTextClipped(PRI.PlayerName$AdminString);
+        C.SetDrawColor(255,255,255,255);
+        C.DrawTextClipped(PRI.PlayerName$AdminString);
     }
     C.ClipX=OldClipX;
 
     for(i=0;i<MAXPLAYERS;i++)
     {
-         if( PRI == OwnerPRI )
-         {
-             C.SetDrawColor(255,255,0,255);
-         }
-         else
-             C.SetDrawColor(255,255,255,255);
+        if( PRI == OwnerPRI )
+            C.SetDrawColor(255,255,0,255);
+        else
+            C.SetDrawColor(255,255,255,255);
     }
 
     // DrawScore
@@ -432,14 +422,13 @@ simulated function DrawPlayerInformation(Canvas C, PlayerReplicationInfo PRI, fl
        C.Font = NotReducedFont;
 
 
-	if ( PRI.bOutOfLives )
-	{
+    if ( PRI.bOutOfLives )
+    {
         C.SetPos(C.ClipX*0.0190+XOffset, (C.ClipY*0.159)+YOffset);
         C.DrawText("OUT");
     }
-	else
-	{ //  C.strLen(PRI.Score, strlenx, strleny);
-     //   C.SetPos(C.ClipX*0.0190+XOffset, (C.ClipY*0.159)+YOffset);
+    else
+    {
         C.DrawTextJustified(int(PRI.Score), 0,C.ClipX*0.0190+XOffset,C.ClipY*0.159+YOffset, C.ClipX*0.068+XOffset, C.ClipY*0.204+Yoffset);
 
     }
@@ -456,30 +445,30 @@ simulated function DrawPlayerInformation(Canvas C, PlayerReplicationInfo PRI, fl
     }
     // Player Deaths
     if(PRI.Deaths>99)
-       C.Font=SmallerFont;
+        C.Font=SmallerFont;
     else
-       C.Font=ReducedFont;
+        C.Font=ReducedFont;
     C.SetDrawColor(255,0,0,255);
-	C.SetPos(C.ClipX*0.070+XOffset, (C.ClipY*0.159)+YOffset);
+    C.SetPos(C.ClipX*0.070+XOffset, (C.ClipY*0.159)+YOffset);
     C.DrawText(int(PRI.Deaths));
 
     // Player Effeciency
     if(uPRI.RealKills-PRI.Deaths >99)
-       C.Font = SmallerFont;
+        C.Font = SmallerFont;
     else
-       C.Font=ReducedFont;
-	C.SetPos(C.ClipX*0.070+XOffset, (C.ClipY*0.187)+YOffset);
+        C.Font=ReducedFont;
+    C.SetPos(C.ClipX*0.070+XOffset, (C.ClipY*0.187)+YOffset);
     C.SetDrawColor(0,200,255,255);
     tmpEff = (uPRI.RealKills-PRI.Deaths);
     C.DrawText(int(tmpEff));
 
     C.Font = SmallerFont;
     if(PRI==OwnerPRI)
-       C.SetDrawColor(255,255,0,255);
+        C.SetDrawColor(255,255,0,255);
     else
-       C.SetDrawColor(255,255,255,255);
+        C.SetDrawColor(255,255,255,255);
     if ( Level.NetMode != NM_Standalone )
-    {// Net Info
+    { // Net Info
         C.SetPos(C.ClipX*0.108+XOffset, (C.ClipY*tmp1)+YOffset);
         C.DrawText("Ping:"$Min(999,4*PRI.Ping));
 
@@ -511,7 +500,7 @@ simulated function DrawPlayerInformation(Canvas C, PlayerReplicationInfo PRI, fl
     if (OwnerPRI.bOnlySpectator || (PRI.Team!=None && OwnerPRI.Team!=None && PRI.Team.TeamIndex==OwnerPRI.Team.TeamIndex))
     {
         C.SetDrawColor(255,150,0,255);
-	    C.SetPos(C.ClipX*0.21+XOffset, (C.ClipY*tmp3)+YOffset);
+        C.SetPos(C.ClipX*0.21+XOffset, (C.ClipY*tmp3)+YOffset);
         C.DrawText(Left(PRI.GetLocationName(), 30));
     }
 }
