@@ -37,6 +37,9 @@ var bool bEnableEnhancedNetCodeVoting;
 var bool bForward;
 var bool bEnableForwardVoting;
 
+var bool bShieldFix;
+var bool bAllowRestartVoteEvenIfMapVotingIsTurnedOff;
+
 var int MaxMultiDodges;
 var int MinNetSpeed;
 var int MaxNetSpeed;
@@ -53,7 +56,7 @@ replication
         benableDoubleDamage, ServerMaxPlayers, bEnableTimedOvertime,
         MaxPlayersClone, bEnableAdvancedVotingOptions, VotingOptions, LinePRI, bEnableTimedOvertimeVoting,
         bEnableEnhancedNetCodeVoting,bEnableEnhancedNetCode, bEnableWarmupVoting, bForward, bEnableForwardVoting,
-        MaxMultiDodges, MinNetSpeed, MaxNetSpeed;
+        bAllowRestartVoteEvenIfMapVotingIsTurnedOff, MaxMultiDodges, MinNetSpeed, MaxNetSpeed;
 }
 
 defaultproperties

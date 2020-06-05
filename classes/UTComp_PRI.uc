@@ -16,6 +16,12 @@ var int NormalWepStatsPrim[15];
 var int NormalWepStatsAltHit[15];
 var int NormalWepStatsPrimHit[15];
 
+var int NormalWepStatsAltPercent[15];
+var int NormalWepStatsPrimPercent[15];
+
+var int NormalWepStatsAltDamage[15];
+var int NormalWepStatsPrimDamage[15];
+
 var string ColoredName;
 var int RealKills;
 var bool bIsReady;
@@ -31,6 +37,7 @@ var string VoteOptions2;
 var bool bSendWepStats;
 
 var int DamR;
+var int DamG;
 
 var byte CurrentVoteID;
 var bool bWantsMapList;
@@ -60,9 +67,9 @@ var TeamOverlayInfo OverlayInfo[iMAXPLAYERS];
 
 var bool bMapListCompleted;
 
-var class<DamageType> WepStatDamTypesAlt[15];
-var class<DamageType> WepStatDamTypesPrim[15];
 var localized string WepStatNames[15];
+
+var string HitPrim,HitAlt,FiredPrim,FiredAlt,DamagePrim,DamageAlt;
 
 replication
 {
@@ -74,6 +81,7 @@ replication
         PickedUpVial, PickedUpHealth, PickedUpKeg,
         PickedUpAdren, DamR, VoteSwitch, VoteOptions,
         Vote, VoteOptions2, VoteSwitch2;
+
     unreliable if(Role==Role_Authority && bNetOwner && bSendWepStats)
         NormalWepStatsPrim, NormalWepStatsAlt;
     unreliable if(Role==Role_Authority && bNetOwner)
@@ -81,9 +89,27 @@ replication
     reliable if(Role<Role_Authority)
         Ready, NotReady, SetVoteMode, SetCoachTeam,
         CallVote, PassVote, SetColoredName, SetShowSelf, GetMapList, ReplyToMapSend;
-
     reliable if(Role==Role_Authority && bNetOwner)
         MapListSend, SendTotalMapNumber;
+}
+
+
+
+
+
+
+simulated function UpdatePercentages()
+{
+    local int i;
+
+    for(i=0; i<ArrayCount(NormalWepStatsPrim); i++)
+    {
+        if(NormalWepStatsPrim[i]>0)
+            NormalWepStatsPrimPercent[i]=float(NormalWepStatsPrimHit[i])/float(NormalWepStatsPrim[i])*100.0;
+    }
+    for(i=0; i<ArrayCount(NormalWepStatsPrim); i++)
+        if(NormalWepStatsAlt[i]>0)
+            NormalWepStatsAltPercent[i]=float(NormalWepStatsAltHit[i])/float(NormalWepStatsAlt[i])*100.0;
 }
 
 function CallVote(byte b, byte switch, string Options, optional string Caller, optional byte P2, optional string Options2)
@@ -135,8 +161,13 @@ function ClearStats()
     {
         NormalWepStatsAlt[i]=0;
         NormalWepStatsPrim[i]=0;
+        NormalWepStatsPrimHit[i]=0;
+        NormalWepStatsAltHit[i]=0;
+        NormalWepStatsPrimDamage[i]=0;
+        NormalWepStatsAltDamage[i]=0;
     }
     DamR=0;
+    DamG=0;
     PickedUpFifty=0;
     PickedUpHundred=0;
     PickedUpAmp=0;

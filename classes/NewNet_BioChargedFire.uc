@@ -10,7 +10,7 @@ const MAX_PROJECTILE_FUDGE = 0.07500;
 
 function projectile SpawnProjectile(Vector Start, Rotator Dir)
 {
-    local rotator NewDir;
+    local rotator NewDir,outDir;
     local float f,g;
     local vector End, HitLocation, HitNormal, VZ;
     local actor Other;
@@ -27,14 +27,19 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
     {
         if(PingDT > 0.0 && Weapon.Owner!=None)
         {
-            NewDir=Dir;
+            OutDir=Dir;
             for(f=0.00; f<pingDT + PROJ_TIMESTEP; f+=PROJ_TIMESTEP)
             {
                 //Make sure the last trace we do is right where we want
                 //the proj to spawn if it makes it to the end
                 g = Fmin(pingdt, f);
                 //Where will it be after deltaF, NewDir byRef for next tick
-                End = Start + Extrapolate(NewDir, PROJ_TIMESTEP, GoopLoad);
+                 End = Start + NewExtrapolate(Dir, g, outDir, GoopLoad);
+              /*  if(f > pingDT)
+                   End = Start + Extrapolate(Dir, (pingDT-f+PROJ_TIMESTEP),GoopLoad);
+                else
+                   End = Start + Extrapolate(Dir, PROJ_TIMESTEP,GoopLoad);
+              */
                 //Put pawns there
                 TimeTravel(pingdt - g);
                 //Trace between the start and extrapolated end
@@ -44,7 +49,7 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
                     break;
                 }
                 //repeat
-                Start=End;
+               // Start=End;
            }
            UnTimeTravel();
 
@@ -55,7 +60,7 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
            }
 
            VZ.Z = class'BioGlob'.default.TossZ;
-     //      NewDir =  rotator(vector(NewDir)*class'BioGlob'.default.speed - VZ);
+           NewDir =  rotator(vector(OutDir)*class'BioGlob'.default.speed - VZ);
            if(Other == none)
                glob = Weapon.Spawn(class'BioGlob',,, End, NewDir);
            else
@@ -77,6 +82,28 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
     if ( Weapon.AmmoAmount(ThisModeNum) <= 0 )
         Weapon.OutOfAmmo();
     return Glob;
+}
+
+function vector NewExtrapolate(rotator Dir, float dF, out rotator outDir, byte GoopLoad)
+{
+    local vector V;
+    local vector Pos;
+    local float GooSpeed;
+
+   // if(vSize(vector(Dir)) != 1.0)
+   //    log(vSize(vector(Dir)));
+
+    if ( GoopLoad < 1 )
+	    GooSpeed =  class'BioGlob'.default.speed;
+	else
+	    GooSpeed =  class'BioGlob'.default.speed * (0.4 + GoopLoad)/(1.4*GoopLoad);
+
+    V = vector(Dir)*GooSpeed;
+    V.Z += ProjectileClass.default.TossZ;
+
+    Pos = V*dF + 0.5*square(dF)*Weapon.Owner.PhysicsVolume.Gravity;
+    OutDir = rotator(V + dF*Weapon.Owner.PhysicsVolume.Gravity);
+    return Pos;
 }
 
 function vector Extrapolate(out rotator Dir, float dF, byte GoopLoad)

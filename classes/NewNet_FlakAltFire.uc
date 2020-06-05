@@ -142,7 +142,7 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
 {
     local Projectile p;
 
-    local rotator NewDir;
+    local rotator NewDir, outDir;
     local float f,g;
     local vector End, HitLocation, HitNormal, VZ;
     local actor Other;
@@ -156,14 +156,21 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
     {
         if(PingDT > 0.0 && Weapon.Owner!=None)
         {
-            NewDir=Dir;
+            //NewDir=Dir;
+            OutDir=Dir;
             for(f=0.00; f<pingDT + PROJ_TIMESTEP; f+=PROJ_TIMESTEP)
             {
                 //Make sure the last trace we do is right where we want
                 //the proj to spawn if it makes it to the end
                 g = Fmin(pingdt, f);
                 //Where will it be after deltaF, NewDir byRef for next tick
-                End = Start + Extrapolate(NewDir, PROJ_TIMESTEP, g==0.00);
+                End = Start + NewExtrapolate(Dir, g, outDir);
+
+             /*  if(f >= pingDT)
+                   End = Start + Extrapolate(Dir, speed, (pingDT-f+PROJ_TIMESTEP),g==0.0);
+               else
+                   End = Start + Extrapolate(Dir, speed, PROJ_TIMESTEP,g==0.0);
+             */
                 //Put pawns there
                 TimeTravel(pingdt - g);
                 //Trace between the start and extrapolated end
@@ -173,8 +180,9 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
                     break;
                 }
                 //repeat
-                Start=End;
-           }
+               // Start=End;
+             }
+
            UnTimeTravel();
 
            if(Other!=None && Other.IsA('PawnCollisionCopy'))
@@ -184,11 +192,12 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
            }
 
            VZ.Z = ProjectileClass.default.TossZ;
-           NewDir =  rotator(vector(NewDir)*ProjectileClass.default.speed - VZ);
+           NewDir =  rotator(vector(OutDir)*ProjectileClass.default.speed - VZ);
+
            if(Other == none)
                p = Weapon.Spawn(ProjectileClass,,, End, NewDir);
            else
-               p = Weapon.Spawn(ProjectileClass,,, HitLocation - Vector(dir)*20.0, NewDir);
+               p = Weapon.Spawn(ProjectileClass,,, HitLocation - vector(dir)*20.0, NewDir);
         }
         else
             p = Weapon.Spawn(ProjectileClass,,, Start, Dir);
@@ -203,7 +212,23 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
 
 
 
-function vector Extrapolate(out rotator Dir, float dF, bool bTossZ)
+function vector NewExtrapolate(rotator Dir, float dF, out rotator outDir)
+{
+    local vector V;
+    local vector Pos;
+
+   // if(vSize(vector(Dir)) != 1.0)
+   //    log(vSize(vector(Dir)));
+
+    V = vector(Dir)*ProjectileClass.default.speed;
+    V.Z += ProjectileClass.default.TossZ;
+
+    Pos = V*dF + 0.5*square(dF)*Weapon.Owner.PhysicsVolume.Gravity;
+    OutDir = rotator(V + dF*Weapon.Owner.PhysicsVolume.Gravity);
+    return Pos;
+}
+
+function vector Extrapolate(out rotator Dir, out float speed, float dF, bool bTossZ)
 {
     local rotator OldDir;
     local Vector VZ;
@@ -214,16 +239,18 @@ function vector Extrapolate(out rotator Dir, float dF, bool bTossZ)
     {
         VZ.Z = ProjectileClass.default.TossZ;
         Dir = rotator(vector(OldDir)*ProjectileClass.default.speed + VZ + Weapon.Owner.PhysicsVolume.Gravity*dF);
+        Speed = vSize(vector(OldDir)*ProjectileClass.default.speed + VZ + Weapon.Owner.PhysicsVolume.Gravity*dF);
     }
     else
-        Dir = rotator(vector(OldDir)*ProjectileClass.default.speed + Weapon.Owner.PhysicsVolume.Gravity*dF);
-
+    {
+        Dir = rotator(vector(OldDir)*Speed + Weapon.Owner.PhysicsVolume.Gravity*dF);
+    }
     if(bTossZ)
     {
-        return (vector(OldDir)*ProjectileClass.default.speed + VZ)*dF + 0.5*Square(dF)*Weapon.Owner.PhysicsVolume.Gravity;
+        return ((vector(OldDir)*ProjectileClass.default.speed)*dF + 0.5*Square(dF)*Weapon.Owner.PhysicsVolume.Gravity);
     }
-    else
-        return vector(OldDir)*ProjectileClass.default.speed*dF + 0.5*Square(dF)*Weapon.Owner.PhysicsVolume.Gravity;
+     else
+        return (vector(OldDir)*Speed*dF + 0.5*Square(dF)*Weapon.Owner.PhysicsVolume.Gravity);
 }
 
 // We need to do 2 traces. First, one that ignores the things which have already been copied

@@ -49,6 +49,8 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
         {
             BS_xPlayer(InstigatedBy.Controller).ReceiveStats(DamageType, Damage, Injured);
         }
+
+        BS_xPlayer(InstigatedBy.Controller).ServerReceiveHit(DamageType, Damage, Injured);
     }
     if(Injured!=None && Injured.Controller!=None && BS_xPlayer(Injured.Controller)!=None)
     {

@@ -112,7 +112,7 @@ function TakeActionOnVote(byte VoteType, byte VoteSwitch, string Options)
         UTCompMutator.default.bEnableWarmup=(VoteSwitch==1);
         UTCompMutator.RepInfo.bEnableWarmup=(VoteSwitch==1);
     }
-    else if(VoteType==5 && UTCompMutator.WarmupClass!=None)
+    else if(VoteType==5 && UTCompMutator.WarmupClass!=None && (UTCompMutator.bEnableMapVoting || UTCompMutator.bAllowRestartVoteEvenIfMapVotingIsTurnedOff) )
     {
         UTCompMutator.WarmupClass.SoftRestart();
     }
@@ -344,7 +344,7 @@ function TakeActionOnVote(byte VoteType, byte VoteSwitch, string Options)
         UTCompMutator.bForward=(VoteSwitch==1);
         UTCompMutator.default.bForward=(VoteSwitch==1);
     }
-    UTCompMutator.Static.StaticSaveConfig();
+    UTCompMutator.static.StaticSaveConfig();
 }
 
 function bool MatchesGametypePrefix(string MapName, string S)

@@ -12,6 +12,18 @@ simulated function UpdatePrecacheMaterials()
     super.UpdatePrecacheMaterials();
 }
 
+exec function NextStats()
+{
+   Super.NextStats();
+   if(ScoreBoard!=None)
+       ScoreBoard.NextStats();
+}
+
+function DisplayEnemyName(Canvas C, PlayerReplicationInfo PRI)
+{
+	PlayerOwner.ReceiveLocalizedMessage(class'UTComp_PlayerNameMessage',0,PRI);
+}
+
 simulated function DrawUTCompCrosshair (Canvas C)
 {
     local int i;

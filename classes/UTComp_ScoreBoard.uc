@@ -14,6 +14,7 @@ var UTComp_Warmup uWarmup;
 var config bool bEnableColoredNamesOnScoreboard;
 var config bool bDrawStats;
 var config bool bDrawPickups;
+var config bool bOverrideDisplayStats;
 
 function DrawTitle2(Canvas Canvas)
 {
@@ -515,4 +516,5 @@ defaultproperties
      bEnableColoredNamesOnScoreboard=True
      bDrawStats=True
      bDrawPickups=True
+     bOverrideDisplayStats=false
 }

@@ -38,6 +38,16 @@ function Blehz()
         bu_QuickRestart.DisableMe();
     else
        bu_QuickRestart.EnableMe();
+    if(RepInfo!=None && !RepInfo.bEnableMapVoting)
+    {
+        eb_MapInput.disableme();
+        bu_ChangeMap.DisableMe();
+    }
+    else
+    {
+        eb_mapinput.enableme();
+        bu_ChangeMap.EnableMe();
+    }
 }
 
 simulated function bool InStrNonCaseSensitive(String S, string S2)

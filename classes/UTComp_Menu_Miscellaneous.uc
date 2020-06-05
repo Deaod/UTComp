@@ -12,11 +12,12 @@ var automated GUILabel l_NewNet;
 var automated moCheckBox ch_UseScoreBoard;
 var automated moCheckBox ch_WepStats;
 var automated moCheckBox ch_PickupStats;
-var automated moCheckBox ch_InfoBox;
 var automated moCheckBox ch_FootSteps;
 var automated moCheckBox ch_MatchHudColor;
 var automated moCheckBox ch_UseEyeHeightAlgo;
 var automated moCheckBox ch_UseNewNet;
+
+var automated GUIButton bu_adren;
 
 var automated moComboBox co_CrosshairScale;
 
@@ -24,7 +25,6 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
     super.InitComponent(MyController,MyOwner);
 
-    ch_InfoBox.Checked(class'UTComp_Overlay'.default.DesiredOnJoinMessageTime!=0.0);
     ch_UseScoreboard.Checked(!class'UTComp_Settings'.default.bUseDefaultScoreboard);
     ch_WepStats.Checked(class'UTComp_Scoreboard'.default.bDrawStats);
     ch_PickupStats.Checked(class'UTComp_Scoreboard'.default.bDrawPickups);
@@ -38,10 +38,6 @@ function InternalOnChange( GUIComponent C )
 {
     switch(C)
     {
-        case ch_InfoBox:  if(ch_InfoBox.IsChecked())
-                              class'UTComp_Overlay'.default.DesiredOnJoinMessageTime=6.0;
-                          else
-                              class'UTComp_Overlay'.default.DesiredOnJoinMessageTime=0;  break;
         case ch_UseScoreboard: class'UTComp_Settings'.default.bUseDefaultScoreboard=!ch_UseScoreBoard.IsChecked(); break;
         case ch_WepStats:  class'UTComp_Scoreboard'.default.bDrawStats=ch_WepStats.IsChecked();
                            BS_xPlayer(PlayerOwner()).SetBStats(class'UTComp_Scoreboard'.default.bDrawStats);break;
@@ -62,6 +58,15 @@ function InternalOnChange( GUIComponent C )
     BS_xPlayer(PlayerOwner()).MakeSureSaveConfig();
     BS_xPlayer(PlayerOwner()).MatchHudColor();
 
+}
+
+function bool InternalOnClick(GUIComponent C)
+{
+    switch(C)
+    {
+        case bu_Adren:  PlayerOwner().ClientReplaceMenu("UTCompv17asrc.UTComp_Menu_AdrenMenu"); break;
+    }
+    return super.InternalOnClick(C);
 }
 
 function bool InternalOnKeyEvent(out byte Key, out byte State, float delta)
@@ -114,25 +119,25 @@ defaultproperties
      ch_PickupStats=moCheckBox'UTCompv18a.UTComp_Menu_Miscellaneous.PickupCheck'
 
      Begin Object Class=GUILabel Name=InfoLabel
-         Caption="--------Information Box--------"
+         Caption="--------Adrenaline Combos--------"
          TextColor=(B=0,G=200,R=230)
-		WinWidth=1.000000
-		WinHeight=0.060000
-		WinLeft=0.250000
-		WinTop=0.450000
+        WinWidth=1.000000
+        WinHeight=0.060000
+        WinLeft=0.250000
+        WinTop=0.450000
      End Object
      l_InfoTitle=GUILabel'UTCompv18a.UTComp_Menu_Miscellaneous.InfoLabel'
 
-     Begin Object Class=moCheckBox Name=InfoCheck
-         Caption="Show UTComp info box on connect."
-         OnCreateComponent=InfoCheck.InternalOnCreateComponent
-		WinWidth=0.500000
-		WinHeight=0.030000
-		WinLeft=0.250000
-		WinTop=0.490000
-         OnChange=UTComp_Menu_Miscellaneous.InternalOnChange
+     Begin Object Class=GUIButton Name=AdrenButton
+         Caption="Disable Adrenaline Combos"
+        WinWidth=0.400000
+        WinHeight=0.050000
+        WinLeft=0.2500000
+        WinTop=0.49000
+        OnClick=UTComp_Menu_Miscellaneous.InternalOnClick
+        OnKeyEvent=AdrenButton.InternalOnKeyEvent
      End Object
-     ch_InfoBox=moCheckBox'UTCompv18a.UTComp_Menu_Miscellaneous.InfoCheck'
+     bu_adren=GUIButton'UTCompv17asrc.UTComp_Menu_Miscellaneous.AdrenButton'
 
      Begin Object Class=GUILabel Name=GenericLabel
          Caption="----Generic UT2004 Settings----"

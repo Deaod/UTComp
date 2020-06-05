@@ -767,6 +767,7 @@ function DrawSpecs(Canvas C, PlayerReplicationInfo PRI, int i)
 
     if(C.SizeX<630)
         return;
+    C.Font=SmallerFont;
     C.StrLen(" 100% / 100%", BoxSizeX, BoxSizeY);
     StartPosX=C.ClipX-BoxSizeX*1.25;
     StartPosY=(C.ClipY*0.9150-BoxSizeY);
@@ -797,6 +798,122 @@ function DrawSpecs(Canvas C, PlayerReplicationInfo PRI, int i)
     C.DrawTextJustified(DrawText, 1, StartPosX, StartPosY-(BoxSizeY+BorderSize)*i, StartPosX+BoxSizeX,  StartPosY-(BoxSizeY+BorderSize)*i+BoxSizeY);
 }
 
+function DrawOtherPowerups(Canvas C)
+{
+    local float BoxSizeX, BoxSizeY;
+    local float StartPosX, StartPosY;
+    local float bordersize;
+    local UTComp_PRI uPRI;
+    local BS_xPlayer UxP;
+    local int Hundreds, fifties, Health, Adren, amp;
+    local int lines, i;
+    local float charoffset, charoffset2;
+
+
+    if(!class'UTComp_ScoreBoard'.default.bDrawPickups || BS_xPlayer(Owner)==None || BS_xPlayer(Owner).UTCompPRI==None || C.SizeX<=630)
+        return;
+    UxP=BS_xPlayer(Owner);
+    uPRI=UxP.currentStatDraw;
+
+    C.StrLen(" 100% / 100%", BoxSizeX, BoxSizeY);
+    StartPosX=C.ClipX-BoxSizeX*3.0;
+    StartPosY=(C.ClipY*0.9150)-(BoxSizeY+BorderSize);
+    bordersize=1.0;
+    C.StrLen("A", charoffset, charoffset2);
+    charoffset=charoffset*0.5;
+
+    if(uPRI.PickedUpFifty>0)
+    {
+        fifties+=uPRI.PickedUpFifty;
+        Lines++;
+    }
+    if(uPRI.PickedUpHundred>0)
+    {
+        hundreds+=uPRI.PickedUpHundred;
+        Lines++;
+    }
+    if(uPRI.PickedUpAmp>0)
+    {
+        Amp+=uPRI.PickedUpAmp;
+        Lines++;
+    }
+    if(uPRI.PickedUpVial>0)
+    {
+        Health+=5*uPRI.PickedUpVial;
+    }
+    if(uPRI.PickedUpHealth>0)
+    {
+        Health+=25*uPRI.PickedUpHealth;
+    }
+    if(uPRI.PickedUpKeg>0)
+    {
+        Health+=100*uPRI.PickedUpKeg;
+    }
+    if(uPRI.PickedUpAdren>0)
+    {
+        Adren+=2*uPRI.PickedUpAdren;
+        Lines++;
+    }
+    if(health>0)
+    {
+        Lines++;
+    }
+
+    if(lines==0)
+        return;
+
+
+    C.Style=5;
+
+
+    //draw borders
+    C.SetDrawColor(255,255,255,255);
+
+    C.SetPos(StartPosX, StartPosY+(boxsizey));
+    C.DrawTileStretched(material'Engine.WhiteTexture',(BoxSizeX+BorderSize),BorderSize);
+
+    C.SetPos(StartPosX+BoxSizeX, StartPosY-(Lines-1)*(BoxSizeY+BorderSize));
+    C.DrawTileStretched(material'Engine.WhiteTexture',(BorderSize),(BorderSize+BoxSizeY)*Lines);
+
+    C.SetPos(StartPosX, StartPosY-(Lines-1)*(BoxSizeY+BorderSize));
+    C.DrawTileStretched(material'Engine.WhiteTexture',(BorderSize),(BorderSize+BoxSizeY)*Lines);
+    C.DrawTileStretched(material'Engine.WhiteTexture',(BoxSizeX+BorderSize),BorderSize);
+
+    //draw background
+    C.SetDrawColor(45,45,45,155);
+    C.DrawTileStretched(material'Engine.WhiteTexture',(BoxSizeX+BorderSize), lines*(BoxSizeY+BorderSize));
+    C.SetDrawColor(255,255,255,255);
+
+
+        C.SetPos(StartPosX+CharOffset, StartPosY);
+        if(Adren>0)
+        {
+            C.DrawText("Adren:  "$Adren);
+            i++;
+            C.SetPos(StartPosX+CharOffset, StartPosY-i*(BoxSizeY+BorderSize));
+        }
+        if(Fifties>0)
+        {
+            C.DrawText("50s:    "$Fifties);
+            i++;
+            C.SetPos(StartPosX+CharOffset, StartPosY-i*(BoxSizeY+BorderSize));
+        }
+        if(Hundreds>0)
+        {
+            C.DrawText("100s:   "$Hundreds);
+            i++;
+            C.SetPos(StartPosX+CharOffset, StartPosY-i*(BoxSizeY+BorderSize));
+        }
+        if(Health>0)
+        {
+            C.DrawText("Health: "$Health);
+            i++;
+            C.SetPos(StartPosX+CharOffset, StartPosY-i*(BoxSizeY+BorderSize));
+        }
+        if(amp>0)
+            C.DrawText("DD:     "$Amp);
+}
+
 function DrawPowerups(Canvas C)
 {
     local float BoxSizeX, BoxSizeY;
@@ -812,6 +929,11 @@ function DrawPowerups(Canvas C)
     if(!class'UTComp_ScoreBoard'.default.bDrawPickups || BS_xPlayer(Owner)==None || BS_xPlayer(Owner).UTCompPRI==None || C.SizeX<=630)
         return;
     UxP=BS_xPlayer(Owner);
+    if(UxP.currentStatDraw!=None && UxP.currentStatDraw!=UxP.UTCompPRI)
+    {
+        DrawOtherPowerups(C);
+        return;
+    }
     uPRI=UxP.UTCompPRI;
 
     C.StrLen(" 100% / 100%", BoxSizeX, BoxSizeY);
@@ -913,6 +1035,187 @@ function DrawPowerups(Canvas C)
             C.DrawText("DD:     "$Amp);
 }
 
+function DrawOtherStats(Canvas C)
+{
+    local float BoxSizeX;
+    local float BoxSizeY;
+    local float BorderSize;
+    local int NumColumns;
+    local int i;
+    local int j;
+  //  local int k;
+    local float StartPosX;
+    local float StartPosY;
+    local float StrLenX;
+    local float StrLenY;
+    local float TmpX;
+    local float TmpY;
+    local UTComp_PRI UxP;
+    local array<int> toDrawStandard;
+    local string DrawString;
+    local float TextOffsetX;
+    local float TextOffsetY;
+    local bool bShouldDraw;
+
+
+    bDisplayMessages=!class'UTComp_ScoreBoard'.default.bDrawStats;
+    if(!class'UTComp_ScoreBoard'.default.bDrawStats || !Owner.IsA('BS_xPlayer') || BS_xPlayer(Owner).UTCompPRI==None)
+        return;
+
+
+    UxP=BS_xPlayer(Owner).currentStatDraw;
+    UxP.UpdatePercentages();
+
+    C.Font=SmallerFont;
+    C.StrLen(" 100% / 100%", BoxSizeX, BoxSizeY);
+    C.Style=5;
+    BorderSize=1.0;
+    StartPosX=(0.05*C.ClipX/*-(2.5*boxSizeX+borderSize)*/);
+    StartPosY=(C.ClipY*0.9150);
+    StartPosY-=BoxSizeY;
+    C.StrLen("/", textOffsetX, textOffsetY);
+    //Get The Background Size
+    for(i=0; i<arraycount(UxP.NormalWepStatsPrim); i++)
+    {
+        bShouldDraw=True;
+        if(UxP.NormalWepStatsPrim[i]!=0 || UxP.NormalWepStatsAlt[i]!=0 || UxP.NormalWepStatsAltHit[i]!=0 || UxP.NormalWepStatsPrimHit[i]!=0)
+        {
+            for(j=0; j<class'UTComp_Settings'.default.DontDrawInStats.Length; j++)
+                if(class'UTComp_Settings'.default.DontDrawInStats[j]==i)
+                    bShouldDraw=False;
+            if(bShouldDraw)
+            {
+                NumColumns++;
+                ToDrawStandard[ToDrawStandard.Length]=i;
+            }
+        }
+    }
+
+    if(NumColumns==0)
+        return;
+
+    //Draw Borders
+    C.SetDrawColor(255,255,255,255);
+    for(i=-1; i<=NumColumns+2; i++)
+    {
+        C.SetPos(StartPosX, StartPosY-i*(BoxSizeY+BorderSize)-BorderSize);
+        C.DrawTileStretched(material'Engine.WhiteTexture', 5*(BoxSizeX+BorderSize), BorderSize);
+    }
+    C.SetPos(StartPosX, StartPosY-(NumColumns+2)*(BoxSizeY+BorderSize));
+    C.DrawTileStretched(material'Engine.WhiteTexture', BorderSize, (NumColumns+3)*(BoxSizeY+BorderSize));
+
+    C.SetPos(StartPosX+BoxSizeX+BorderSize, StartPosY-(NumColumns+1)*(BoxSizeY+BorderSize));
+    C.DrawTileStretched(material'Engine.WhiteTexture', BorderSize, (NumColumns+1)*(BoxSizeY+BorderSize));
+
+    C.SetPos(StartPosX+5*(BoxSizeX+BorderSize), StartPosY-(NumColumns+2)*(BoxSizeY+BorderSize));
+    C.DrawTileStretched(material'Engine.WhiteTexture', BorderSize, (NumColumns+3)*(BoxSizeY+BorderSize));
+
+    // Draw Background
+    C.SetDrawColor(45,45,45,155);
+    C.SetPos(StartPosX, StartPosY-(NumColumns+2)*(BoxSizeY+BorderSize)-BorderSize);
+    C.DrawTileStretched(material'Engine.WhiteTexture', 5*(BoxSizeX+BorderSize)+BorderSize, (NumColumns+3)*(BoxSizeY+BorderSize)+BorderSize);
+
+    //Draw Text
+    C.SetDrawColor(255,255,255,255);
+
+    //Player Text
+
+    if(class'UTComp_ScoreBoard'.default.bEnableColoredNamesOnScoreboard==True)
+        DrawString = "Stats For"@UxP.ColoredName$class'UTComp_Util'.static.MakeColorCode(C.MakeColor(255,255,255))$"."@GetNextKeyString();
+    else
+        DrawString = "Stats For"@GetNonColoredName(UxP)$"."@GetNextKeyString();
+    C.StrLen("Stats For"@GetNonColoredName(UxP)$"."@GetNextKeyString(),StrLenX, strLenY);
+    C.SetPos(StartPosX+2.5*(BoxSizeX+BorderSize)-0.5*StrLenX,StartPosY-(NumColumns+2)*(BorderSize+BoxSizeY));
+    C.DrawText(DrawString);
+
+    //Headings
+    for(i=0; i<5; i++)
+    {
+        switch(i)
+        {
+
+            case 0:  DrawString="Weapon:"; break;
+            case 1:  DrawString="Hits:"; break;
+            case 2:  DrawString="Fired:"; break;
+            case 3:  DrawString="Hit %:"; break;
+            case 4:  DrawString="Damage:"; break;
+        }
+        C.StrLen(DrawString, StrLenX, StrLenY);
+        C.SetPos(StartPosX+(i+0.5)*(BoxSizeX+BorderSize)-0.5*StrLenX,StartPosY-(NumColumns+1)*(BorderSize+BoxSizeY));
+        C.DrawText(DrawString);
+    }
+    //Standard weps
+    for(i=0; i<NumColumns; i++)
+    {
+        TmpY=StartPosY-((i+1)*(BoxSizeY+BorderSize));
+        TmpX=StartPosX+BorderSize+0.5*TextOffsetX;
+        if(i<ToDrawStandard.Length)
+            j=ToDrawStandard[i];
+        else
+            break;
+
+        //Wep Name
+        DrawString=BS_xPlayer(Owner).NormalWepStatsPrim[j].WepName;
+        C.SetPos(TmpX, TmpY);
+        C.DrawText(DrawString);
+
+        //Hit
+        DrawString=StatView(UxP.NormalWepStatsPrimHit[j])@"/";
+        C.StrLen(DrawString, StrLenX, StrLenY);
+        DrawString@=StatView(UxP.NormalWepStatsAltHit[j]);
+        if(j == 5 )
+        {
+            if(UxP.NormalWepStatsAltHit[j] > 0)
+            {
+                if(UxP.NormalWepStatsAltHit[j] > 99)
+                    DrawString$="HS";
+                else
+                    DrawString@="HS";
+            }
+        }
+        C.SetPos(TmpX+(BorderSize+BoxSizeX)+(0.5*boxSizeX)-strLenX, TmpY);
+        C.DrawText(DrawString);
+
+        //Fired
+        DrawString=StatView(UxP.NormalWepStatsPrim[j])@"/";
+        C.StrLen(DrawString, StrLenX, StrLenY);
+        DrawString@=StatView(UxP.NormalWepStatsAlt[j]);
+        C.SetPos(TmpX+2*(BorderSize+BoxSizeX)+(0.5*boxSizeX)-strLenX, TmpY);
+        C.DrawText(DrawString);
+
+        //Pct
+        DrawString=PercView(UxP.NormalWepStatsPrimPercent[j])@"/";
+        C.StrLen(DrawString, StrLenX, StrLenY);
+        DrawString@=PercView(UxP.NormalWepStatsAltPercent[j]);
+        C.SetPos(TmpX+3*(BorderSize+BoxSizeX)+(0.5*boxSizeX)-strLenX, TmpY);
+        C.DrawText(DrawString);
+
+        //Damage
+        DrawString=StatView(UxP.NormalWepStatsPrimDamage[j])@"/";
+        C.StrLen(DrawString, StrLenX, StrLenY);
+        DrawString@=StatView(UxP.NormalWepStatsAltDamage[j]);
+        C.SetPos(TmpX+4*(BorderSize+BoxSizeX)+(0.5*boxSizeX)-strLenX, TmpY);
+        C.DrawText(DrawString);
+    }
+    TmpY=StartPosY+(BoxSizeY+BorderSize);
+    TmpX=StartPosX+BorderSize+0.5*TextOffsetX;
+    C.SetPos(TmpX+1*(BorderSize+BoxSizeX), TmpY-BoxSizeY-BorderSize);
+    C.DrawText("Damage Received:"@UxP.DamR);
+    C.SetPos(TmpX+3*(BorderSize+BoxSizeX), TmpY-BoxSizeY-BorderSize);
+    C.DrawText("Damage Given:"@UxP.DamG);
+}
+
+function string GetNonColoredName(UTComp_PRI uPRI)
+{
+   local int i;
+   for(i=0; i<GRI.PRIArray.Length; i++)
+   {
+      if(class'UTComp_util'.static.GetUTCompPRI(GRI.PRIArray[i]) == uPRI)
+           return GRI.PRIArray[i].Playername;
+   }
+   return uPRI.ColoredName;
+}
+
 function DrawStats(Canvas C)
 {
     local float BoxSizeX;
@@ -939,7 +1242,17 @@ function DrawStats(Canvas C)
     bDisplayMessages=!class'UTComp_ScoreBoard'.default.bDrawStats;
     if(!class'UTComp_ScoreBoard'.default.bDrawStats || !Owner.IsA('BS_xPlayer') || BS_xPlayer(Owner).UTCompPRI==None)
         return;
+
+
     UxP=BS_xPlayer(Owner);
+
+
+    if(UXP.currentStatDraw != None && (UxP.currentStatDraw != UxP.UTCompPRI))
+    {
+        DrawOtherStats(C);
+        return;
+    }
+
     UxP.UpdatePercentages();
 
     C.Font=SmallerFont;
@@ -972,27 +1285,35 @@ function DrawStats(Canvas C)
 
     //Draw Borders
     C.SetDrawColor(255,255,255,255);
-    for(i=-1; i<=NumColumns+1; i++)
+    for(i=-1; i<=NumColumns+2; i++)
     {
         C.SetPos(StartPosX, StartPosY-i*(BoxSizeY+BorderSize)-BorderSize);
         C.DrawTileStretched(material'Engine.WhiteTexture', 5*(BoxSizeX+BorderSize), BorderSize);
     }
-    C.SetPos(StartPosX, StartPosY-(NumColumns+1)*(BoxSizeY+BorderSize));
-    C.DrawTileStretched(material'Engine.WhiteTexture', BorderSize, (NumColumns+2)*(BoxSizeY+BorderSize));
+    C.SetPos(StartPosX, StartPosY-(NumColumns+2)*(BoxSizeY+BorderSize));
+    C.DrawTileStretched(material'Engine.WhiteTexture', BorderSize, (NumColumns+3)*(BoxSizeY+BorderSize));
 
     C.SetPos(StartPosX+BoxSizeX+BorderSize, StartPosY-(NumColumns+1)*(BoxSizeY+BorderSize));
     C.DrawTileStretched(material'Engine.WhiteTexture', BorderSize, (NumColumns+1)*(BoxSizeY+BorderSize));
 
-    C.SetPos(StartPosX+5*(BoxSizeX+BorderSize), StartPosY-(NumColumns+1)*(BoxSizeY+BorderSize));
-    C.DrawTileStretched(material'Engine.WhiteTexture', BorderSize, (NumColumns+2)*(BoxSizeY+BorderSize));
+    C.SetPos(StartPosX+5*(BoxSizeX+BorderSize), StartPosY-(NumColumns+2)*(BoxSizeY+BorderSize));
+    C.DrawTileStretched(material'Engine.WhiteTexture', BorderSize, (NumColumns+3)*(BoxSizeY+BorderSize));
 
     // Draw Background
     C.SetDrawColor(10,10,10,155);
-    C.SetPos(StartPosX, StartPosY-(NumColumns+1)*(BoxSizeY+BorderSize)-BorderSize);
-    C.DrawTileStretched(material'Engine.WhiteTexture', 5*(BoxSizeX+BorderSize)+BorderSize, (NumColumns+2)*(BoxSizeY+BorderSize)+BorderSize);
+    C.SetPos(StartPosX, StartPosY-(NumColumns+2)*(BoxSizeY+BorderSize)-BorderSize);
+    C.DrawTileStretched(material'Engine.WhiteTexture', 5*(BoxSizeX+BorderSize)+BorderSize, (NumColumns+3)*(BoxSizeY+BorderSize)+BorderSize);
 
     //Draw Text
     C.SetDrawColor(255,255,255,255);
+
+    if(class'UTComp_ScoreBoard'.default.bEnableColoredNamesOnScoreboard==True)
+        DrawString = "Stats For"@UxP.UTCompPRI.ColoredName$class'UTComp_Util'.static.MakeColorCode(C.MakeColor(255,255,255))$"."@GetNextKeyString();
+    else
+        DrawString = "Stats For"@GetNonColoredName(UxP.UTCompPRI)$"."@GetNextKeyString();
+    C.StrLen("Stats For"@GetNonColoredName(UxP.UTCompPRI)$"."@GetNextKeyString(),StrLenX, strLenY);
+    C.SetPos(StartPosX+2.5*(BoxSizeX+BorderSize)-0.5*StrLenX,StartPosY-(NumColumns+2)*(BorderSize+BoxSizeY));
+    C.DrawText(DrawString);
 
     //Headings
     for(i=0; i<5; i++)
@@ -1029,6 +1350,16 @@ function DrawStats(Canvas C)
         DrawString=StatView(UxP.NormalWepStatsPrim[j].Hits)@"/";
         C.StrLen(DrawString, StrLenX, StrLenY);
         DrawString@=StatView(UxP.NormalWepStatsAlt[j].Hits);
+        if(j == 5 )
+        {
+            if(UxP.NormalWepStatsAlt[j].Hits > 0)
+            {
+                if(UxP.NormalWepStatsAlt[j].Hits > 99)
+                    DrawString$="HS";
+                else
+                    DrawString@="HS";
+            }
+        }
         C.SetPos(TmpX+(BorderSize+BoxSizeX)+(0.5*boxSizeX)-strLenX, TmpY);
         C.DrawText(DrawString);
 
@@ -1094,6 +1425,20 @@ function DrawStats(Canvas C)
     C.DrawText("Damage Given:"@UxP.DamG);
 }
 
+function string GetNextKeyString()
+{
+    local string key;
+    local color Col;
+
+    key = class'GameInfo'.Static.GetKeyBindName("NextStats", BS_xPlayer(owner));
+    col.R=255;
+    Col.G=255;
+    Col.B=255;
+
+    return "Press"@key@"for next player.";
+}
+
+
 function string StatView(coerce string S)
 {
     if(S~="0" || S~= "0.00")
@@ -1108,6 +1453,12 @@ function string PercView(coerce string S)
         return "";
     else
         return S$"%";
+}
+
+simulated function NextStats()
+{
+    if(BS_xPlayer(Owner)!=None)
+        BS_xPlayer(Owner).StatNext();
 }
 
 defaultproperties

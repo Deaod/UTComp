@@ -5,7 +5,7 @@ class NewNet_BioRifle extends UTComp_BioRifle
 
 const MAX_PROJECTILE_FUDGE = 0.075;
 
-var TimeStamp T;
+var TimeStamp_Pawn T;
 var MutUTComp M;
 
 var int CurIndex;
@@ -45,10 +45,10 @@ simulated event NewNet_ClientStartFire(int Mode)
         if (StartFire(Mode))
         {
             if(T==None)
-                foreach DynamicActors(class'TimeStamp', T)
+                foreach DynamicActors(class'TimeStamp_Pawn', T)
                      break;
 
-            NewNet_ServerStartFire(mode, T.ClientTimeStamp);
+            NewNet_ServerStartFire(mode, T.TimeStamp, T.Dt);
         }
     }
     else
@@ -57,7 +57,7 @@ simulated event NewNet_ClientStartFire(int Mode)
     }
 }
 
-function NewNet_ServerStartFire(byte Mode, float ClientTimeStamp)
+function NewNet_ServerStartFire(byte Mode, byte ClientTimeStamp, float DT)
 {
     if(M==None)
         foreach DynamicActors(class'MutUTComp', M)
@@ -65,12 +65,12 @@ function NewNet_ServerStartFire(byte Mode, float ClientTimeStamp)
 
     if(NewNet_BioFire(FireMode[Mode])!=None)
     {
-        NewNet_BioFire(FireMode[Mode]).PingDT = FMin(M.ClientTimeStamp - ClientTimeStamp + 1.75*M.AverDT, MAX_PROJECTILE_FUDGE);
+        NewNet_BioFire(FireMode[Mode]).PingDT = FMin(M.ClientTimeStamp - M.GetStamp(ClientTimeStamp)-DT + 0.5*M.AverDT, MAX_PROJECTILE_FUDGE);
         NewNet_BioFire(FireMode[Mode]).bUseEnhancedNetCode = true;
     }
     else if(NewNet_BioChargedFire(FireMode[Mode])!=None)
     {
-        NewNet_BioChargedFire(FireMode[Mode]).PingDT = FMin(M.ClientTimeStamp - ClientTimeStamp + 1.75*M.AverDT, MAX_PROJECTILE_FUDGE);
+        NewNet_BioChargedFire(FireMode[Mode]).PingDT = FMin(M.ClientTimeStamp - M.GetStamp(ClientTimeStamp)-DT + 0.5*M.AverDT, MAX_PROJECTILE_FUDGE);
         NewNet_BioChargedFire(FireMode[Mode]).bUseEnhancedNetCode = true;
     }
 

@@ -93,6 +93,8 @@ function bool InternalOnKeyEvent(out byte Key, out byte State, float delta)
     class'UTComp_Settings'.default.EnemySound=co_EnemySound.GetText();
     class'UTComp_Settings'.default.FriendlySound=co_FriendlySound.GetText();
     BS_xPlayer(PlayerOwner()).MakeSureSaveConfig();
+    BS_xPlayer(PlayerOwner()).LoadedFriendlySound = None;
+    BS_xPlayer(PlayerOwner()).LoadedEnemySound = none;
     class'UTComp_Settings'.static.staticSaveConfig();
     class'BS_xPlayer'.Static.StaticSaveConfig();
 

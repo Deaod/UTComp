@@ -26,6 +26,7 @@ event Opened(GUIComponent Sender)
          case 7:  l_Vote[2].Caption="Change Map"; break;
          case 8:  l_Vote[2].Caption="Change DoubleDamage Mode"; break;
          case 9:  l_Vote[2].Caption="Change Enhanced Netcode Mode"; break;
+         case 10:  l_Vote[2].Caption="Change Forward Mode"; break;
          default:  l_Vote[2].Caption=""; break;
      }
      if(BS_xPlayer(PlayerOwner()).UTCompPRI.CurrentVoteID!=6 && BS_xPlayer(PlayerOwner()).UTCompPRI.CurrentVoteID!=7)

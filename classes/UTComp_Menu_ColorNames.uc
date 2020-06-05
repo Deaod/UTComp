@@ -112,7 +112,7 @@ function SetColorSliders(byte offset)
 function InternalOnChange( GUIComponent C )
 {
 
-    Switch(C)
+    switch(C)
     {
     case ch_ColorChat: class'UTComp_Settings'.default.bEnableColoredNamesInTalk=ch_ColorChat.IsChecked();  break;
     case ch_ColorScoreboard: class'UTComp_ScoreBoard'.default.bEnableColoredNamesOnScoreboard=ch_ColorScoreboard.IsChecked(); break;
@@ -155,7 +155,7 @@ function bool InternalOnClick( GUIComponent Sender )
     case bu_SaveName:
                        BS_xPlayer(PlayerOwner()).SaveNewColoredName();
                        co_SavedNames.ReadOnly(False);
-                       co_SavedNames.AddItem(BS_xPlayer(PlayerOwner()).FindColoredName(class'UTComp_Settings'.default.ColoredName.Length-1));
+                       co_SavedNames.AddItem(BS_xPlayer(PlayerOwner()).AddNewColoredName(class'UTComp_Settings'.default.ColoredName.Length-1));
                        co_SavedNames.ReadOnly(True); break;
 
 

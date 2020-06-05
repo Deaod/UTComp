@@ -25,6 +25,7 @@ var byte ScreenshotsTaken;
 var bool bAutoDemoStarted;
 var bool clientChangedScoreboard;
 var bool bWantsStats;
+var bool oldbShowScoreBoard;
 
 var sound LoadedEnemySound, LoadedFriendlySound;
 
@@ -91,6 +92,8 @@ var float errorsamples, totalerror;
 
 var bool bDisableSpeed, bDisableBooster, bDisableInvis, bDisableberserk;
 
+var UTComp_PRI currentStatDraw;
+
 // Fractional Parts of Pitch/Yaw Input
 var transient float PitchFraction, YawFraction;
 
@@ -107,6 +110,67 @@ replication
         serverfindprevnode, servergotonode, ServerGoToWepBase, speclockRed, speclockBlue, CallVote;
     reliable if(Role<Role_Authority)
         ServerAdminReady, BroadCastVote, BroadCastReady;
+
+    unreliable if(role < Role_Authority)
+        RequestStats;
+    unreliable if(Role == Role_Authority)
+        SendHitPrim,SendHitAlt,SendFiredPrim,SendFiredAlt,
+        SendDamagePrim,SendDamageAlt,sendDamageGR,sendPickups;
+}
+
+
+
+exec function SetEnemySkinColor(string S)
+{
+    local array <string> Parts;
+
+    Split(S, " ", Parts);
+
+    if(Parts.length >=3)
+    {
+    class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.R=byte(Parts[0]);
+    class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.G=byte(Parts[1]);
+    class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.B=byte(Parts[2]);
+    class'utcomp_settings'.StaticSaveConfig();
+    }
+    else
+    echo("Invalid command, need 3 colors");
+}
+
+exec function SetFriendSkinColor(string S)
+{
+    local array <string> Parts;
+
+    Split(S, " ", Parts);
+        if(Parts.length >=3)
+    {
+    class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.R=byte(Parts[0]);
+    class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.G=byte(Parts[1]);
+    class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.B=byte(Parts[2]);
+    class'utcomp_settings'.StaticSaveConfig();
+    }
+    else
+    echo("Invalid command, need 3 colors");
+}
+
+
+exec function SetBlueSkinColor(string S)
+{
+   SetEnemySkinColor(S);
+}
+
+exec function SetRedSkinColor(string S)
+{
+  SetFriendSkinColor(S);
+}
+
+function ServertopStats()
+{
+}
+
+exec function SetStats(int i)
+{
+
 }
 
 
@@ -216,6 +280,12 @@ event PlayerTick(float deltatime)
             SetNetSpeed(RepInfo.MinNetSpeed);
     }
 
+     if(myHud!=None && myHud.bShowScoreBoard && !oldbShowScoreBoard)
+     {
+         StatMine();
+     }
+     oldbShowScoreBoard=myHud.bShowScoreBoard;
+
     Super.PlayerTick(deltatime);
 }
 
@@ -234,7 +304,7 @@ simulated function InitializeStuff()
     InitializeScoreboard();
     SetInitialColoredName();
     SetShowSelf(class'UTComp_Settings'.default.bShowSelfInTeamOverlay);
-    SetBStats(class'UTComp_Scoreboard'.default.bDrawStats);
+    SetBStats(class'UTComp_Scoreboard'.default.bDrawStats || class'UTComp_ScoreBoard'.default.bOverrideDisplayStats);
     if(class'UTComp_Settings'.default.bFirstRun)
     {
         class'UTComp_Settings'.default.bFirstRun=False;
@@ -281,11 +351,11 @@ simulated function InitializeScoreboard()
 
 simulated function SetInitialColoredName()
 {
-    if(class'UTComp_Settings'.default.currentselectedcoloredname!=255 && class'UTComp_Settings'.default.currentselectedcoloredname<class'UTComp_Settings'.default.ColoredName.Length)
-    {
-        SetColoredNameOldStyleCustom(,class'UTComp_Settings'.default.currentselectedcoloredname);
-    }
-    else
+  //  if(class'UTComp_Settings'.default.currentselectedcoloredname!=255 && class'UTComp_Settings'.default.currentselectedcoloredname<class'UTComp_Settings'.default.ColoredName.Length)
+  //  {
+  //      SetColoredNameOldStyleCustom(,class'UTComp_Settings'.default.currentselectedcoloredname);
+  //  }
+  //  else
         SetColoredNameOldStyle();
 }
 
@@ -403,6 +473,16 @@ simulated function ReceiveHit(class<DamageType> DamageType, int Damage, pawn Inj
     }
 }
 
+simulated function ServerReceiveHit(class<DamageType> DamageType, int Damage, pawn Injured)
+{
+    if(Injured!=None && Injured.Controller!=None && Injured.Controller==Self)
+        ServerRegisterSelfHit(DamageType, Damage);
+    else if(Injured.GetTeamNum()==255 || (Injured.GetTeamNum() != GetTeamNum()))
+        ServerRegisterEnemyHit(DamageType, Damage);
+    else
+        ServerRegisterTeammateHit(DamageType, Damage);
+}
+
 simulated function bool IsHitScan(class<DamageType> DamageType)
 {
     if(
@@ -474,6 +554,11 @@ simulated function ReceiveHitSound(int Damage, byte iTeam)
 simulated function RegisterSelfHit(class<DamageType> DamageType, int Damage)
 {
 }
+
+simulated function ServerRegisterSelfHit(class<DamageType> DamageType, int Damage)
+{
+}
+
 
 simulated function RegisterEnemyHit(class<DamageType> DamageType, int Damage)
 {
@@ -549,6 +634,307 @@ simulated function RegisterEnemyHit(class<DamageType> DamageType, int Damage)
     CustomWepStats[i-1].Hits=1;
 }
 
+simulated function ServerRegisterEnemyHit(class<DamageType> DamageType, int Damage)
+{
+    local int i;
+    if(DamageType==None || UTCompPRI==None)
+        return;
+
+    UTCompPRI.DamG+=Damage;
+    for(i=0; i<=14; i++)
+    {
+        if(DamageType==WepStatDamTypesPrim[i])
+        {
+            UTCompPRI.NormalWepStatsPrimHit[i] +=1;
+            UTCompPRI.NormalWepStatsPrimDamage[i]+=Damage;
+            return;
+        }
+        else if(DamageType==WepStatDamTypesAlt[i])
+        {
+            UTCompPRI.NormalWepStatsAltHit[i] +=1;
+            UTCompPRI.NormalWepStatsAltDamage[i]+=Damage;
+            return;
+        }
+        //Hack DamageTypes(more than 1, currently only sniper)
+        else if(DamageType==class'DamTypeSniperHeadShot' || DamageType==class'DamTypeClassicHeadshot' || DamageType==class'DamTypeClassicSniper')
+        {
+            UTCompPRI.NormalWepStatsPrimHit[5] +=1;
+            UTCompPRI.NormalWepStatsPrimDamage[5]+=Damage;
+
+            if(DamageType!=class'DamTypeClassicSniper')
+            {
+                UTCompPRI.NormalWepStatsAltHit[5] +=1;
+            }
+            return;
+        }
+    }
+}
+
+
+exec function StatMine()
+{
+    if(PlayerReplicationInfo == None || !PlayerREplicationInfo.bOnlySpectator)
+        currentStatDraw=UTCompPRI;
+    else
+        StatSpec();
+}
+
+exec function StatSpec()
+{
+    if(viewTarget==none)
+    {
+        StatNext();
+        return;
+    }
+    if (ViewTarget.IsA('Pawn') && Pawn(ViewTarget).PlayerReplicationInfo!=None
+    && !Pawn(ViewTarget).PlayerReplicationInfo.bBot)
+       currentStatDraw =  class'UTComp_Util'.static.GetUTCompPRI(Pawn(ViewTarget).PlayerReplicationInfo);
+
+    if(currentStatDraw == None)
+        StatNext();
+    else
+       RequestStats(currentStatDraw);
+}
+
+exec function StatNext()
+{
+    local utcomp_PRI upri;
+    local playerreplicationinfo pri;
+    local bool buseNext;
+    local int i;
+    local utcomp_pri startPRI;
+
+    if(gameREplicationInfo == None)
+       return;
+
+    startPRI = currentStatDraw;
+
+    if(currentStatDraw == None)
+    {
+        for(i=0; i<GameReplicationInfo.PRIArray.length; i++)
+        {
+            pri = GameREplicationInfo.PRIArray[i];
+            uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameREplicationInfo.PRIArray[i]);
+            if(uPRI!=None && uPRI!=UTCompPRI && !PRI.bBot && !pri.bOnlySpectator)
+            {
+               currentStatDraw=uPRI;
+               break;
+            }
+        }
+    }
+    else
+    {
+        for(i=0; i<GameReplicationInfo.PRIArray.length; i++)
+        {
+          uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameREplicationInfo.PRIArray[i]);
+          pri = GameREplicationInfo.PRIArray[i];
+          if(bUseNext && !PRI.bBot && !pri.bOnlySpectator)
+          {
+              currentStatDraw=uPRI;
+              bUseNext=false;
+              break;
+          }
+          if(currentStatDraw==uPRI)
+              bUseNext=true;
+       }
+       if(bUseNext)
+       {
+           for(i=0; i<GameReplicationInfo.PRIArray.length; i++)
+           {
+                uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameREplicationInfo.PRIArray[i]);
+                pri = GameREplicationInfo.PRIArray[i];
+                if(!PRI.bBot && !pri.bOnlySpectator)
+                    currentStatDraw=uPRI;
+                break;
+           }
+       }
+    }
+
+    if(startPRI!=None && currentStatDraw == startPRI)
+    {
+        currentStatDraw=none;
+        StatNext();
+        return;
+    }
+    if(UTCompPRI!= currentStatDraw && currentStatDraw!=None)
+        RequestStats(currentStatDraw);
+}
+
+simulated function REquestStats(UTComp_PRI uPRI)
+{
+    local string S;
+    local int i;
+
+    if(uPRI == None)
+       return;
+    S="";
+    for(i=0; i<ArrayCount(uPRI.NormalWepStatsPrimHit); i++)
+    {
+        if(i==0)
+           S=S$uPRI.NormalWepStatsPrimHit[i];
+        else
+           S=S@uPRI.NormalWepStatsPrimHit[i];
+    }
+    SendHitPrim(S, uPRI);
+
+    S="";
+    for(i=0; i<ArrayCount(uPRI.NormalWepStatsAltHit); i++)
+    {
+        if(i==0)
+            S=S$uPRI.NormalWepStatsAltHit[i];
+        else
+            S=S@uPRI.NormalWepStatsAltHit[i];
+    }
+    SendHitAlt(S, uPRI);
+
+    S="";
+    for(i=0; i<ArrayCount(uPRI.NormalWepStatsPrim); i++)
+    {
+        if(i==0)
+            S=S$uPRI.NormalWepStatsPrim[i];
+        else
+            S=S@uPRI.NormalWepStatsPrim[i];
+    }
+    SendFiredPrim(S, uPRI);
+
+    S="";
+    for(i=0; i<ArrayCount(uPRI.NormalWepStatsAlt); i++)
+    {
+        if(i==0)
+            S=S$uPRI.NormalWepStatsAlt[i];
+        else
+            S=S@uPRI.NormalWepStatsAlt[i];
+    }
+    SendFiredAlt(S, uPRI);
+
+    S="";
+    for(i=0; i<ArrayCount(uPRI.NormalWepStatsPrimDamage); i++)
+    {
+        if(i==0)
+            S=S$uPRI.NormalWepStatsPrimDamage[i];
+        else
+            S=S@uPRI.NormalWepStatsPrimDamage[i];
+    }
+    SendDamagePrim(S, uPRI);
+
+    S="";
+    for(i=0; i<ArrayCount(uPRI.NormalWepStatsAltDamage); i++)
+    {
+        if(i==0)
+            S=S$uPRI.NormalWepStatsAltDamage[i];
+        else
+            S=S@uPRI.NormalWepStatsAltDamage[i];
+    }
+    SendDamageAlt(S, uPRI);
+
+    SendDamageGR(uPRI.damG,uPRI.damR, uPRI);
+
+    S = uPRI.PickedUpFifty@uPRI.PickedUpHundred@uPRI.PickedUpAmp@uPRI.PickedUpVial@uPRI.PickedUpHealth@uPRI.PickedUpKeg@uPRI.PickedUpAdren;
+    sendPickups(S,uPRI);
+}
+
+simulated function SendPickups(string S, UTComp_PRI uPRI)
+{
+    local array<string> parts;
+    //log("getting pickups");
+
+    Split(S, " ", Parts);
+
+    uPRI.PickedUpFifty=int(Parts[0]);
+    uPRI.PickedUpHundred=int(Parts[1]);
+    uPRI.PickedUpAmp=int(Parts[2]);
+    uPRI.PickedUpVial=int(Parts[3]);
+    uPRI.PickedUpHealth=int(Parts[4]);
+    uPRI.PickedUpKeg=int(Parts[5]);
+    uPRI.PickedUpAdren=int(Parts[6]);
+}
+
+simulated function SendDamageGR(int damageG, int damageR, UTComp_PRI uPRI)
+{
+
+    uPRI.damG = damageG;
+    uPRI.damR = damageR;
+}
+
+
+simulated function SendHitPrim(string S, utcomp_PRI uPRI)
+{
+    local int i;
+    local array<string> parts;
+
+    Split(S," ", parts);
+    for(i=0; i<Parts.length; i++)
+    {
+        uPRI.NormalWepStatsPrimHit[i]=int(Parts[i]);
+    }
+}
+
+simulated function SendHitAlt(string S, utcomp_PRI uPRI)
+{
+    local int i;
+    local array<string> parts;
+
+    Split(S," ", parts);
+    for(i=0; i<Parts.length; i++)
+    {
+        uPRI.NormalWepStatsAltHit[i]=int(Parts[i]);
+    }
+}
+
+
+simulated function SendFiredPrim(string S, utcomp_PRI uPRI)
+{
+    local int i;
+    local array<string> parts;
+
+    Split(S," ", parts);
+    for(i=0; i<Parts.length; i++)
+    {
+        uPRI.NormalWepStatsPrim[i]=int(Parts[i]);
+    }
+}
+
+simulated function SendFiredAlt(string S, utcomp_PRI uPRI)
+{
+    local int i;
+    local array<string> parts;
+
+    Split(S," ", parts);
+    for(i=0; i<Parts.length; i++)
+    {
+        uPRI.NormalWepStatsAlt[i]=int(Parts[i]);
+    }
+}
+
+
+simulated function SendDamagePrim(string S, utcomp_PRI uPRI)
+{
+    local int i;
+    local array<string> parts;
+
+    Split(S," ", parts);
+    for(i=0; i<Parts.length; i++)
+    {
+        uPRI.NormalWepStatsPrimDamage[i]=int(Parts[i]);
+    }
+}
+
+simulated function SendDamageAlt(string S, utcomp_PRI uPRI)
+{
+     local int i;
+    local array<string> parts;
+
+    Split(S," ", parts);
+    for(i=0; i<Parts.length; i++)
+    {
+        uPRI.NormalWepStatsAltDamage[i]=int(Parts[i]);
+    }
+}
+
+exec function StatPrev()
+{
+}
+
 simulated function bool InStrNonCaseSensitive(String S, string S2)
 {
     local int i;
@@ -588,7 +974,26 @@ simulated function UpdatePercentages()
             NormalWepStatsAlt[i].Percent=float(NormalWepStatsAlt[i].Hits)/float(UTCompPRI.NormalWepStatsAlt[i])*100.0;
 }
 
+simulated function SyncPRI()
+{
+    local int i;
+    if(UTCompPRI==None)
+        return;
+
+    for(i=0; i<15; i++)
+    {
+        UTCompPRI.NormalWepStatsPrimHit[i]=NormalWepStatsPrim[i].Hits;
+        UTCompPRI.NormalWepStatsPrimPercent[i]=NormalWepStatsPrim[i].Percent;
+        UTCompPRI.NormalWepStatsAltHit[i]=NormalWepStatsAlt[i].Hits;
+        UTCompPRI.NormalWepStatsAltPercent[i]=NormalWepStatsAlt[i].Percent;
+    }
+}
+
 simulated function RegisterTeammateHit(class<DamageType> DamageType, int Damage)
+{
+}
+
+simulated function ServerRegisterTeammateHit(class<DamageType> DamageType, int Damage)
 {
 }
 
@@ -1465,6 +1870,28 @@ simulated function SetColoredNameOldStyle(optional string S2, optional bool bSho
 simulated function string FindColoredName(int CustomColors)
 {
     local string S;
+    local string S2;
+    local int i;
+
+    if(Level.NetMode==NM_DedicatedServer || PlayerReplicationInfo==None)
+        return "";
+
+    if(S2=="")
+    {
+       S2=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedName;
+    }
+  //  SetNameNoReset(S2);
+ //   Log(default.ColoredName[CustomColors].SavedName);
+ //   Log(default.ColoredName[CustomColors].SavedColor[0].R@default.ColoredName[CustomColors].SavedColor[0].G@default.ColoredName[CustomColors].SavedColor[0].B);
+
+    for(i=0; i<Len(S2); i++)
+        S $= class'UTComp_Util'.Static.MakeColorCode(class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[i])$Mid(class'UTComp_Settings'.default.ColoredName[CustomColors].SavedName,i,1);
+    return S;
+}
+
+simulated function string AddNewColoredName(int CustomColors)
+{
+    local string S;
     local byte k;
     local byte numdoatonce;
     local byte m;
@@ -1552,6 +1979,7 @@ simulated function SetColoredNameOldStyleCustom(optional string S2, optional int
  //   Log(default.ColoredName[CustomColors].SavedColor[0].R@default.ColoredName[CustomColors].SavedColor[0].G@default.ColoredName[CustomColors].SavedColor[0].B);
     for(k=0; k<20; k++)
         class'UTComp_Settings'.default.ColorName[k]=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k];
+    class'UTComp_Settings'.static.StaticSaveConfig();
     for(k=1; k<=Len(S2); k++)
     {
         numdoatonce=1;
@@ -1609,7 +2037,8 @@ simulated function reskinall()
        return;
    foreach dynamicactors(class'UTComp_xPawn', P)
    {
-       P.ColorSkins();
+       if(!P.bInvis)
+           P.ColorSkins();
    }
 }
 
@@ -1863,7 +2292,7 @@ event TeamMessage( PlayerReplicationInfo PRI, coerce string S, name Type  )
        {
           S=Repl(S, "^"$k, ColorReplace(k));
        }
-       S=Repl(S, "^r", RandomColor());
+      // S=Repl(S, "^r", RandomColor());
     }
     else
     {
@@ -1871,7 +2300,7 @@ event TeamMessage( PlayerReplicationInfo PRI, coerce string S, name Type  )
        {
           S=Repl(S, "^"$k, "");
        }
-       S=Repl(S, "^r", "");
+     //  S=Repl(S, "^r", "");
     }
     if ( myHUD != None )
     {   if (class'UTComp_Settings'.default.bEnableColoredNamesInTalk)
@@ -2046,12 +2475,12 @@ function string ColorReplace(int k)   //makes the 8 primary colors
    return class'UTComp_Util'.Static.MakeColorCode(theColor);
 }
 
-static function int GetBit(int theInt, int bitNum)
+simulated function int GetBit(int theInt, int bitNum)
 {
     return ((theInt & 1<<bitNum));
 }
 
-static function bool GetBitBool(int theInt, int bitNum)
+simulated function bool GetBitBool(int theInt, int bitNum)
 {
    return ((theInt & 1<<bitNum)!=0);
 }

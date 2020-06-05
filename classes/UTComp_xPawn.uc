@@ -32,6 +32,86 @@ replication
      bShieldActive, bLinkActive, bShockActive, bLGactive, overlayActive;
 }
 
+function int ShieldAbsorb( int dam )
+{
+   if(RepInfo==None || RepInfo.bShieldFix)
+       return NewShieldAbsorb(dam);
+   return Super.ShieldAbsorb(dam);
+}
+
+function int NewShieldAbsorb(int dam)
+{
+	local float Big,Small, Absorbed, remaining, Damage;
+
+    damage = dam;
+
+    if ( ShieldStrength == 0 )
+    {
+        return damage;
+    }
+	SetOverlayMaterial( ShieldHitMat, ShieldHitMatTime, false );
+	PlaySound(sound'WeaponSounds.ArmorHit', SLOT_Pain,2*TransientSoundVolume,,400);
+
+    Small=SmallShieldStrength;
+    Big = ShieldStrength-Small;
+
+    //Absorb 100% of shield above 100
+    if ( ShieldStrength > 100 )
+    {
+		Absorbed = ShieldStrength - 100;
+		if ( Absorbed >= damage )
+		{
+			ShieldStrength -= damage;
+			return 0;
+		}
+		else
+		{
+            ShieldStrength = 100;
+			damage -= Absorbed;
+		}
+	}
+    //Absorb 75% of remaining damage to Big Shield
+	if(Big > 0)
+	{
+	    if(Big >= round(0.75*Damage))
+	    {
+            absorbed = round(0.75*damage);
+            ShieldStrength-= absorbed;
+            Damage-=absorbed;
+            if(ShieldStrength < SmallShieldStrength)
+	            SmallShieldStrength = ShieldStrength;
+	        return Damage;
+	    }
+	    else
+	    {
+	        Absorbed = ShieldStrength - SmallShieldStrength;
+	        Remaining = round(Absorbed*0.3333333);
+            ShieldStrength = SmallShieldStrength;
+            damage-=Absorbed;
+            damage-=Remaining;
+        }
+	}
+	//Absorb 50% of remaining damage to Small Shield
+	if(SmallShieldStrength >= round(0.5*damage))
+	{
+         absorbed = round(0.5*damage);
+         ShieldStrength-=absorbed;
+         Damage-=Absorbed;
+         SmallShieldStrength = ShieldStrength;
+
+         return Damage + Remaining;
+    }
+    else
+    {
+        Damage-=ShieldStrength;
+        ShieldStrength=0;
+        SmallShieldStrength=0;
+
+        return Damage + Remaining;
+    }
+}
+
+
 event Landed(vector HitNormal)
 {
     super.Landed(HitNormal);
