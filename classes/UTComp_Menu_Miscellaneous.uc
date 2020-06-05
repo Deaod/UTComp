@@ -64,7 +64,7 @@ function bool InternalOnClick(GUIComponent C)
 {
     switch(C)
     {
-        case bu_Adren:  PlayerOwner().ClientReplaceMenu("UTCompv17asrc.UTComp_Menu_AdrenMenu"); break;
+        case bu_Adren:  PlayerOwner().ClientReplaceMenu("UTCompv18a.UTComp_Menu_AdrenMenu"); break;
     }
     return super.InternalOnClick(C);
 }
@@ -137,7 +137,7 @@ defaultproperties
         OnClick=UTComp_Menu_Miscellaneous.InternalOnClick
         OnKeyEvent=AdrenButton.InternalOnKeyEvent
      End Object
-     bu_adren=GUIButton'UTCompv17asrc.UTComp_Menu_Miscellaneous.AdrenButton'
+     bu_adren=GUIButton'UTCompv18a.UTComp_Menu_Miscellaneous.AdrenButton'
 
      Begin Object Class=GUILabel Name=GenericLabel
          Caption="----Generic UT2004 Settings----"

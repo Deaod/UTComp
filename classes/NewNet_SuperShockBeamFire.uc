@@ -7,6 +7,11 @@ var vector savedVec;
 var float PingDT;
 var bool bSkipNextEffect;
 var bool bUseEnhancedNetCode;
+var bool bBelievesHit;
+var Actor BelievedHitActor;
+var vector BelievedHitLocation;
+var float averdt;
+var bool bFirstGo;
 
 function PlayFiring()
 {
@@ -39,6 +44,11 @@ function DoTrace(Vector Start, Rotator Dir)
     local bool bDoReflect;
     local int ReflectNum;
     local vector PawnHitLocation;
+    local actor AltOther;
+	local vector AltHitlocation,altHitNormal,altPawnHitLocation;
+	local float f;
+
+//	local vector ShockLoc;
 
     if(!bUseEnhancedNetCode)
     {
@@ -71,6 +81,87 @@ function DoTrace(Vector Start, Rotator Dir)
         {
             PawnHitLocation = HitLocation;
         }
+
+        if(bFirstGo && bBelievesHit && !(Other == BelievedHitActor))
+        {
+
+            if(ReflectNum==0)
+            {
+                f = 0.02;
+                while(abs(f) < (0.04 + 2.0*AverDT))
+                {
+
+                    TimeTravel(PingDT-f);
+                    if((PingDT-f) <=0.0)
+                          AltOther = Weapon.Trace(AltHitLocation,AltHitNormal,End,Start,true);
+                    else
+                          AltOther = DoTimeTravelTrace(AltHitLocation, AltHitNormal, End, Start);
+
+                    if(AltOther!=None && AltOther.IsA('PawnCollisionCopy'))
+                    {
+                         AltPawnHitLocation = AltHitLocation + PawnCollisionCopy(AltOther).CopiedPawn.Location - AltOther.Location;
+                         AltOther=PawnCollisionCopy(AltOther).CopiedPawn;
+                    }
+                    else
+                         AltPawnHitLocation=AltHitLocation;
+
+                    if(altOther == BelievedHitACtor)
+                    {
+                    //   Log("Fixed At"@f@"with max"@(0.04 + 2.0*AverDT));
+                       Other=altOther;
+                       PawnHitLocation=AltPawnHitLocation;
+                       HitLocation=AltHitLocation;
+                       f=10.0;
+                    }
+                    if(f > 0.00)
+                        f = -1.0*f;
+                    else
+                        f = -1.0*f+0.02;
+                }
+              //  if(abs(f)<9.0)
+                //   log("Failed to fix");
+            }
+        }
+        else if(bFirstGo && !bBelievesHit && Other!=None && (Other.IsA('xpawn') || Other.IsA('Vehicle')))
+        {
+            if(ReflectNum==0)
+            {
+                f = 0.02;
+                while(abs(f) < (0.04 + 2.0*AverDT))
+                {
+                    AltOther=None;
+                    TimeTravel(PingDT-f);
+                    if((PingDT-f) <=0.0)
+                          AltOther = Weapon.Trace(AltHitLocation,AltHitNormal,End,Start,true);
+                    else
+                          AltOther = DoTimeTravelTrace(AltHitLocation, AltHitNormal, End, Start);
+
+                    if(AltOther!=None && AltOther.IsA('PawnCollisionCopy'))
+                    {
+                         AltPawnHitLocation = AltHitLocation + PawnCollisionCopy(AltOther).CopiedPawn.Location - AltOther.Location;
+                         AltOther=PawnCollisionCopy(AltOther).CopiedPawn;
+                    }
+                    else
+                         AltPawnHitLocation=AltHitLocation;
+
+                    if(altOther == None || !(altOther.IsA('xpawn') || altOther.IsA('Vehicle')))
+                    {
+                     //  Log("Reverse Fixed At"@f);
+                       Other=altOther;
+                       PawnHitLocation=AltPawnHitLocation;
+                       HitLocation=altHitLocation;
+                       f=10.0;
+                    }
+                    if(f > 0.00)
+                        f = -1.0*f;
+                    else
+                        f = -1.0*f+0.02;
+                }
+                //if(abs(f)<9.0)
+                //   log("Failed to reverse fix");
+            }
+        }
+        bFirstGo=false;
         UnTimeTravel();
 
         if ( Other != None && (Other != Instigator || ReflectNum > 0) )
