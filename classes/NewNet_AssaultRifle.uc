@@ -3,7 +3,7 @@ class NewNet_AssaultRifle extends UTComp_AssaultRifle
 	HideDropDown
 	CacheExempt;
 
-var TimeStamp T;
+var TimeStamp_Pawn T;
 var MutUTComp M;
 
 const MAX_PROJECTILE_FUDGE = 0.075;
@@ -42,10 +42,10 @@ simulated event NewNet_ClientStartFire(int Mode)
         if (StartFire(Mode))
         {
             if(T==None)
-                foreach DynamicActors(class'TimeStamp', T)
+                foreach DynamicActors(class'TimeStamp_Pawn', T)
                      break;
 
-            NewNet_ServerStartFire(mode, T.ClientTimeStamp);
+            NewNet_ServerStartFire(mode, T.TimeStamp, T.DT);
         }
     }
     else
@@ -54,7 +54,7 @@ simulated event NewNet_ClientStartFire(int Mode)
     }
 }
 
-function NewNet_ServerStartFire(byte Mode, float ClientTimeStamp)
+function NewNet_ServerStartFire(byte Mode, byte ClientTimeStamp, float DT)
 {
     if(M==None)
         foreach DynamicActors(class'MutUTComp', M)
@@ -62,12 +62,12 @@ function NewNet_ServerStartFire(byte Mode, float ClientTimeStamp)
 
     if(NewNet_AssaultFire(FireMode[Mode])!=None)
     {
-        NewNet_AssaultFire(FireMode[Mode]).PingDT = M.ClientTimeStamp - ClientTimeStamp + 1.75*M.AverDT;
+        NewNet_AssaultFire(FireMode[Mode]).PingDT = M.ClientTimeStamp - M.GetStamp(ClientTimeStamp)-DT + 0.5*M.AverDT;
         NewNet_AssaultFire(FireMode[Mode]).bUseEnhancedNetCode = true;
     }
     else if(NewNet_AssaultGrenade(FireMode[Mode])!=None)
     {
-        NewNet_AssaultGrenade(FireMode[Mode]).PingDT = FMin(M.ClientTimeStamp - ClientTimeStamp + 1.75*M.AverDT, MAX_PROJECTILE_FUDGE);
+        NewNet_AssaultGrenade(FireMode[Mode]).PingDT = FMin(M.ClientTimeStamp - M.GetStamp(ClientTimeStamp)-DT + 0.5*M.AverDT, MAX_PROJECTILE_FUDGE);
         NewNet_AssaultGrenade(FireMode[Mode]).bUseEnhancedNetCode = true;
     }
 

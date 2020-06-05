@@ -29,5 +29,5 @@ auto state Pickup
 
 defaultproperties
 {
-    RespawnTime = 27.5
+    RespawnTime = 33
 }

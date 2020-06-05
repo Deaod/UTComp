@@ -295,9 +295,13 @@ function Projectile AltSpawnProjectile(Vector Start, Rotator Dir, int index)
     local Projectile p;
 
     p = RocketLauncher(Weapon).SpawnProjectile(Start, Dir);
-    if ( P != None )
-		p.Damage *= DamageAtten;
-	if(p.IsA('NewNet_RocketProj'))
+
+    if ( P == None )
+        return none;
+
+    p.Damage *= DamageAtten;
+
+    if(p.IsA('NewNet_RocketProj'))
         NewNet_RocketProj(p).Index = index;
     if(p.IsA('NewNet_SeekingRocketProj'))
         NewNet_SeekingRocketProj(p).Index = index;

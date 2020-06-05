@@ -2,7 +2,7 @@ class NewNet_MiniGun extends UTComp_MiniGun
 	HideDropDown
 	CacheExempt;
 
-var TimeStamp T;
+var TimeStamp_pawn T;
 var MutUTComp M;
 
 replication
@@ -37,10 +37,10 @@ simulated event NewNet_ClientStartFire(int Mode)
         if (StartFire(Mode))
         {
             if(T==None)
-                foreach DynamicActors(class'TimeStamp', T)
+                foreach DynamicActors(class'TimeStamp_Pawn', T)
                      break;
 
-            NewNet_ServerStartFire(mode, T.ClientTimeStamp);
+            NewNet_ServerStartFire(mode, T.TimeStamp, T.dt);
         }
     }
     else
@@ -49,7 +49,7 @@ simulated event NewNet_ClientStartFire(int Mode)
     }
 }
 
-function NewNet_ServerStartFire(byte Mode, float ClientTimeStamp)
+function NewNet_ServerStartFire(byte Mode, byte ClientTimeStamp, float dt)
 {
     if(M==None)
         foreach DynamicActors(class'MutUTComp', M)
@@ -57,12 +57,12 @@ function NewNet_ServerStartFire(byte Mode, float ClientTimeStamp)
 
     if(NewNet_MiniGunFire(FireMode[Mode])!=None)
     {
-        NewNet_MiniGunFire(FireMode[Mode]).PingDT = M.ClientTimeStamp - ClientTimeStamp + 1.75*M.AverDT;
+        NewNet_MiniGunFire(FireMode[Mode]).PingDT = M.ClientTimeStamp - M.GetStamp(ClientTimeStamp)-DT + 0.5*M.AverDT;
         NewNet_MiniGunFire(FireMode[Mode]).bUseEnhancedNetCode = true;
     }
     else if(NewNet_MiniGunAltFire(FireMode[Mode])!=None)
     {
-        NewNet_MiniGunAltFire(FireMode[Mode]).PingDT = M.ClientTimeStamp - ClientTimeStamp + 1.75*M.AverDT;
+        NewNet_MiniGunAltFire(FireMode[Mode]).PingDT = M.ClientTimeStamp - M.GetStamp(ClientTimeStamp)-DT + 0.5*M.AverDT;
         NewNet_MiniGunAltFire(FireMode[Mode]).bUseEnhancedNetCode = true;
     }
 

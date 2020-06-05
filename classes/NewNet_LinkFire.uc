@@ -40,7 +40,7 @@ simulated function ModeTick(float dt)
 
     if ( LinkGun.Links < 0 )
     {
-        log("warning:"@Instigator@"linkgun had"@LinkGun.Links@"links");
+        //log("warning:"@Instigator@"linkgun had"@LinkGun.Links@"links");
         LinkGun.Links = 0;
     }
 

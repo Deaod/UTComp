@@ -4,24 +4,31 @@
 //-----------------------------------------------------------
 class TimeStamp extends ReplicationInfo;
 
-var float ClientTimeStamp;
+//var float ClientTimeStamp;
 var float AverDT;
 
 replication
 {
    unreliable if(Role == Role_Authority)
-       ClientTimeStamp, averDT;
+       /*ClientTimeStamp,*/ averDT;
+}
+
+simulated function PostBeginPlay()
+{
+    class'ShieldFire'.default.AutoFireTestFreq=0.05;
+    Super.PostBeginPlay();
 }
 
 simulated function tick(float DeltaTime)
 {
-    ClientTimeStamp+=deltatime;
+   // ClientTimeStamp+=deltatime;
+    //Log(ClientTimeStamp);
     default.AverDT = Averdt;
 }
 
 function ReplicatetimeStamp(float f)
 {
-    ClientTimeStamp=f;
+ //   ClientTimeStamp=f;
 }
 
 function REplicatedAverDT(float f)

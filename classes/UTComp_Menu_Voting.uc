@@ -31,7 +31,7 @@ function Blehz()
 
     foreach PlayerOwner().DynamicActors(class'UTComp_ServerReplicationInfo', RepInfo)
          break;
-    if(RepInfo.bEnableMapVoting==False || RepInfo.bEnableVoting==False)
+    if((RepInfo.bEnableMapVoting==false && RepInfo.bAllowRestartVoteEvenIfMapVotingIsTurnedOff == false) || RepInfo.bEnableVoting==false)
         bu_MapChangeMenu.DisableMe();
     else
         bu_MapChangeMenu.EnableMe();

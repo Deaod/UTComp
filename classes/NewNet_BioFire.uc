@@ -20,7 +20,7 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
 {
     local Projectile p;
 
-    local rotator NewDir;
+    local rotator NewDir, outDir;
     local float f,g;
     local vector End, HitLocation, HitNormal, VZ;
     local actor Other;
@@ -36,14 +36,19 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
     {
         if(PingDT > 0.0 && Weapon.Owner!=None)
         {
-            NewDir=Dir;
+            outDir=Dir;
             for(f=0.00; f<pingDT + PROJ_TIMESTEP; f+=PROJ_TIMESTEP)
             {
                 //Make sure the last trace we do is right where we want
                 //the proj to spawn if it makes it to the end
                 g = Fmin(pingdt, f);
                 //Where will it be after deltaF, NewDir byRef for next tick
-                End = Start + Extrapolate(NewDir, PROJ_TIMESTEP, g==0.00);
+
+                End = Start + NewExtrapolate(Dir, g, outDir);
+               // if(f >= pingDT)
+                //  End = Start + Extrapolate(Dir, (pingDT-f+PROJ_TIMESTEP), g==0.0);
+               // else
+               //   End = Start + Extrapolate(Dir, PROJ_TIMESTEP, g==0.0);
                 //Put pawns there
                 TimeTravel(pingdt - g);
                 //Trace between the start and extrapolated end
@@ -53,7 +58,7 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
                     break;
                 }
                 //repeat
-                Start=End;
+               // Start=End;
            }
            UnTimeTravel();
 
@@ -64,7 +69,9 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
            }
 
            VZ.Z = ProjectileClass.default.TossZ;
-           NewDir =  rotator(vector(NewDir)*ProjectileClass.default.speed - VZ);
+           NewDir =  rotator(vector(OutDir)*ProjectileClass.default.speed - VZ);
+         //  Log(vSize(Start-End)/PingDT);
+
            if(Other == none)
                p = Weapon.Spawn(ProjectileClass,,, End, NewDir);
            else
@@ -218,6 +225,22 @@ function PlayFiring()
 function DoClientFireEffect()
 {
    super.DoFireEffect();
+}
+
+function vector NewExtrapolate(rotator Dir, float dF, out rotator outDir)
+{
+    local vector V;
+    local vector Pos;
+
+   // if(vSize(vector(Dir)) != 1.0)
+   //    log(vSize(vector(Dir)));
+
+    V = vector(Dir)*ProjectileClass.default.speed;
+    V.Z += ProjectileClass.default.TossZ;
+
+    Pos = V*dF + 0.5*square(dF)*Weapon.Owner.PhysicsVolume.Gravity;
+    OutDir = rotator(V + dF*Weapon.Owner.PhysicsVolume.Gravity);
+    return Pos;
 }
 
 simulated function DoTimedClientFireEffect()

@@ -430,15 +430,15 @@ defaultproperties
      l_BGColor=GUILabel'UTCompv17Beta4SRC.UTComp_Menu_TeamOverlay.BGColorLabel'
 
      Begin Object Class=GUILabel Name=NameColorLabel
-         Caption="Name Color"
+         Caption="Location color"
          TextColor=(B=0,G=200,R=230)
          WinTop=0.615000
          WinLeft=0.120000
      End Object
      l_NameColor=GUILabel'UTCompv17Beta4SRC.UTComp_Menu_TeamOverlay.NameColorLabel'
-
+     //PLEASE NOTE, THIS IS NAMED BACKWARDS AS A QUICK FIX
      Begin Object Class=GUILabel Name=LocColorLabel
-         Caption="Location Color"
+         Caption="Name color"
          TextColor=(B=0,G=200,R=230)
          WinTop=0.615000
          WinLeft=0.520000

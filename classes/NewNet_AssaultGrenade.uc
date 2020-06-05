@@ -15,7 +15,7 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
     local vector Velocity;
     local float Speed;
 
-    local rotator NewDir;
+    local rotator NewDir, outDir;
     local actor Other;
     local vector HitNormal,HitLocation,End;
     local float h,f;
@@ -37,14 +37,20 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
 
     if(PingDT > 0.0 && Weapon.Owner!=None)
     {
-            NewDir=Dir;
+            OutDir=Dir;
             for(f=0.00; f<pingDT + PROJ_TIMESTEP; f+=PROJ_TIMESTEP)
             {
                 //Make sure the last trace we do is right where we want
                 //the proj to spawn if it makes it to the end
                 h = Fmin(pingdt, f);
                 //Where will it be after deltaF, NewDir byRef for next tick
-                End = Start + Extrapolate(NewDir, PROJ_TIMESTEP, Speed);
+
+                End = Start + NewExtrapolate(Dir, h, outDir);
+               /* if(f > pingDT)
+                   End = Start + Extrapolate(Dir, (pingDT-f+PROJ_TIMESTEP),Speed);
+                else
+                   End = Start + Extrapolate(Dir, PROJ_TIMESTEP,Speed);
+               */
                 //Put pawns there
                 TimeTravel(pingdt - h);
                 //Trace between the start and extrapolated end
@@ -54,7 +60,7 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
                     break;
                 }
                 //repeat
-                Start=End;
+             //   Start=End;
            }
            UnTimeTravel();
 
@@ -64,7 +70,7 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
                  Other=PawnCollisionCopy(Other).CopiedPawn;
            }
 
-           Velocity = Speed * Vector(NewDir);
+           Velocity = Speed * Vector(OutDir);
            if(Other == none)
                g = Weapon.Spawn(class'Grenade',,, End, NewDir);
            else
@@ -82,6 +88,22 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
     g.Damage *= DamageAtten;
 
     return g;
+}
+
+function vector NewExtrapolate(rotator Dir, float dF, out rotator outDir)
+{
+    local vector V;
+    local vector Pos;
+
+   // if(vSize(vector(Dir)) != 1.0)
+   //    log(vSize(vector(Dir)));
+
+    V = vector(Dir)*ProjectileClass.default.speed;
+    V.Z += ProjectileClass.default.TossZ;
+
+    Pos = V*dF + 0.5*square(dF)*Weapon.Owner.PhysicsVolume.Gravity;
+    OutDir = rotator(V + dF*Weapon.Owner.PhysicsVolume.Gravity);
+    return Pos;
 }
 
 function vector Extrapolate(out rotator Dir, float dF, float Speed)
@@ -171,5 +193,4 @@ function UnTimeTravel()
 
 defaultproperties
 {
-
 }

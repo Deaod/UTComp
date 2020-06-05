@@ -37,6 +37,9 @@ const MAX_HISTORY_LENGTH = 0.350;
 
 var bool bCrouched;
 
+
+var InterpCurve LocCurveX, LocCurveY,LocCurveZ;
+
 /* Set up the collision properties of our copy */
 function SetPawn(Pawn Other)
 {
@@ -102,9 +105,11 @@ function TimeTravelPawn(float dt)
 {
     local int i, Floor, Ceiling;
     local bool bFloor, bCeiling;
-    local vector V;
-    local float StampDT, Alpha;
-    local float Interpdt;
+  //  local vector V;
+    local vector V2;
+    local float StampDT;
+//    local float Alpha;
+  //  local float Interpdt;
 
     if(CopiedPawn == none || CopiedPawn.DrivenVehicle!=None)
        return;
@@ -140,23 +145,41 @@ function TimeTravelPawn(float dt)
 
     if(bCeiling)
     {
-         /* interpolate between the 2 locations based on stampDT*/
-         Alpha = (PawnHistory[Floor].TimeStamp - StampDT) / (PawnHistory[Floor].TimeStamp - PawnHistory[ceiling].TimeStamp);
-         V.X = lerp(Alpha, PawnHistory[Floor].Location.X, PawnHistory[ceiling].Location.X);
-         V.Y = lerp(Alpha, PawnHistory[Floor].Location.Y, PawnHistory[ceiling].Location.Y);
-         V.Z = lerp(Alpha, PawnHistory[Floor].Location.Z, PawnHistory[ceiling].Location.Z);
+        /* if(bFloor)
+         {
+             // interpolate between the 2 locations based on stampDT
+             Alpha = (PawnHistory[Floor].TimeStamp - StampDT) / (PawnHistory[Floor].TimeStamp - PawnHistory[ceiling].TimeStamp);
+             if(Alpha > 1.0 || alpha < 0.0)
+                log("Error, alpha out of expected range");
 
+             V.X = lerp(Alpha, PawnHistory[Floor].Location.X, PawnHistory[ceiling].Location.X, true);
+             V.Y = lerp(Alpha, PawnHistory[Floor].Location.Y, PawnHistory[ceiling].Location.Y, true);
+             V.Z = lerp(Alpha, PawnHistory[Floor].Location.Z, PawnHistory[ceiling].Location.Z, true);
+         }
+         else
+         {
+            log("Error, no floor");
+         }
+        */
          /* Highest gravity error at center of the 2 samples, 0 at ends
          This doesn't amount to a pinch of shit on any realistic tickrate
          but might as well keep it for now, can always remove it later*/
-         if(PawnHistory[Floor].Physics == PHYS_FALLING && PawnHistory[Ceiling].Physics == PHYS_FALLING)
+       /*  if(PawnHistory[Floor].Physics == PHYS_FALLING && PawnHistory[Ceiling].Physics == PHYS_FALLING)
          {
              if(alpha > 0.50)
                 InterpDT= (1.0-Alpha)*(PawnHistory[Floor].TimeStamp - PawnHistory[ceiling].TimeStamp);
              else
                 InterpDT = (Alpha)*(PawnHistory[Floor].TimeStamp - PawnHistory[ceiling].TimeStamp);
              V = V - 0.5*CopiedPawn.PhysicsVolume.Gravity*Square(InterpDT);   //close enough??
-         }
+         }     */
+
+
+         V2.X = InterpCurveEval(LocCurveX,StampDT);
+         V2.Y = InterpCurveEval(LocCurveY,StampDT);
+         V2.Z = InterpCurveEval(LocCurveZ,StampDT);
+
+         SetLocation(V2);
+         SetRotation(PawnHistory[Floor].Rotation);
 
          if(bUseCylinderCollision)
          {
@@ -172,9 +195,8 @@ function TimeTravelPawn(float dt)
              }
          }
 
-         SetLocation(V);
          /* Maybe interpolate rotation? */
-         SetRotation(PawnHistory[Floor].Rotation);
+
 
     }
     else
@@ -240,8 +262,8 @@ event TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector Mo
 
 event destroyed()
 {
-   if(!bNormalDestroy)
-      Warn("DESTROYED WITHOUT SETTING UP LIST");
+  /* if(!bNormalDestroy)
+      Warn("DESTROYED WITHOUT SETTING UP LIST");     */
    super.Destroyed();
 }
 
@@ -262,8 +284,6 @@ function tick(float DeltaTime)
 {
     if(CopiedPawn==None)
         return;
-    if(bCollideActors || bCollideWorld || bBlockActors)
-       Warn("COLLISION COPY SHOULD NEVER HAVE COLLISION EXCEPT DURING A TRACE");
     AddHistory();
     RemoveOutdatedHistory();
 }
@@ -271,6 +291,8 @@ function tick(float DeltaTime)
 function AddHistory()
 {
     local int i;
+    local InterpCurvePoint XPoint,YPoint,ZPoint;
+
     i=Pawnhistory.Length;
     PawnHistory.Length=i+1;
     PawnHistory[i].Location = CopiedPawn.Location;
@@ -279,12 +301,32 @@ function AddHistory()
     PawnHistory[i].TimeStamp = M.ClientTimeStamp;
     PawnHistory[i].Physics = CopiedPawn.Physics;
 
+    XPoint.InVal = M.ClientTimeStamp;
+    XPoint.OutVal = CopiedPawn.Location.X;
+    LocCurveX.Points.Insert(LocCurveX.Points.Length,1);
+    LocCurveX.Points[LocCurveX.Points.Length-1]=XPoint;
+
+    YPoint.InVal = M.ClientTimeStamp;
+    YPoint.OutVal = CopiedPawn.Location.Y;
+    LocCurveY.Points.Insert(LocCurveY.Points.Length,1);
+    LocCurveY.Points[LocCurveY.Points.Length-1]=YPoint;
+
+    ZPoint.InVal = M.ClientTimeStamp;
+    ZPoint.OutVal = CopiedPawn.Location.Z;
+    LocCurveZ.Points.Insert(LocCurveZ.Points.Length,1);
+    LocCurveZ.Points[LocCurveZ.Points.Length-1]=ZPoint;
 }
 
 function RemoveOutdatedHistory()
 {
     while(PawnHistory.Length > 0 && PawnHistory[0].TimeStamp + MAX_HISTORY_LENGTH < M.ClientTimeStamp )
        PawnHistory.Remove(0,1);
+    while(LocCurveX.Points.Length > 0 &&  LocCurveX.Points[0].InVal + MAX_HISTORY_LENGTH < M.ClientTimeStamp)
+    {
+        LocCurveX.Points.Remove(0,1);
+        LocCurveY.Points.Remove(0,1);
+        LocCurveZ.Points.Remove(0,1);
+    }
 }
 
 defaultproperties

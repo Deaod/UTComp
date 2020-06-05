@@ -11,6 +11,7 @@ var config bool bEnableMapVoting;
 var config bool bEnableGametypeVoting;
 var config bool bEnableTimedOvertimeVoting;
 var bool bEnableDoubleDamageVoting;
+var bool bWarmupDisabled;
 var config float VotingPercentRequired;
 var config float VotingTimeLimit;
 
@@ -45,6 +46,9 @@ var bool bDemoStarted;
 var config bool bForward;
 var config bool bEnableForwardVoting;
 
+var config bool bShieldFix;
+var config bool  bAllowRestartVoteEvenIfMapVotingIsTurnedOff;
+
 /* ----Known issues ----
    Mutant:  No Bskins/Forcemodel
    Invasion:  No Bskins/forcemodel on bots (but will on players), no warmup, no custom scoreboard
@@ -68,6 +72,11 @@ var bool bHasInteraction;
 
 var string origcontroller;
 var class<PlayerController> origcclass;
+
+var float StampArray[256];
+var float counter;
+var controller countercontroller;
+var pawn counterpawn;
 
 
 /*    List Of Features to be completed(see utcomp_v2.txt for details)
@@ -140,23 +149,12 @@ function PreBeginPlay()
 
     SetupDD();
     ReplacePawnAndPC();
-    SetupTeamOverlay();
     SetupStats();
-    SetupWarmup();
     SetupVoting();
     SetupColoredDeathMessages();
-    SpawnReplicationClass();
     StaticSaveConfig();
     bEnhancedNetCodeEnabledAtStartOfMap = bEnableEnhancedNetCode;
-    AddToPackageMap("UTCompSettings");
 
-    if(bForward)
-    {
-        Level.Game.AddMutator("utcompv17Beta4SRC.Forward_Mutator", true);
-     //   WeaponPickupClassNames[8]="UTCompv17Beta4SRC.NewNet_SniperRiflePickup";
-     //   WeaponPickupClasses[8]=Class'UTCompv17Beta4SRC.NewNet_SniperRiflePickup';
-     //   WeaponClasses[8]=Class'UTCompv17Beta4SRC.NewNet_SniperRifle';
-    }
     super.PreBeginPlay();
 }
 
@@ -296,6 +294,7 @@ function SetupWarmup()
     }
     else if(!bEnableWarmup || Level.Game.IsA('ASGameInfo') || Level.Game.IsA('Invasion') || Level.Title~="Bollwerk Ruins 2004 - Pro Edition")
     {
+        bWarmupDisabled = true;
         return;
     }
 
@@ -329,6 +328,9 @@ function SetupStats()
 
     if(!bEnableWeaponStats)
         return;
+    if(bEnableEnhancedNetcode)
+        class'xWeapons.ShieldFire'.default.AutoFireTestFreq=0.05;
+
     class'xWeapons.AssaultRifle'.default.FireModeClass[0] = Class'UTCompv17Beta4SRC.UTComp_AssaultFire';
     class'xWeapons.AssaultRifle'.default.FireModeClass[1] = Class'UTCompv17Beta4SRC.UTComp_AssaultGrenade';
 
@@ -374,8 +376,11 @@ simulated function Tick(float DeltaTime)
         if(bEnhancedNetCodeEnabledAtStartOfMap)
         {
             ClientTimeStamp+=DeltaTime;
+            counter+=1;
+            StampArray[counter%256] = ClientTimeStamp;
             AverDT = (9.0*AverDT + DeltaTime) / 10.0;
-            StampInfo.ReplicatetimeStamp(ClientTimeStamp);
+          //  StampInfo.ReplicatetimeStamp(ClientTimeStamp);
+            SetPawnStamp();
             if(ClientTimeStamp > LastReplicatedAverDT + AVERDT_SEND_PERIOD)
             {
                 StampInfo.ReplicatedAverDT(AverDT);
@@ -383,7 +388,7 @@ simulated function Tick(float DeltaTime)
             }
         }
 
-        if (!bEnableAutoDemoRec || bDemoStarted || default.bEnableWarmup || Level.Game.bWaitingToStartMatch)
+        if (!bEnableAutoDemoRec || bDemoStarted || (default.bEnableWarmup && !bWarmupDisabled) || Level.Game.bWaitingToStartMatch)
             return;
         else
            AutoDemoRecord();
@@ -403,6 +408,32 @@ simulated function Tick(float DeltaTime)
         bHasInteraction=True;
         class'DamTypeLinkShaft'.default.bSkeletize=false;
     }
+}
+
+function SetPawnStamp()
+{
+   local rotator R;
+   local int i;
+
+   if(counterpawn==none)
+   {
+       if(countercontroller==none)
+           countercontroller = spawn(class'TimeStamp_Controller');
+       if(countercontroller.pawn!=None)
+           counterpawn=countercontroller.pawn;
+       return;
+   }
+
+   R.Yaw = (counter%256)*256;
+   i=counter/256;
+   R.Pitch = i*256;
+
+   counterpawn.SetRotation(R);
+}
+
+simulated function float GetStamp(int stamp)
+{
+   return StampArray[stamp%256];
 }
 
 function ReplacePawnAndPC()
@@ -447,6 +478,8 @@ function SpawnReplicationClass()
     RepInfo.bEnableEnhancedNetcodeVoting=bEnableEnhancedNetcodeVoting;
     RepInfo.bForward = bForward;
     RepInfo.bEnableForwardVoting= bEnableForwardVoting;
+    RepInfo.bShieldFix=bShieldFix;
+    repinfo.bAllowRestartVoteEvenIfMapVotingIsTurnedOff = bAllowRestartVoteEvenIfMapVotingIsTurnedOff;
     for(i=0; i<VotingGametype.Length && i<ArrayCount(RepInfo.VotingNames); i++)
         RepInfo.VotingNames[i]=VotingGametype[i].GameTypeName;
 
@@ -462,11 +495,21 @@ function PostBeginPlay()
 {
 	local UTComp_GameRules G;
 	local mutator M;
+	local string URL;
 
 	Super.PostBeginPlay();
 
-	G = spawn(class'UTComp_GameRules');
-    G.UTCompMutator=Self;
+	URL = Level.GetLocalURL();
+	URL = Mid(URL, InStr(URL, "?"));
+	ParseURL(URl);
+    SetupTeamOverlay();
+    SetupWarmup();
+    if(bForward)
+        Level.Game.AddMutator("utcompv17asrc.Forward_Mutator", true);
+    SpawnReplicationClass();
+
+    G = spawn(class'UTComp_GameRules');
+    G.UTCompMutator=self;
 	G.OVERTIMETIME=TimedOverTimeLength;
 
     if ( Level.Game.GameRulesModifiers == None )
@@ -726,15 +769,11 @@ function GetServerPlayers( out GameInfo.ServerResponseLine ServerState )
 
 function ServerTraveling(string URL, bool bItems)
 {
-   local string Skinz0r, Sounds, overlay, warmup, dd, TimedOver
-   , TimedOverLength, grenadesonspawn, enableenhancednetcode, forward;
-   local array<string> Parts;
-   local int i;
-
    class'xPawn'.default.ControllerClass=class'XGame.XBot';
 
    class'xWeapons.ShockRifle'.default.FireModeClass[1]=Class'XWeapons.ShockProjFire';
    class'GrenadeAmmo'.default.InitialAmount = 4;
+
    class'xWeapons.AssaultRifle'.default.FireModeClass[0] = Class'xWeapons.AssaultFire';
    class'xWeapons.AssaultRifle'.default.FireModeClass[1] = Class'xWeapons.AssaultGrenade';
 
@@ -767,6 +806,20 @@ function ServerTraveling(string URL, bool bItems)
 
     class'xWeapons.SuperShockRifle'.default.FireModeClass[0]=class'xWeapons.SuperShockBeamFire';
     class'xWeapons.SuperShockRifle'.default.FireModeClass[1]=class'xWeapons.SuperShockBeamFire';
+
+   ParseUrl(Url);
+
+   Super.ServerTraveling(url, bitems);
+}
+
+function ParseURL(string Url)
+{
+   local string Skinz0r, Sounds, overlay, warmup, dd, TimedOver
+   , TimedOverLength, grenadesonspawn, enableenhancednetcode, forward;
+   local array<string> Parts;
+   local int i;
+
+
     Split(Url, "?", Parts);
 
    for(i=0; i<Parts.Length; i++)
@@ -797,17 +850,35 @@ function ServerTraveling(string URL, bool bItems)
    }
  //  Log("DD Value"$DD);
    if(Skinz0r !="" && int(Skinz0r)<4 && int(Skinz0r)>0)
+   {
        default.EnableBrightskinsMode=Int(Skinz0r);
+       EnableBrightskinsMode = default.EnableBrightskinsMode;
+   }
    if(Sounds !="" && int(Sounds)<3 && int(Sounds)>=0)
+   {
        default.EnableHitsoundsMode=Int(Sounds);
+       EnableHitsoundsMode = default.EnableHitsoundsMode;
+   }
    if(Overlay !="" && (Overlay~="False" || Overlay~="True"))
+   {
        default.bEnableTeamOverlay=Overlay~="True";
+       bEnableTeamOverlay = default.bEnableTeamOverlay;
+   }
    if(Warmup !="" && (Warmup~="False" || Warmup~="True"))
+   {
        default.bEnableWarmup=(Warmup~="True");
+       bEnableWarmup=default.bEnableWarmup;
+   }
    if(DD !="" && (DD~="False" || DD~="True"))
+   {
        default.bEnableDoubleDamage=(DD~="True");
+       bEnableDoubleDamage = default.bEnableDoubleDamage;
+   }
    if(Forward!="" && (DD~="False" || DD~="True"))
+   {
        default.bForward = (Forward~="True");
+       bForward = default.bForward;
+   }
    if(TimedOverLength !="" && int(TimedOverLength)>=0)
    {
        if(int(TimedOverLength) == 0)
@@ -817,13 +888,21 @@ function ServerTraveling(string URL, bool bItems)
           default.TimedOvertimeLength=60*Int(TimedOverLength);
           default.bEnableTimedOverTime=True;
        }
+       bEnableTimedOverTime = default.bEnableTimedOverTime;
+       TimedOvertimeLength = default.TimedOvertimeLength;
    }
    if(GrenadesOnSpawn !="" && int(GrenadesOnSpawn)<9 && int(GrenadesOnSpawn)>=0)
+   {
        default.NumGrenadesOnSpawn=Int(GrenadesOnSpawn);
+       NumGrenadesOnSpawn = default.NumGrenadesOnSpawn;
+   }
    if(EnableEnhancedNetcode !="" && (EnableEnhancedNetcode~="false" || EnableEnhancedNetcode~="True"))
+   {
        default.bEnableEnhancedNetcode=(EnableEnhancedNetcode~="True");
+       bEnhancedNetCodeEnabledAtStartOfMap=default.bEnableEnhancedNetcode;
+       bEnableEnhancedNetcode = default.bEnableEnhancedNetCode;
+   }
    StaticSaveConfig();
-   Super.ServerTraveling(url, bitems);
 }
 
 function AutoDemoRecord()
@@ -1200,4 +1279,7 @@ defaultproperties
 
      bForward=False
      bEnableForwardVoting = true
+     bShieldFix=true
+
+     bAllowRestartVoteEvenIfMapVotingIsTurnedOff=false
 }

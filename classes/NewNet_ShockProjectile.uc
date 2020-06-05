@@ -36,7 +36,7 @@ simulated function DoPostNet()
         if( !CheckForFakeProj())
         {
             bMoved = true;
-            DoMove(FMax(0.00, (class'NewNet_PRI'.default.PredictedPing - 1.50*class'TimeStamp'.default.AverDT))*Velocity);
+            DoMove(FMax(0.00, (class'NewNet_PRI'.default.PredictedPing - 1.5*class'TimeStamp'.default.AverDT))*Velocity);
         }
 }
 
