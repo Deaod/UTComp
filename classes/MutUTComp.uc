@@ -1227,9 +1227,9 @@ defaultproperties
      MinNetSpeed=15000
      MaxNetSpeed=25000
 
-     FriendlyName="UTComp Version 1.8"
+     FriendlyName="UTComp Version 1.8a"
      FriendlyVersionPrefix="UTComp Version"
-     FriendlyVersionNumber="1.8"
+     FriendlyVersionNumber="1.8a"
      Description="A mutator for warmup, brightskins, hitsounds, and various other features."
      bNetTemporary=True
      bAlwaysRelevant=True
