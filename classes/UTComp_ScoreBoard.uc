@@ -189,7 +189,7 @@ simulated function DrawTeamInfoBox(Canvas C,float StartX, float StartY,int TeamN
 simulated event UpdateScoreBoard(Canvas C)
 {
     local PlayerReplicationInfo PRI, OwnerPRI;
-    local PlayerReplicationInfo RedPRI[MAXPLAYERS], BluePRI[MaxPlayers], SPecPRI[MaxPlayers];
+    local PlayerReplicationInfo RedPRI[MAXPLAYERS], BluePRI[MaxPlayers], SpecPRI[MaxPlayers];
     local int i, BluePlayerCount, RedPlayerCount, RedOwnerOffset, BlueOwnerOffset, maxTiles, numspecs, j;
     local float MyScale;
     local bool bOwnerDrawn;
@@ -226,7 +226,7 @@ simulated event UpdateScoreBoard(Canvas C)
 
         if(PRI.bOnlySpectator)
         {
-            specPRI[numSpecs]=PRI;
+            SpecPRI[numSpecs]=PRI;
             numSpecs++;
         }
         if ( (!PRI.bOnlySpectator || PRI.bWaitingPlayer) )
@@ -344,8 +344,8 @@ simulated event UpdateScoreBoard(Canvas C)
 
     if(numSpecs>0)
     {
-        ArrangeSpecs(specPRI);
-        for (i=0; i<numspecs && specPRI[i]!=None; i++)
+        ArrangeSpecs(SpecPRI);
+        for (i=0; i<numspecs && SpecPRI[i]!=None; i++)
             DrawSpecs(C, SpecPRI[i], i);
         DrawSpecs(C,None,i);
     }

@@ -226,7 +226,7 @@ simulated event UpdateScoreBoard(Canvas Canvas)
 	local bool bNameFontReduction;
 	local font ReducedFont;
 	local int numSpecs;
-	local array<playerreplicationinfo> specpri;
+	local array<playerreplicationinfo> SpecPRI;
 	local UTComp_PRI uPRI;
 
 
@@ -502,7 +502,7 @@ simulated event UpdateScoreBoard(Canvas Canvas)
     }
     if(numSpecs>0)
     {
-       for (i=0; i<numspecs && specPRI[i]!=None; i++)
+       for (i=0; i<numspecs && SpecPRI[i]!=None; i++)
           DrawSpecs(Canvas, SpecPRI[i], i);
        DrawSpecs(Canvas,None,i);
     }

@@ -222,7 +222,7 @@ simulated event UpdateScoreBoard(Canvas Canvas)
 	local int i, FontReduction,HeaderOffsetY,HeadFoot,PlayerBoxSizeY, BoxSpaceY;
 	local float XL,YL, IconSize, MaxScaling, MessageFoot;
 	local int BluePlayerCount, RedPlayerCount, RedOwnerOffset, BlueOwnerOffset, MaxPlayerCount;
-	local PlayerReplicationInfo RedPRI[MAXPLAYERS], BluePRI[MaxPlayers], SPECPRI[maxPlayers];
+	local PlayerReplicationInfo RedPRI[MAXPLAYERS], BluePRI[MaxPlayers], SpecPRI[maxPlayers];
 	local font MainFont;
     local int numSpecs;
 
@@ -370,7 +370,7 @@ simulated event UpdateScoreBoard(Canvas Canvas)
 
     if(numSpecs>0)
     {
-       for (i=0; i<numspecs && specPRI[i]!=None; i++)
+       for (i=0; i<numspecs && SpecPRI[i]!=None; i++)
           DrawSpecs(Canvas, SpecPRI[i], i);
        DrawSpecs(Canvas,None,i);
     }
