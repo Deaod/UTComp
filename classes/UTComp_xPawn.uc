@@ -32,6 +32,13 @@ replication
      bShieldActive, bLinkActive, bShockActive, bLGactive, overlayActive;
 }
 
+simulated event PostNetBeginPlay()
+{
+    super.PostNetBeginPlay();
+    OldBaseEyeHeight = default.BaseEyeHeight;
+    OldLocation = Location;
+}
+
 function int ShieldAbsorb( int dam )
 {
    if(RepInfo==None || RepInfo.bShieldFix)
