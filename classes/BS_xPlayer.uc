@@ -209,18 +209,18 @@ simulated function ChangeDeathMessageOrder()
 
 event PlayerTick(float deltatime)
 {
-    if(RepInfo==None)
+    if (RepInfo==None)
         foreach DynamicActors(Class'UTComp_ServerReplicationInfo', RepInfo)
             break;
-    if(uWarmup==None)
+    if (uWarmup==None)
         foreach Dynamicactors(class'UTComp_Warmup', uWarmup)
-        break;
-    if(UTCompPRI==None)
+            break;
+    if (UTCompPRI==None)
         UTCompPRI=class'UTComp_Util'.static.GetUTCompPRIFor(self);
-    if(Level.NetMode!=NM_DedicatedServer && !Blah && PlayerReplicationInfo !=None && PlayerReplicationInfo.CustomReplicationInfo!=None && myHud !=None && RepInfo!=None && UTCompPRI!=None)
+    if (Level.NetMode!=NM_DedicatedServer && !Blah && PlayerReplicationInfo !=None && PlayerReplicationInfo.CustomReplicationInfo!=None && myHud !=None && RepInfo!=None && UTCompPRI!=None)
     {
-        if(uWarmup==None || !uWarmup.bInWarmup)
-        StartDemo();
+        if (uWarmup==None || !uWarmup.bInWarmup)
+            StartDemo();
         InitializeStuff();
         blah=true;
     }
@@ -2491,7 +2491,7 @@ function BecomeSpectator()
 function ResetNet()
 {
     if(UTCompPRI!=None)
-       UTCompPRI.RealKills=0;
+        UTCompPRI.RealKills=0;
 }
 
 state PlayerWalking
