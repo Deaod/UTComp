@@ -968,7 +968,7 @@ event UpdateEyeHeight( float DeltaTime )
 {
     local vector Delta;
 
-    if (class'UTComp_Settings'.default.bUseNewEyeHeightAlgorithm == false) {
+    if (BS_xPlayer(Controller) == none || BS_xPlayer(Controller).bUseNewEyeHeightAlgorithm == false) {
         super.UpdateEyeHeight(DeltaTime);
         return;
     }

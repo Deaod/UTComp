@@ -94,6 +94,8 @@ var bool bDisableSpeed, bDisableBooster, bDisableInvis, bDisableberserk;
 
 var UTComp_PRI currentStatDraw;
 
+var bool bUseNewEyeHeightAlgorithm;
+
 // Fractional Parts of Pitch/Yaw Input
 var transient float PitchFraction, YawFraction;
 
@@ -104,7 +106,7 @@ replication
     reliable if (Role==Role_Authority)
         StartDemo, NotifyEndWarmup, SetClockTime, NotifyRestartMap, SetClockTimeOnly, SetEndTimeOnly;
     reliable if(Role<Role_Authority)
-        SetbStats, TurnOffNetCode;
+        SetbStats, TurnOffNetCode, ServerSetEyeHeightAlgorithm;
     unreliable if(Role<Role_Authority)
         ServerNextPlayer, ServerGoToPlayer, ServerFindNextNode,
         serverfindprevnode, servergotonode, ServerGoToWepBase, speclockRed, speclockBlue, CallVote;
@@ -271,6 +273,7 @@ simulated function InitializeStuff()
     SetInitialColoredName();
     SetShowSelf(class'UTComp_Settings'.default.bShowSelfInTeamOverlay);
     SetBStats(class'UTComp_Scoreboard'.default.bDrawStats || class'UTComp_ScoreBoard'.default.bOverrideDisplayStats);
+    SetEyeHeightAlgorithm(class'UTComp_Settings'.default.bUseNewEyeHeightAlgorithm);
     if(class'UTComp_Settings'.default.bFirstRun)
     {
         class'UTComp_Settings'.default.bFirstRun=False;
@@ -2510,22 +2513,15 @@ state PlayerWalking
         return false;
     }
 }
- /*
-exec function UseNewRotation()
-{
-    bUseNewRotation = !bUseNewRotation;
-    default.bUseNewRotation = bUseNewRotation;
-    ClientMessage("using rotation:"@bUseNewRotation);
-    ClientMessage("using deltatime:"@bUseDeltaTime);
+
+function ServerSetEyeHeightAlgorithm(bool B) {
+    bUseNewEyeHeightAlgorithm = B;
 }
 
-exec function UseDelta()
-{
-    bUseDeltaTime = !bUseDeltaTime;
-    default.bUseDeltaTime = bUseDeltaTime;
-    ClientMessage("using rotation:"@bUseNewRotation);
-    ClientMessage("using deltatime:"@bUseDeltaTime);
-}  */
+function SetEyeHeightAlgorithm(bool B) {
+    bUseNewEyeHeightAlgorithm = B;
+    ServerSetEyeHeightAlgorithm(B);
+}
 
 function TurnOffNetCode()
 {
