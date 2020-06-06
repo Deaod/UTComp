@@ -202,14 +202,14 @@ function NewNet_ServerStartFire(byte Mode, byte ClientTimeStamp, float DT, Repli
 
     if(bBelievesHit)
     {
-        NewNet_ShockBeamFire(FireMode[Mode]).bBelievesHit=true;
-        NewNet_ShockBeamFire(FireMode[Mode]).BelievedHitActor=A;
+        NewNet_SuperShockBeamFire(FireMode[Mode]).bBelievesHit=true;
+        NewNet_SuperShockBeamFire(FireMode[Mode]).BelievedHitActor=A;
     }
     else
     {
-        NewNet_ShockBeamFire(FireMode[Mode]).bBelievesHit=false;
+        NewNet_SuperShockBeamFire(FireMode[Mode]).bBelievesHit=false;
     }
-    NewNet_ShockBeamFire(FireMode[Mode]).bFirstGo=true;
+    NewNet_SuperShockBeamFire(FireMode[Mode]).bFirstGo=true;
     if ( (FireMode[Mode].NextFireTime <= Level.TimeSeconds + FireMode[Mode].PreFireTime)
 		&& StartFire(Mode) )
     {
@@ -266,9 +266,11 @@ simulated function SpawnBeamEffect(vector HitLocation, vector HitNormal, vector 
     }
     if ( (Instigator.PlayerReplicationInfo.Team != None) && (Instigator.PlayerReplicationInfo.Team.TeamIndex == 1) ) {
         Beam = Spawn(class'NewNet_BlueSuperShockBeam',,, Start, Dir);
+        if (Beam == none) return;
         Beam.CoilClass = class'NewNet_Client_ShockBeamCoilBlue';
     } else {
         Beam = Spawn(class'NewNet_SuperShockBeamEffect',,, Start, Dir);
+        if (Beam == none) return;
         Beam.CoilClass = class'NewNet_Client_ShockBeamCoilB';
     }
     Beam.RemoteRole = ROLE_None;
