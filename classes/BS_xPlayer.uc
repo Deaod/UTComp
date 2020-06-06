@@ -128,10 +128,10 @@ exec function SetEnemySkinColor(string S)
 
     if(Parts.length >=3)
     {
-    class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.R=byte(Parts[0]);
-    class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.G=byte(Parts[1]);
-    class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.B=byte(Parts[2]);
-    class'utcomp_settings'.StaticSaveConfig();
+        class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.R=byte(Parts[0]);
+        class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.G=byte(Parts[1]);
+        class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.B=byte(Parts[2]);
+        class'utcomp_settings'.StaticSaveConfig();
     }
     else
     echo("Invalid command, need 3 colors");
@@ -142,12 +142,12 @@ exec function SetFriendSkinColor(string S)
     local array <string> Parts;
 
     Split(S, " ", Parts);
-        if(Parts.length >=3)
+    if(Parts.length >=3)
     {
-    class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.R=byte(Parts[0]);
-    class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.G=byte(Parts[1]);
-    class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.B=byte(Parts[2]);
-    class'utcomp_settings'.StaticSaveConfig();
+        class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.R=byte(Parts[0]);
+        class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.G=byte(Parts[1]);
+        class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.B=byte(Parts[2]);
+        class'utcomp_settings'.StaticSaveConfig();
     }
     else
     echo("Invalid command, need 3 colors");
@@ -177,40 +177,6 @@ exec function SetStats(int i)
 
 simulated function MakeSureSaveConfig()
 {
- /* local int i;
-
-  bStats = class'UTComp_Settings'.default.bStats;
-  bEnableUTCompAutoDemorec = class'UTComp_Settings'.default.bEnableUTCompAutoDemorec;
-  DemoRecordingMask = class'UTComp_Settings'.default.DemoRecordingMask;
-  bEnableAutoScreenshot = class'UTComp_Settings'.default.bEnableAutoScreenshot;
-  ScreenShotMask = class'UTComp_Settings'.default.ScreenShotMask;
-  FriendlySound = class'UTComp_Settings'.default.FriendlySound;
-  EnemySound = class'UTComp_Settings'.default.EnemySound;
-  bEnableHitSounds = class'UTComp_Settings'.default.bEnableHitSounds;
-  HitSoundVolume = class'UTComp_Settings'.default.HitSoundVolume;
-  bCPMAStyleHitsounds = class'UTComp_Settings'.default.bCPMAStyleHitsounds;
-  CPMAPitchModifier = class'UTComp_Settings'.default.CPMAPitchModifier;
-  SavedSpectateSpeed = class'UTComp_Settings'.default.SavedSpectateSpeed;
-  bUseDefaultScoreBoard = class'UTComp_Settings'.default.bUseDefaultScoreBoard;
-  bShowSelfInTeamOverlay = class'UTComp_Settings'.default.bShowSelfInTeamOverlay;
-  bEnableEnhancedNetCode = class'UTComp_Settings'.default.bEnableEnhancedNetCode;
-  bEnableColoredNamesOnEnemies = class'UTComp_Settings'.default.bEnableColoredNamesOnEnemies;
-
-  ballowcoloredmessages = class'UTComp_Settings'.default.ballowcoloredmessages;
-  bEnableColoredNamesInTalk = class'UTComp_Settings'.default.bEnableColoredNamesInTalk;
-
-  LoadedEnemySound = Sound(DynamicLoadObject(class'UTComp_Settings'.default.EnemySound, class'Sound', True));
-  LoadedFriendlySound = Sound(DynamicLoadObject(class'UTComp_Settings'.default.FriendlySound, class'Sound', True));
-
-
-
-
-  CurrentSelectedColoredName = class'UTComp_Settings'.default.CurrentSelectedColoredName;
-  for(i=0; i<ArrayCount(ColorName); i++)
-  {
-      ColorName[i] = class'UTComp_Settings'.default.ColorName[i];
-  }
-  ColoredName =  class'UTComp_Settings'.default.ColoredName;       */
 }
 
 simulated function PostBeginPlay()
@@ -246,13 +212,13 @@ event PlayerTick(float deltatime)
             break;
     if(uWarmup==None)
         foreach Dynamicactors(class'UTComp_Warmup', uWarmup)
-            break;
+        break;
     if(UTCompPRI==None)
         UTCompPRI=class'UTComp_Util'.static.GetUTCompPRIFor(self);
     if(Level.NetMode!=NM_DedicatedServer && !Blah && PlayerReplicationInfo !=None && PlayerReplicationInfo.CustomReplicationInfo!=None && myHud !=None && RepInfo!=None && UTCompPRI!=None)
     {
         if(uWarmup==None || !uWarmup.bInWarmup)
-            StartDemo();
+        StartDemo();
         InitializeStuff();
         blah=true;
     }
@@ -280,11 +246,11 @@ event PlayerTick(float deltatime)
             SetNetSpeed(RepInfo.MinNetSpeed);
     }
 
-     if(myHud!=None && myHud.bShowScoreBoard && !oldbShowScoreBoard)
-     {
-         StatMine();
-     }
-     oldbShowScoreBoard=myHud.bShowScoreBoard;
+    if(myHud!=None && myHud.bShowScoreBoard && !oldbShowScoreBoard)
+    {
+        StatMine();
+    }
+    oldbShowScoreBoard=myHud.bShowScoreBoard;
 
     Super.PlayerTick(deltatime);
 }
@@ -330,33 +296,28 @@ simulated function InitializeStuff()
 
 simulated function InitializeScoreboard()
 {
-   local class<scoreboard> NewScoreboardclass;
+    local class<scoreboard> NewScoreboardclass;
 
-   if(myHud!=None && myHUD.ScoreBoard.IsA('UTComp_ScoreBoard') && gamereplicationinfo!=None)
-   {
-       if(class'UTComp_Settings'.default.bUseDefaultScoreboard)
-       {
-           if(gamereplicationinfo.bTeamGame)
-               NewScoreboardClass=class'UTCompv18a.UTComp_ScoreBoardTDM';
-           else
-               NewScoreboardClass=class'UTCompv18a.UTComp_ScoreBoardDM';
-           ClientChangedScoreboard=True;
+    if(myHud!=None && myHUD.ScoreBoard.IsA('UTComp_ScoreBoard') && gamereplicationinfo!=None)
+    {
+        if(class'UTComp_Settings'.default.bUseDefaultScoreboard)
+        {
+            if(gamereplicationinfo.bTeamGame)
+                NewScoreboardClass=class'UTCompv18a.UTComp_ScoreBoardTDM';
+            else
+                NewScoreboardClass=class'UTCompv18a.UTComp_ScoreBoardDM';
+            clientChangedScoreboard=True;
         }
-   }
-   else if(ClientChangedScoreBoard && !class'UTComp_Settings'.default.bUseDefaultScoreboard)
-       NewScoreboardClass=class'UTCompv18a.UTComp_ScoreBoard';
-   if(myHUD!=None && NewScoreBoardClass!=None)
+    }
+    else if(ClientChangedScoreBoard && !class'UTComp_Settings'.default.bUseDefaultScoreboard)
+        NewScoreboardClass=class'UTCompv18a.UTComp_ScoreBoard';
+    if(myHUD!=None && NewScoreBoardClass!=None)
         myHUD.SetScoreBoardClass( NewScoreboardClass);
 }
 
 simulated function SetInitialColoredName()
 {
-  //  if(class'UTComp_Settings'.default.currentselectedcoloredname!=255 && class'UTComp_Settings'.default.currentselectedcoloredname<class'UTComp_Settings'.default.ColoredName.Length)
-  //  {
-  //      SetColoredNameOldStyleCustom(,class'UTComp_Settings'.default.currentselectedcoloredname);
-  //  }
-  //  else
-        SetColoredNameOldStyle();
+    SetColoredNameOldStyle();
 }
 
 
@@ -374,46 +335,46 @@ simulated function StartDemo()
 
 simulated function string StripIllegalWindowsCharacters(string S)
 {
-   S=MakeDemoName(S);
-   S=repl(S, ".", "-");
-   S=repl(S, "*", "-");
-   S=repl(S, ":", "-");
-   S=repl(S, "|", "-");
-   S=repl(S, "/", "-");
-   S=repl(S, ";", "-");
-   S=repl(S, "\\","-");
-   S=repl(S, ">", "-");
-   S=repl(S, "<", "-");
-   S=repl(S, "+", "-");
-   S=repl(S, " ", "-");
-   S=repl(S, "?", "-");
-   return S;
+    S=MakeDemoName(S);
+    S=repl(S, ".", "-");
+    S=repl(S, "*", "-");
+    S=repl(S, ":", "-");
+    S=repl(S, "|", "-");
+    S=repl(S, "/", "-");
+    S=repl(S, ";", "-");
+    S=repl(S, "\\","-");
+    S=repl(S, ">", "-");
+    S=repl(S, "<", "-");
+    S=repl(S, "+", "-");
+    S=repl(S, " ", "-");
+    S=repl(S, "?", "-");
+    return S;
 }
 
 simulated function string MakeDemoname(string S)
 {
-   local string hourdigits, minutedigits;
-   local string playerNames;
-   local int i;
+    local string hourdigits, minutedigits;
+    local string playerNames;
+    local int i;
 
-   if(Len(level.hour)==1)
-     hourDigits="0"$Level.Hour;
-   else
-     hourDigits=Left(level.Hour, 2);
-   if(len(level.minute)==1)
-     minutedigits="0"$Level.Minute;
-   else
-     minutedigits=Left(Level.Minute, 2);
-   for(i=0; i<GamereplicationInfo.PRIArray.Length; i++)
-   {
-      if(GamereplicationInfo.PRIArray[i].bOnlySpectator==False && !GameReplicationInfo.PRIArray[i].bOnlySpectator && GamereplicationInfo.PRIArray[i].Team==None || GamereplicationInfo.PRIArray[i].Team != PlayerReplicationInfo.Team)
-         playerNames=PlayerNames$GamereplicationInfo.PRIArray[i].PlayerName$"-";
-   }
-   S=Repl(S, "%t", hourdigits$"-"$minutedigits);
-   S=repl(S, "%p", Playerreplicationinfo.PlayerName);
-   S=repl(S, "%o", playerNames);
-   S=Left(S,100);
-   return S;
+    if(Len(level.hour)==1)
+        hourDigits="0"$Level.Hour;
+    else
+        hourDigits=Left(level.Hour, 2);
+    if(len(level.minute)==1)
+        minutedigits="0"$Level.Minute;
+    else
+        minutedigits=Left(Level.Minute, 2);
+    for(i=0; i<GamereplicationInfo.PRIArray.Length; i++)
+    {
+        if(GamereplicationInfo.PRIArray[i].bOnlySpectator==False && !GameReplicationInfo.PRIArray[i].bOnlySpectator && GamereplicationInfo.PRIArray[i].Team==None || GamereplicationInfo.PRIArray[i].Team != PlayerReplicationInfo.Team)
+            playerNames=PlayerNames$GamereplicationInfo.PRIArray[i].PlayerName$"-";
+    }
+    S=Repl(S, "%t", hourdigits$"-"$minutedigits);
+    S=repl(S, "%p", Playerreplicationinfo.PlayerName);
+    S=repl(S, "%o", playerNames);
+    S=Left(S,100);
+    return S;
 }
 
 state GameEnded
@@ -485,22 +446,19 @@ simulated function ServerReceiveHit(class<DamageType> DamageType, int Damage, pa
 
 simulated function bool IsHitScan(class<DamageType> DamageType)
 {
-    if(
-       DamageType == Class'XWeapons.DamTypeSuperShockBeam'
-    || DamageType == Class'XWeapons.DamTypeLinkShaft'
-    || DamageType == Class'XWeapons.DamTypeSuperShockBeam'
-    || DamageType == Class'XWeapons.DamTypeSniperShot'
-    || DamageType == Class'XWeapons.DamTypeMinigunBullet'
-    || DamageType == Class'XWeapons.DamTypeShockBeam'
-    || DamageType == Class'XWeapons.DamTypeAssaultBullet'
-    || DamageType == Class'XWeapons.DamTypeShieldImpact'
-    || DamageType == Class'XWeapons.DamTypeMinigunAlt'
-    || DamageType == Class'DamTypeSniperHeadShot'
-    || DamageType == Class'DamTypeClassicHeadshot'
-    || DamageType == Class'DamTypeClassicSniper'
-    )
-        return true;
-    return false;
+    return
+        DamageType == Class'XWeapons.DamTypeSuperShockBeam' ||
+        DamageType == Class'XWeapons.DamTypeLinkShaft' ||
+        DamageType == Class'XWeapons.DamTypeSuperShockBeam' ||
+        DamageType == Class'XWeapons.DamTypeSniperShot' ||
+        DamageType == Class'XWeapons.DamTypeMinigunBullet' ||
+        DamageType == Class'XWeapons.DamTypeShockBeam' ||
+        DamageType == Class'XWeapons.DamTypeAssaultBullet' ||
+        DamageType == Class'XWeapons.DamTypeShieldImpact' ||
+        DamageType == Class'XWeapons.DamTypeMinigunAlt' ||
+        DamageType == Class'DamTypeSniperHeadShot' ||
+        DamageType == Class'DamTypeClassicHeadshot' ||
+        DamageType == Class'DamTypeClassicSniper';
 }
 
 // only stats
@@ -531,7 +489,7 @@ simulated function GroupDamageSound(class<DamageType> DamageType, int Damage, bo
 
 simulated function DelayedHitSound(int Damage, bool bEnemy)
 {
-    if(bEnemy)
+    if (bEnemy)
         PlayEnemyHitSound(Damage);
     else
         PlayTeammateHitSound(Damage);
@@ -541,13 +499,13 @@ simulated function DelayedHitSound(int Damage, bool bEnemy)
 // only hitsound, LOS check done i9n gamerules
 simulated function ReceiveHitSound(int Damage, byte iTeam)
 {
-    if(Level.NetMode==NM_DedicatedServer)
+    if (Level.NetMode==NM_DedicatedServer)
         return;
-    if(bBehindView)
+    if (bBehindView)
         return;
-    if(iTeam==1)
+    if (iTeam==1)
         PlayEnemyHitSound(Damage);
-    else if(iTeam==2)
+    else if (iTeam==2)
         PlayTeammateHitSound(Damage);
 }
 
@@ -563,31 +521,31 @@ simulated function ServerRegisterSelfHit(class<DamageType> DamageType, int Damag
 simulated function RegisterEnemyHit(class<DamageType> DamageType, int Damage)
 {
     local int i, j, k;
-    if(DamageType==None)
+    if (DamageType==None)
         return;
 
     DamG+=Damage;
     for(i=0; i<=14; i++)
     {
-        if(DamageType==WepStatDamTypesPrim[i])
+        if (DamageType==WepStatDamTypesPrim[i])
         {
             NormalWepStatsPrim[i].Hits +=1;
             NormalWepStatsPrim[i].Damage+=Damage;
             return;
         }
-        else if(DamageType==WepStatDamTypesAlt[i])
+        else if (DamageType==WepStatDamTypesAlt[i])
         {
             NormalWepStatsAlt[i].Hits +=1;
             NormalWepStatsAlt[i].Damage+=Damage;
             return;
         }
         //Hack DamageTypes(more than 1, currently only sniper)
-        else if(DamageType==class'DamTypeSniperHeadShot' || DamageType==class'DamTypeClassicHeadshot' || DamageType==class'DamTypeClassicSniper')
+        else if (DamageType==class'DamTypeSniperHeadShot' || DamageType==class'DamTypeClassicHeadshot' || DamageType==class'DamTypeClassicSniper')
         {
             NormalWepStatsPrim[5].Hits +=1;
             NormalWepStatsPrim[5].Damage+=Damage;
 
-            if(DamageType!=class'DamTypeClassicSniper')
+            if (DamageType!=class'DamTypeClassicSniper')
             {
                 NormalWepStatsAlt[5].Hits +=1;
             }
@@ -603,7 +561,7 @@ simulated function RegisterEnemyHit(class<DamageType> DamageType, int Damage)
             {
                 for(k=0; k<ArrayCount(CustomWepTypes[j].DamType); k++)
                 {
-                    if(( CustomWepTypes[j].DamType[k]!="" && InstrNonCaseSensitive(string(DamageType), CustomWepTypes[j].DamType[k])) && CustomWepTypes[j].WepName~=CustomWepStats[i].WepName)
+                    if (( CustomWepTypes[j].DamType[k]!="" && InstrNonCaseSensitive(string(DamageType), CustomWepTypes[j].DamType[k])) && CustomWepTypes[j].WepName~=CustomWepStats[i].WepName)
                     {
                         CustomWepStats[i].Hits+=1;
                         CustomWepStats[i].Damage+=Damage;
@@ -612,7 +570,7 @@ simulated function RegisterEnemyHit(class<DamageType> DamageType, int Damage)
                 }
             }
         }
-        if(DamageType==CustomWepStats[i].DamageType)
+        if (DamageType==CustomWepStats[i].DamageType)
         {
             CustomWepStats[i].Hits+=1;
             CustomWepStats[i].Damage+=Damage;
@@ -626,8 +584,8 @@ simulated function RegisterEnemyHit(class<DamageType> DamageType, int Damage)
     for(j=0; j<CustomWepTypes.Length; j++)
     {
         for(k=0; k<ArrayCount(CustomWepTypes[j].DamType); k++)
-           if(( CustomWepTypes[j].DamType[k]!="" && InstrNonCaseSensitive(string(DamageType), CustomWepTypes[j].DamType[k])))
-               CustomWepStats[i-1].WepName=CustomWepTypes[j].WepName;
+            if (( CustomWepTypes[j].DamType[k]!="" && InstrNonCaseSensitive(string(DamageType), CustomWepTypes[j].DamType[k])))
+                CustomWepStats[i-1].WepName=CustomWepTypes[j].WepName;
     }
     CustomWepStats[i-1].DamageType=DamageType;
     CustomWepStats[i-1].Damage=Damage;
@@ -637,7 +595,7 @@ simulated function RegisterEnemyHit(class<DamageType> DamageType, int Damage)
 simulated function ServerRegisterEnemyHit(class<DamageType> DamageType, int Damage)
 {
     local int i;
-    if(DamageType==None || UTCompPRI==None)
+    if (DamageType==None || UTCompPRI==None)
         return;
 
     UTCompPRI.DamG+=Damage;
@@ -681,19 +639,21 @@ exec function StatMine()
 
 exec function StatSpec()
 {
-    if(viewTarget==none)
+    if (viewTarget==none)
     {
         StatNext();
         return;
     }
     if (ViewTarget.IsA('Pawn') && Pawn(ViewTarget).PlayerReplicationInfo!=None
-    && !Pawn(ViewTarget).PlayerReplicationInfo.bBot)
-       currentStatDraw =  class'UTComp_Util'.static.GetUTCompPRI(Pawn(ViewTarget).PlayerReplicationInfo);
+        && !Pawn(ViewTarget).PlayerReplicationInfo.bBot
+    ) {
+        currentStatDraw =  class'UTComp_Util'.static.GetUTCompPRI(Pawn(ViewTarget).PlayerReplicationInfo);
+    }
 
-    if(currentStatDraw == None)
+    if (currentStatDraw == None)
         StatNext();
     else
-       RequestStats(currentStatDraw);
+        RequestStats(currentStatDraw);
 }
 
 exec function StatNext()
@@ -704,21 +664,21 @@ exec function StatNext()
     local int i;
     local utcomp_pri startPRI;
 
-    if(gameREplicationInfo == None)
-       return;
+    if (gameREplicationInfo == None)
+        return;
 
     startPRI = currentStatDraw;
 
-    if(currentStatDraw == None)
+    if (currentStatDraw == None)
     {
         for(i=0; i<GameReplicationInfo.PRIArray.length; i++)
         {
             pri = GameREplicationInfo.PRIArray[i];
             uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameREplicationInfo.PRIArray[i]);
-            if(uPRI!=None && uPRI!=UTCompPRI && !PRI.bBot && !pri.bOnlySpectator)
+            if (uPRI!=None && uPRI!=UTCompPRI && !PRI.bBot && !pri.bOnlySpectator)
             {
-               currentStatDraw=uPRI;
-               break;
+                currentStatDraw=uPRI;
+                break;
             }
         }
     }
@@ -726,37 +686,37 @@ exec function StatNext()
     {
         for(i=0; i<GameReplicationInfo.PRIArray.length; i++)
         {
-          uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameREplicationInfo.PRIArray[i]);
-          pri = GameREplicationInfo.PRIArray[i];
-          if(bUseNext && !PRI.bBot && !pri.bOnlySpectator)
-          {
-              currentStatDraw=uPRI;
-              bUseNext=false;
-              break;
-          }
-          if(currentStatDraw==uPRI)
-              bUseNext=true;
-       }
-       if(bUseNext)
-       {
-           for(i=0; i<GameReplicationInfo.PRIArray.length; i++)
-           {
+            uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameREplicationInfo.PRIArray[i]);
+            pri = GameREplicationInfo.PRIArray[i];
+            if (bUseNext && !PRI.bBot && !pri.bOnlySpectator)
+            {
+                currentStatDraw=uPRI;
+                bUseNext=false;
+                break;
+            }
+            if(currentStatDraw==uPRI)
+                bUseNext=true;
+        }
+        if(bUseNext)
+        {
+            for(i=0; i<GameReplicationInfo.PRIArray.length; i++)
+            {
                 uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameREplicationInfo.PRIArray[i]);
                 pri = GameREplicationInfo.PRIArray[i];
-                if(!PRI.bBot && !pri.bOnlySpectator)
+                if (!PRI.bBot && !pri.bOnlySpectator)
                     currentStatDraw=uPRI;
                 break;
-           }
-       }
+            }
+        }
     }
 
-    if(startPRI!=None && currentStatDraw == startPRI)
+    if (startPRI!=None && currentStatDraw == startPRI)
     {
         currentStatDraw=none;
         StatNext();
         return;
     }
-    if(UTCompPRI!= currentStatDraw && currentStatDraw!=None)
+    if (UTCompPRI!= currentStatDraw && currentStatDraw!=None)
         RequestStats(currentStatDraw);
 }
 
@@ -766,14 +726,14 @@ simulated function REquestStats(UTComp_PRI uPRI)
     local int i;
 
     if(uPRI == None)
-       return;
+        return;
     S="";
     for(i=0; i<ArrayCount(uPRI.NormalWepStatsPrimHit); i++)
     {
         if(i==0)
-           S=S$uPRI.NormalWepStatsPrimHit[i];
+            S=S$uPRI.NormalWepStatsPrimHit[i];
         else
-           S=S@uPRI.NormalWepStatsPrimHit[i];
+            S=S@uPRI.NormalWepStatsPrimHit[i];
     }
     SendHitPrim(S, uPRI);
 
@@ -921,7 +881,7 @@ simulated function SendDamagePrim(string S, utcomp_PRI uPRI)
 
 simulated function SendDamageAlt(string S, utcomp_PRI uPRI)
 {
-     local int i;
+    local int i;
     local array<string> parts;
 
     Split(S," ", parts);
@@ -1041,7 +1001,7 @@ exec function myMenu()
 
 exec function OpenVoteMenu()
 {
-ClientOpenMenu(UTCompVotingMenuClass);
+    ClientOpenMenu(UTCompVotingMenuClass);
 }
 
 exec function SetVolume(float f)
@@ -1049,25 +1009,17 @@ exec function SetVolume(float f)
     ConsoleCommand("set alaudio.alaudiosubsystem soundvolume "$f);
 }
 
-
 exec function Echo(string S)
 {
     ClientMessage(""$S);
 }
-/*
-exec function SpecViewGoal()
-{
-    if(IsCoaching())
-       return;
-    Super.SpecViewGoal();
-}     */
 
 function ServerSpecViewGoal()
 {
     local actor NewGoal;
 
     if(!IsCoaching())
-       super.ServerSpecViewGoal();
+        super.ServerSpecViewGoal();
 
     if ( PlayerReplicationInfo.bOnlySpectator && IsInState('Spectating') )
     {
@@ -1119,8 +1071,8 @@ exec function Ready()
     UTCompPRI.Ready();
     if(PlayerReplicationInfo!=None && !PlayerReplicationInfo.bOnlySpectator && Level.TimeSeconds > LastBroadcastReadyTime)
     {
-         LastBroadcastReadyTime=5.0+Level.TimeSeconds;
-         BroadcastReady(True);
+        LastBroadcastReadyTime=5.0+Level.TimeSeconds;
+        BroadcastReady(True);
     }
 }
 
@@ -1131,304 +1083,309 @@ exec function NotReady(optional bool bSilent)
     UTCompPRI.NotReady();
     if(!bSilent && PlayerReplicationInfo!=None && !PlayerReplicationInfo.bOnlySpectator && Level.TimeSeconds > LastBroadcastReadyTime)
     {
-         LastBroadcastReadyTime=5.0+Level.TimeSeconds;
-         BroadcastReady(False);
+        LastBroadcastReadyTime=5.0+Level.TimeSeconds;
+        BroadcastReady(False);
     }
 }
 
 exec function NextNode()
 {
-    if(IsCoaching())
-       return;
+    if (IsCoaching())
+        return;
     ServerFindNextNode();
 }
 
 exec function PrevNode()
 {
-   if(IsCoaching())
-       return;
-   ServerFindPrevNode();
+    if (IsCoaching())
+        return;
+    ServerFindPrevNode();
 }
 
 exec function Node(int k)
 {
-  if(IsCoaching())
-       return;
-  ServerGotoNode(k+1);
+    if (IsCoaching())
+        return;
+    ServerGotoNode(k+1);
 }
 
 exec function Core(int k)
 {
-  if(IsCoaching())
-     return;
-  k=Max(k, 1);
-  k=Min(k, 2);
-  ServergotoNode(k-1);
+    if (IsCoaching())
+        return;
+    k=Max(k, 1);
+    k=Min(k, 2);
+    ServergotoNode(k-1);
 }
 
 exec function bool NextRedPlayer()
 {
-   if(IsCoaching() && !IsCoachingRed())
-       return false;
-   return(ServerNextPlayer(0));
+    if (IsCoaching() && !IsCoachingRed())
+        return false;
+    return(ServerNextPlayer(0));
 }
 
 exec function bool NextBluePlayer()
 {
-   if(IsCoaching() && !IsCoachingBlue())
-       return false;
+    if (IsCoaching() && !IsCoachingBlue())
+        return false;
 
-   return(ServerNextPlayer(1));
+    return(ServerNextPlayer(1));
 }
 
 exec function GoToPlayer(int k)
 {
-   if(IsCoaching())
-       return ;
-   ServerGoToPlayer(k-1);
+    if (IsCoaching())
+        return ;
+    ServerGoToPlayer(k-1);
 }
 
 function bool ServerNextPlayer(int teamindex)
 {
-   local int k;
-   local controller C;
-   local array<Controller> RedPlayers;
+    local int k;
+    local controller C;
+    local array<Controller> RedPlayers;
 
-   for(C=Level.ControllerList; c!=None; C=C.NextController)
-   {
+    for(C=Level.ControllerList; c!=None; C=C.NextController)
+    {
       if(C.PlayerReplicationInfo !=None && C.PlayerReplicationInfo.Team !=None && C.PlayerReplicationInfo.Team.TeamIndex==teamindex)
-         RedPlayers[RedPlayers.Length]=C;
-   }
-   for(k=0; k<RedPlayers.Length; k++)
-   {
-      if(RedPlayers[k]==LastViewedController)
-      {
-         if(k==RedPlayers.Length-1)
-         {
-            ServerSetViewTarget(RedPlayers[0]);
-            LastViewedController=RedPlayers[0];
-            if(IsCoaching())
+      RedPlayers[RedPlayers.Length]=C;
+    }
+    for(k=0; k<RedPlayers.Length; k++)
+    {
+        if(RedPlayers[k]==LastViewedController)
+        {
+            if(k==RedPlayers.Length-1)
             {
-               ClientSetBehindview(False);
-               bBehindView=False;
+                ServerSetViewTarget(RedPlayers[0]);
+                LastViewedController=RedPlayers[0];
+                if(IsCoaching())
+                {
+                    ClientSetBehindview(False);
+                    bBehindView=False;
+                }
+                return true;
             }
-            return true;
-         }
-         else
-         {
-            ServerSetViewTarget(RedPlayers[k+1]);
-            LastViewedController=RedPlayers[k+1];
-            if(IsCoaching())
+            else
             {
-               ClientSetBehindview(False);
-               bBehindView=False;
+                ServerSetViewTarget(RedPlayers[k+1]);
+                LastViewedController=RedPlayers[k+1];
+                if (IsCoaching())
+                {
+                    ClientSetBehindview(False);
+                    bBehindView=False;
+                }
+                return true;
             }
-            return true;
-         }
-      }
-   }
-   if(RedPlayers.Length>0)
-   {
-       ServerSetViewTarget(RedPlayers[0]);
-       LastViewedController=RedPlayers[0];
-       if(IsCoaching())
-       {
+        }
+    }
+    if(RedPlayers.Length>0)
+    {
+        ServerSetViewTarget(RedPlayers[0]);
+        LastViewedController=RedPlayers[0];
+        if(IsCoaching())
+        {
             ClientSetBehindview(False);
             bBehindView=False;
-       }
-       return true;
-   }
-   else
-   {
-       return false;
-   }
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 exec function GoToItem(string PickupString)
 {
-  if(IsCoaching())
-     return;
-  if(PickupString ~= "50" || PickupString ~="Small"
-  || PickupString ~="50a")
-     ServerGoToWepBase(class'XPickups.ShieldPack');
-  else if(PickupString ~="100" || PickupString ~="100a"
-  || PickupString ~="Large" || PickupString ~="Big")
-     ServerGoToWepBase(class'XPickups.SuperShieldPack');
-  else if(PickupString ~="DD" || PickupString ~="Amp"
-  || PickupString ~="Double-Damage" || PickupString ~="DoubleDamage")
-     ServerGoToWepBase(class'XPickups.UDamagePack');
+    if(IsCoaching())
+        return;
+    if (PickupString ~= "50" || PickupString ~="Small"
+        || PickupString ~="50a"
+    ) {
+        ServerGoToWepBase(class'XPickups.ShieldPack');
+
+    } else if(PickupString ~="100" || PickupString ~="100a"
+        || PickupString ~="Large" || PickupString ~="Big"
+    ) {
+        ServerGoToWepBase(class'XPickups.SuperShieldPack');
+
+    } else if(PickupString ~="DD" || PickupString ~="Amp"
+        || PickupString ~="Double-Damage" || PickupString ~="DoubleDamage"
+    ) {
+        ServerGoToWepBase(class'XPickups.UDamagePack');
+    }
 }
 
 function ServerGoToWepBase(class<Pickup> theClass)
 {
-   local xPickupBase xPBase;
-   foreach allactors(class'xPickupBase', xPBase)
-   {
-     if(xPBase.PowerUp == theClass)
-     {
-        ServerSetViewTarget(xPBase);
-        break;
-     }
-   }
+    local xPickupBase xPBase;
+    foreach allactors(class'xPickupBase', xPBase)
+    {
+        if(xPBase.PowerUp == theClass)
+        {
+            ServerSetViewTarget(xPBase);
+            break;
+        }
+    }
 }
 
 function ServerGoToPlayer(int k)
 {
-   local int j;
-   local Controller C;
-   for(C=Level.ControllerList; C!=None; C=C.NextController)
-   {
-      if (j==k)
-      {
-         ServerSetViewTarget(C);
-         return;
-      }
-      j++;
-   }
+    local int j;
+    local Controller C;
+    for(C=Level.ControllerList; C!=None; C=C.NextController)
+    {
+        if (j==k)
+        {
+            ServerSetViewTarget(C);
+            return;
+        }
+        j++;
+    }
 }
 
 
 function ServerSetViewTarget(actor A)
 {
-   if(PlayerReplicationInfo.bOnlySpectator==False)
-      return;
-   SetViewTarget(A);
-   ClientSetViewTarget(A);
+    if(PlayerReplicationInfo.bOnlySpectator==False)
+        return;
+    SetViewTarget(A);
+    ClientSetViewTarget(A);
 }
 
 exec function SetSavedSpectateSpeed(float F)
 {
-   class'UTComp_Settings'.default.SavedSpectateSpeed=F;
-  // SavedSpectateSpeed=F;
-   SetSpectateSpeed(F);
-   class'UTComp_Settings'.static.staticSaveConfig();
+    class'UTComp_Settings'.default.SavedSpectateSpeed=F;
+    SetSpectateSpeed(F);
+    class'UTComp_Settings'.static.staticSaveConfig();
 }
 
 exec function NextSuperWeapon()
 {
     if(IsCoaching())
-       return;
+        return;
     ServerGoToNextSuperWeapon();
 }
 
 
 function ServerGoToNextSuperWeapon()
 {
-   local xWeaponBase xWep;
-   local xWeaponBase foundWep;
-   local xweaponBase firstWep;
-   local bool bfirstactor;
+    local xWeaponBase xWep;
+    local xWeaponBase foundWep;
+    local xweaponBase firstWep;
+    local bool bfirstactor;
 
-   if(PlayerReplicationInfo.bOnlySpectator==False)
-     return;
+    if(PlayerReplicationInfo.bOnlySpectator==False)
+        return;
 
-   foreach AllActors(class'xWeaponBase', xWep)
-   {
-     if(!bfirstactor && (xWep.WeaponType == class'Redeemer' || xWep.WeaponType == class'Painter'))
-     {
-        firstWep=xWep;
-        bFirstActor=true;
-     }
-     if(FoundWep !=None && (xWep.WeaponType == class'Redeemer' || xWep.WeaponType == class'Painter') )
-     {
-        SetViewTarget(xWep);
-        ClientSetViewTarget(xWep);
-        bBehindView = true;
-        OldFoundWep=xWep;
-        ClientSetBehindview(True);
-        break;
-     }
-     if (xWep==OldFoundWep)
-         FoundWep=xWep;
-   }
-   if(FoundWep==None && firstWep !=None)
-   {
+    foreach AllActors(class'xWeaponBase', xWep)
+    {
+        if(!bfirstactor && (xWep.WeaponType == class'Redeemer' || xWep.WeaponType == class'Painter'))
+        {
+            firstWep=xWep;
+            bFirstActor=true;
+        }
+        if(FoundWep !=None && (xWep.WeaponType == class'Redeemer' || xWep.WeaponType == class'Painter') )
+        {
+            SetViewTarget(xWep);
+            ClientSetViewTarget(xWep);
+            bBehindView = true;
+            OldFoundWep=xWep;
+            ClientSetBehindview(True);
+            break;
+        }
+        if (xWep==OldFoundWep)
+            FoundWep=xWep;
+    }
+    if(FoundWep==None && firstWep !=None)
+    {
         SetViewTarget(firstWep);
         ClientSetViewTarget(firstWep);
         bBehindView = true;
         OldFoundWep=firstWep;
         ClientSetBehindview(True);
-   }
-   else if(OldFoundWep !=None)
-   {
+    }
+    else if(OldFoundWep !=None)
+    {
         SetViewTarget(oldFoundWep);
         ClientSetViewTarget(OldFoundWep);
         bBehindView = true;
         ClientSetBehindview(True);
-   }
+    }
 }
 
 
 function ServerGoToNode(int k)
 {
-   if(PlayerReplicationInfo.bOnlySpectator==False || !Level.Game.IsA('ONSOnslaughtGame')
-   || k>=ONSOnslaughtGame(Level.Game).PowerCores.Length)
-     return;
-   SetViewTarget(ONSOnslaughtGame(Level.Game).PowerCores[k]);
-   ClientSetViewTarget(ONSOnslaughtGame(Level.Game).PowerCores[k]);
-   bBehindView = true;
-   OldFoundCore=ONSOnslaughtGame(Level.Game).PowerCores[k];
+    if(PlayerReplicationInfo.bOnlySpectator==False || !Level.Game.IsA('ONSOnslaughtGame')
+       || k>=ONSOnslaughtGame(Level.Game).PowerCores.Length)
+    return;
+    SetViewTarget(ONSOnslaughtGame(Level.Game).PowerCores[k]);
+    ClientSetViewTarget(ONSOnslaughtGame(Level.Game).PowerCores[k]);
+    bBehindView = true;
+    oldFoundCore=ONSOnslaughtGame(Level.Game).PowerCores[k];
 }
 
 function ServerFindNextNode()
 {
 
-   local ONSPowerCore FoundCore;
-   local int k;
-   if(PlayerReplicationInfo.bOnlySpectator==False)
-     return;
-   if(!Level.Game.IsA('ONSOnslaughtGame'))
-       return;
-   for(k=0; k<ONSOnslaughtGame(Level.Game).PowerCores.Length; k++)
-   {
-       if(ONSOnslaughtGame(Level.Game).PowerCores[k] == OldfoundCore && k<ONSOnslaughtGame(Level.Game).PowerCores.Length-1)
-       {
-           FoundCore=ONSOnslaughtGame(Level.Game).PowerCores[k+1];
-           break;
-       }
-   }
-   if(OldFoundCore==None)
-   {
+    local ONSPowerCore FoundCore;
+    local int k;
+    if(PlayerReplicationInfo.bOnlySpectator==False)
+        return;
+    if(!Level.Game.IsA('ONSOnslaughtGame'))
+        return;
+    for(k=0; k<ONSOnslaughtGame(Level.Game).PowerCores.Length; k++)
+    {
+        if(ONSOnslaughtGame(Level.Game).PowerCores[k] == OldfoundCore && k<ONSOnslaughtGame(Level.Game).PowerCores.Length-1)
+        {
+            FoundCore=ONSOnslaughtGame(Level.Game).PowerCores[k+1];
+            break;
+        }
+    }
+    if(OldFoundCore==None)
+    {
         FoundCore=ONSOnslaughtGame(Level.Game).PowerCores[0];
-   }
-   if(FoundCore==None)
-   {
-       FoundCore=ONSOnslaughtGame(Level.Game).PowerCores[0];
-   }
-   SetViewTarget(FoundCore);
-   ClientSetViewTarget(FoundCore);
-   bBehindView = true;
-   OldFoundCore=FoundCore;
+    }
+    if(FoundCore==None)
+    {
+        FoundCore=ONSOnslaughtGame(Level.Game).PowerCores[0];
+    }
+    SetViewTarget(FoundCore);
+    ClientSetViewTarget(FoundCore);
+    bBehindView = true;
+    OldFoundCore=FoundCore;
 }
 
 function ServerFindPrevNode()
 {
-   local ONSPowerCore FoundCore;
-   local int k;
-   if(PlayerReplicationInfo.bOnlySpectator==False)
-      return;
-   if(!Level.Game.IsA('ONSOnslaughtGame'))
-       return;
-   for(k=ONSOnslaughtGame(Level.Game).PowerCores.Length-1; k>0; k--)
-   {
-       if(ONSOnslaughtGame(Level.Game).PowerCores[k] == OldfoundCore && k>0)
-       {
-           FoundCore=ONSOnslaughtGame(Level.Game).PowerCores[k-1];
-           break;
-       }
-   }
-   if(OldFoundCore==None)
-   {
+    local ONSPowerCore FoundCore;
+    local int k;
+    if(PlayerReplicationInfo.bOnlySpectator==False)
+        return;
+    if(!Level.Game.IsA('ONSOnslaughtGame'))
+        return;
+    for(k=ONSOnslaughtGame(Level.Game).PowerCores.Length-1; k>0; k--)
+    {
+        if(ONSOnslaughtGame(Level.Game).PowerCores[k] == OldfoundCore && k>0)
+        {
+            FoundCore=ONSOnslaughtGame(Level.Game).PowerCores[k-1];
+            break;
+        }
+    }
+    if(OldFoundCore==None)
+    {
         FoundCore=ONSOnslaughtGame(Level.Game).PowerCores[ONSOnslaughtGame(Level.Game).PowerCores.Length-1];
-   }
-   if(FoundCore==None)
-   {
-       FoundCore=ONSOnslaughtGame(Level.Game).PowerCores[ONSOnslaughtGame(Level.Game).PowerCores.Length-1];
-   }
-   SetViewTarget(FoundCore);
-   ClientSetViewTarget(FoundCore);
-   bBehindView = true;
-   OldFoundCore=FoundCore;
+    }
+    if(FoundCore==None)
+    {
+        FoundCore=ONSOnslaughtGame(Level.Game).PowerCores[ONSOnslaughtGame(Level.Game).PowerCores.Length-1];
+    }
+    SetViewTarget(FoundCore);
+    ClientSetViewTarget(FoundCore);
+    bBehindView = true;
+    OldFoundCore=FoundCore;
 }
 
 simulated function bool IsCoaching()
@@ -1482,17 +1439,17 @@ exec function SpecLockRed()
     if(UTCompPRI==None)
         UTCompPRI=Class'UTComp_Util'.Static.GetUTCompPRI(PlayerReplicationInfo);
 
-    if(!PlayerReplicationInfo.bOnlySpectator)
+    if (!PlayerReplicationInfo.bOnlySpectator)
     {
-       ClientMessage("Sorry, only spectators can spec lock");
-       return;
+        ClientMessage("Sorry, only spectators can spec lock");
+        return;
     }
-    if(IsCoaching())
+    if (IsCoaching())
     {
-       ClientMessage("Sorry, you may only lock to a team once per game. ");
-       return;
+        ClientMessage("Sorry, you may only lock to a team once per game. ");
+        return;
     }
-    if(NextRedPlayer())
+    if (NextRedPlayer())
     {
         UTCompPRI.SetCoachTeam(0);
         Level.Game.Broadcast(self, PlayerReplicationInfo.PlayerName@"has become a coach for the Red Team.");
@@ -1509,17 +1466,17 @@ exec function SpecLockBlue()
     if(UTCompPRI==None)
         UTCompPRI=Class'UTComp_Util'.Static.GetUTCompPRI(PlayerReplicationInfo);
 
-    if(!PlayerReplicationInfo.bOnlySpectator)
+    if (!PlayerReplicationInfo.bOnlySpectator)
     {
-       ClientMessage("Sorry, only spectators can spec lock");
-       return;
+        ClientMessage("Sorry, only spectators can spec lock");
+        return;
     }
-    if(IsCoaching())
+    if (IsCoaching())
     {
-       ClientMessage("Sorry, you may only lock to a team once per game. ");
-       return;
+        ClientMessage("Sorry, you may only lock to a team once per game. ");
+        return;
     }
-    if(NextBluePlayer())
+    if (NextBluePlayer())
     {
         UTCompPRI.SetCoachTeam(1);
         Level.Game.Broadcast(self, PlayerReplicationInfo.PlayerName@"has become a coach for the Blue Team.");
@@ -1531,7 +1488,7 @@ exec function SpecLockBlue()
 exec function ToggleBehindView()
 {
     if((ViewTarget.IsA('xPawn') && xPAwn(viewtarget).DrivenVehicle==None) && IsCoaching())
-       return;
+        return;
     ServerToggleBehindview();
 }
 
@@ -1557,43 +1514,46 @@ state spectating
         Super.BeginState();
         SetTimer(1.0, True);
     }
-      exec function Fire( optional float F )
+
+    exec function Fire( optional float F )
     {
         if ( bFrozen )
-    {
-        if ( (TimerRate <= 0.0) || (TimerRate > 1.0) )
-            bFrozen = false;
-        return;
-    }
-        if(IsCoachingRed())
+        {
+            if ( (TimerRate <= 0.0) || (TimerRate > 1.0) )
+                bFrozen = false;
+            return;
+        }
+        if (IsCoachingRed())
             NextRedPlayer();
-        else if(IsCoachingBlue())
+        else if (IsCoachingBlue())
             NextBluePlayer();
         else
             ServerViewNextPlayer();
     }
+
     function Timer()
     {
-      if(!IsCoaching())
+        if(!IsCoaching())
         Super.Timer();
-      else if(ViewTarget==Self)
-      {
-        if(IsCoachingRed() && NextRedPlayer())
-           return;
-        else if(IsCoachingBlue() && NextBluePlayer())
-           return;
-      }
-      else if(ViewTarget.IsA('xPawn'))
-      {
-         if(IsCoachingRed())
-            if(xPawn(ViewTarget).PlayerReplicationInfo != None && xPAwn(ViewTarget).PlayerReplicationInfo.Team.TeamIndex!= 0)
-                 NextRedPlayer();
-
-         else if (IsCoachingBlue())
-            if(xPawn(ViewTarget).PlayerReplicationInfo != None && xPawn(ViewTarget).PlayerReplicationInfo.Team.TeamIndex!= 1)
-                NextBluePlayer();
-      }
+        else if(ViewTarget==Self)
+        {
+            if(IsCoachingRed() && NextRedPlayer())
+                return;
+            else if(IsCoachingBlue() && NextBluePlayer())
+                return;
+        }
+        else if(ViewTarget.IsA('xPawn'))
+        {
+            if(IsCoachingRed()) {
+                if(xPawn(ViewTarget).PlayerReplicationInfo != None && xPAwn(ViewTarget).PlayerReplicationInfo.Team.TeamIndex!= 0)
+                    NextRedPlayer();
+            } else if (IsCoachingBlue()) {
+                if(xPawn(ViewTarget).PlayerReplicationInfo != None && xPawn(ViewTarget).PlayerReplicationInfo.Team.TeamIndex!= 1)
+                    NextBluePlayer();
+            }
+        }
     }
+
     // Return to spectator's own camera.
     exec function AltFire( optional float F )
     {
@@ -1644,12 +1604,11 @@ function bool IsValidVote(byte b, byte p, out string S, string S2)
         return false;
     }
     if(uWarmup==None)
-       foreach DynamicActors(class'UTComp_Warmup', uWarmup)
-           break;
+        foreach DynamicActors(class'UTComp_Warmup', uWarmup)
+            break;
     if(b>10 || b<0)
     {
         ClientMessage("An Error occured, this is an invalid vote");
-     //   Log("An Error occured, this is an invalid vote.");
         return false;
     }
     if(b==6 || b==7)
@@ -1811,8 +1770,8 @@ function ServerAdminReady()
     if(PlayerReplicationInfo!=None && PlayerReplicationInfo.bAdmin)
     {
         if(uWarmup==None)
-           foreach DynamicActors(class'UTComp_Warmup', uWarmup)
-               break;
+            foreach DynamicActors(class'UTComp_Warmup', uWarmup)
+                break;
         if(uWarmup!=None)
             uWarmup.bAdminBypassReady=True;
     }
@@ -1820,23 +1779,22 @@ function ServerAdminReady()
 
 exec function SetName(coerce string S)
 {
-   S=StripColorCodes(S);
-   Super.SetName(S);
-   ReplaceText(S, " ", "_");
-   ReplaceText(S, "\"", "");
-   SetColoredNameOldStyle(Left(S, 20));
-   class'UTComp_Settings'.default.CurrentSelectedColoredName=255;
- //  CurrentSelectedColoredName=255;
-   class'UTComp_Settings'.static.staticSaveConfig();staticsaveconfig();
+    S=StripColorCodes(S);
+    Super.SetName(S);
+    ReplaceText(S, " ", "_");
+    ReplaceText(S, "\"", "");
+    SetColoredNameOldStyle(Left(S, 20));
+    class'UTComp_Settings'.default.CurrentSelectedColoredName=255;
+    class'UTComp_Settings'.static.staticSaveConfig();staticsaveconfig();
 }
 
 exec function SetNameNoReset(coerce string S)
 {
-   S=StripColorCodes(S);
-   Super.SetName(S);
-   ReplaceText(S, " ", "_");
-   ReplaceText(S, "\"", "");
-   SetColoredNameOldStyle(S);
+    S=StripColorCodes(S);
+    Super.SetName(S);
+    ReplaceText(S, " ", "_");
+    ReplaceText(S, "\"", "");
+    SetColoredNameOldStyle(S);
 }
 
 simulated function SetColoredNameOldStyle(optional string S2, optional bool bShouldSave)
@@ -1849,7 +1807,7 @@ simulated function SetColoredNameOldStyle(optional string S2, optional bool bSho
     if(Level.NetMode==NM_DedicatedServer || PlayerReplicationInfo==None)
         return;
 
-    if(S2=="")
+    if (S2=="")
     {
        S2=PlayerReplicationInfo.PlayerName;
     }
@@ -1858,12 +1816,12 @@ simulated function SetColoredNameOldStyle(optional string S2, optional bool bSho
         numdoatonce=1;
         for(m=k;m<Len(S2)&& class'UTComp_Settings'.default.ColorName[k-1] == class'UTComp_Settings'.default.ColorName[m] ;m++)
         {
-             numdoatonce++;
-             k++;
+            numdoatonce++;
+            k++;
         }
         S=S$class'UTComp_Util'.Static.MakeColorCode(class'UTComp_Settings'.default.ColorName[k-1])$Right(Left(S2, k), numdoatonce);
     }
-    if(UTCompPRI!=None)
+    if (UTCompPRI!=None)
         UTCompPRI.SetColoredName(S);
 }
 
@@ -1874,15 +1832,12 @@ simulated function string FindColoredName(int CustomColors)
     local int i;
 
     if(Level.NetMode==NM_DedicatedServer || PlayerReplicationInfo==None)
-        return "";
+    return "";
 
     if(S2=="")
     {
        S2=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedName;
     }
-  //  SetNameNoReset(S2);
- //   Log(default.ColoredName[CustomColors].SavedName);
- //   Log(default.ColoredName[CustomColors].SavedColor[0].R@default.ColoredName[CustomColors].SavedColor[0].G@default.ColoredName[CustomColors].SavedColor[0].B);
 
     for(i=0; i<Len(S2); i++)
         S $= class'UTComp_Util'.Static.MakeColorCode(class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[i])$Mid(class'UTComp_Settings'.default.ColoredName[CustomColors].SavedName,i,1);
@@ -1898,24 +1853,22 @@ simulated function string AddNewColoredName(int CustomColors)
     local string S2;
 
     if(Level.NetMode==NM_DedicatedServer || PlayerReplicationInfo==None)
-        return "";
+    return "";
 
     if(S2=="")
     {
        S2=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedName;
     }
     SetNameNoReset(S2);
- //   Log(default.ColoredName[CustomColors].SavedName);
- //   Log(default.ColoredName[CustomColors].SavedColor[0].R@default.ColoredName[CustomColors].SavedColor[0].G@default.ColoredName[CustomColors].SavedColor[0].B);
     for(k=0; k<20; k++)
-       class'UTComp_Settings'.default.ColorName[k]=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k];
+        class'UTComp_Settings'.default.ColorName[k]=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k];
     for(k=1; k<=Len(S2); k++)
     {
         numdoatonce=1;
         for(m=k;m<Len(S2)&& class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k-1] == class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[m] ;m++)
         {
-             numdoatonce++;
-             k++;
+            numdoatonce++;
+            k++;
         }
         S=S$class'UTComp_Util'.Static.MakeColorCode(class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k-1])$Right(Left(S2, k), numdoatonce);
     }
@@ -1924,26 +1877,17 @@ simulated function string AddNewColoredName(int CustomColors)
 
 simulated function SaveNewColoredName()
 {
- //   local int i;
     local int n;
     local int l;
 
     n=class'UTComp_Settings'.default.ColoredName.Length+1;
     class'UTComp_Settings'.default.ColoredName.Length=n;
 
- //   Log(default.ColoredName.Length);
-
     class'UTComp_Settings'.default.ColoredName[n-1].SavedName=PlayerReplicationInfo.PlayerName;
 
     for(l=0; l<20; l++)
-         class'UTComp_Settings'.default.ColoredName[n-1].SavedColor[l]=class'UTComp_Settings'.default.ColorName[l];
+        class'UTComp_Settings'.default.ColoredName[n-1].SavedColor[l]=class'UTComp_Settings'.default.ColorName[l];
 
-   /* ColoredName.Length=class'UTComp_Settings'.default.ColoredName.Length;
-    for(i=0; i<class'UTComp_Settings'.default.ColoredName.Length; i++)
-        ColoredName[i]=class'UTComp_Settings'.default.ColoredName[i];
-    for(i=0; i<ArrayCount(ColorName); i++)
-        ColorName[i]=class'UTComp_Settings'.default.ColorName[i];
-    */
 }
 
 exec function ShowColoredNames()
@@ -1954,7 +1898,7 @@ exec function ShowColoredNames()
     {
         Log(class'UTComp_Settings'.default.ColoredName[i].SavedName);
         for(j=0; j<20; j++)
-            S=S$class'UTComp_Settings'.default.ColoredName[i].SavedColor[j].R@class'UTComp_Settings'.default.ColoredName[i].SavedColor[j].G@class'UTComp_Settings'.default.ColoredName[i].SavedColor[j].B;
+        S=S$class'UTComp_Settings'.default.ColoredName[i].SavedColor[j].R@class'UTComp_Settings'.default.ColoredName[i].SavedColor[j].G@class'UTComp_Settings'.default.ColoredName[i].SavedColor[j].B;
         Log(S);
     }
 }
@@ -1968,15 +1912,14 @@ simulated function SetColoredNameOldStyleCustom(optional string S2, optional int
     local byte m;
 
     if(Level.NetMode==NM_DedicatedServer || PlayerReplicationInfo==None)
-        return;
+    return;
 
     if(S2=="")
     {
        S2=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedName;
     }
     SetNameNoReset(S2);
-  //  Log(default.ColoredName[CustomColors].SavedName);
- //   Log(default.ColoredName[CustomColors].SavedColor[0].R@default.ColoredName[CustomColors].SavedColor[0].G@default.ColoredName[CustomColors].SavedColor[0].B);
+
     for(k=0; k<20; k++)
         class'UTComp_Settings'.default.ColorName[k]=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k];
     class'UTComp_Settings'.static.StaticSaveConfig();
@@ -1985,8 +1928,8 @@ simulated function SetColoredNameOldStyleCustom(optional string S2, optional int
         numdoatonce=1;
         for(m=k;m<Len(S2)&& class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k-1] == class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[m] ;m++)
         {
-             numdoatonce++;
-             k++;
+            numdoatonce++;
+            k++;
         }
         S=S$class'UTComp_Util'.Static.MakeColorCode(class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k-1])$Right(Left(S2, k), numdoatonce);
     }
@@ -1996,14 +1939,13 @@ simulated function SetColoredNameOldStyleCustom(optional string S2, optional int
 
 exec function ListColoredNames()
 {
-   local int i;
-   for(i=0; i<class'UTComp_Settings'.default.ColoredName.Length; i++)
-       echo(class'UTComp_Settings'.default.coloredname[i].SavedName);
+    local int i;
+    for(i=0; i<class'UTComp_Settings'.default.ColoredName.Length; i++)
+        echo(class'UTComp_Settings'.default.coloredname[i].SavedName);
 }
 
 simulated function SetShowSelf(Bool b)
 {
-   // bShowSelfInTeamOverlay=b;
     class'UTComp_Settings'.default.bShowSelfInTeamOverlay=b;
     class'UTComp_Settings'.static.staticSaveConfig();staticsaveconfig();
     if(UTCompPRI!=None)
@@ -2013,33 +1955,33 @@ simulated function SetShowSelf(Bool b)
 
 simulated function string StripColorCodes(String S)
 {
-   local array<string> StringParts;
-   local int i;
-   local string S2;
+    local array<string> StringParts;
+    local int i;
+    local string S2;
 
-   Split(S, chr(27), stringParts);
-   if(StringParts.Length>=1)
-      S2=StringParts[0];
-   for(i=1; i<stringParts.Length; i++)
-   {
-      StringParts[i]=Right(StringParts[i], Len(stringParts[i])-3);
-      S2=S2$stringParts[i];
-   }
-   if(Right(s2,1)==chr(27))
-       S2=Left(S2, Len(S2)-1);
-   return S2;
+    Split(S, chr(27), stringParts);
+    if(StringParts.Length>=1)
+        S2=StringParts[0];
+    for(i=1; i<stringParts.Length; i++)
+    {
+        StringParts[i]=Right(StringParts[i], Len(stringParts[i])-3);
+        S2=S2$stringParts[i];
+    }
+    if(Right(s2,1)==chr(27))
+        S2=Left(S2, Len(S2)-1);
+    return S2;
 }
 
 simulated function reskinall()
 {
-   local UTComp_xPawn P;
-   if(Level.NetMode==NM_DedicatedServer)
-       return;
-   foreach dynamicactors(class'UTComp_xPawn', P)
-   {
-       if(!P.bInvis)
-           P.ColorSkins();
-   }
+    local UTComp_xPawn P;
+    if(Level.NetMode==NM_DedicatedServer)
+        return;
+    foreach dynamicactors(class'UTComp_xPawn', P)
+    {
+        if(!P.bInvis)
+        P.ColorSkins();
+    }
 }
 
 function bool AllowTextMessage(string Msg)
@@ -2075,201 +2017,197 @@ simulated function ClientCallMapVote(String S, int i)
 simulated function string CheckShortMapName(coerce string MapName)
 {
     if(mapname~= "Joust")
-       mapName="CTF-1on1-Joust";
+        mapName="CTF-1on1-Joust";
     else if(mapname~= "Avaris")
-       mapName="CTF-Avaris";
+        mapName="CTF-Avaris";
     else if(mapname~= "Bol" || mapname~= "Bolwerk" || mapname~= "Boll" || mapname~= "Bollwerk")
-       mapName="CTF-BollwerkRuins2004-PRO";
+        mapName="CTF-BollwerkRuins2004-PRO";
     else if(mapname~= "Bridge")
-       mapName="CTF-BridgeOfFate";
+        mapName="CTF-BridgeOfFate";
     else if(mapname~= "Chrome")
-       mapName="CTF-Chrome";
+        mapName="CTF-Chrome";
     else if(mapname~= "Cit" || mapname~= "Citadel")
-       mapName="CTF-Citadel";
+        mapName="CTF-Citadel";
     else if(mapname~= "Dec" || mapname~= "December")
-       mapName="CTF-December";
+        mapName="CTF-December";
     else if(mapname~= "Face" || mapname~= "FaceClassic")
-       mapName="CTF-FaceClassic";
+        mapName="CTF-FaceClassic";
     else if(mapname~= "Geo")
-       mapName="CTF-GeoThermal";
+        mapName="CTF-GeoThermal";
     else if(mapname~= "Grendel")
-       mapName="DM-DE-GrendelKeep";
+        mapName="DM-DE-GrendelKeep";
     else if(mapname~= "Face3")
-       mapname="CTF-Face3";
+        mapname="CTF-Face3";
     else if(mapname~= "Geo")
-       mapname="CTF-GeoThermal";
+        mapname="CTF-GeoThermal";
     else if(mapname~= "Jan" || mapname ~="January")
-       mapname="CTF-January";
+        mapname="CTF-January";
     else if(mapname~= "Lost" || mapname ~="LostFaith")
-       mapname="CTF-LostFaith";
+        mapname="CTF-LostFaith";
     else if(mapname~= "Magma")
-       mapname="CTF-Magma";
+        mapname="CTF-Magma";
     else if(mapname~= "Maul")
-       mapname="CTF-Maul";
+        mapname="CTF-Maul";
     else if(mapname~="Orb" || mapname~="Orbital" || mapname~="Orbital2")
-       mapname="CTF-Orbital2";
+        mapname="CTF-Orbital2";
     else if(mapname~="smote")
-       mapname="CTF-Smote";
+        mapname="CTF-Smote";
     else if(mapname~="TwinTombs")
-       mapname="CTF-TwinTombs";
+        mapname="CTF-TwinTombs";
     else if(mapname~="Iron" || mapname~="IronDust")
-       mapname="DM-1on1-IronDust";
+        mapname="DM-1on1-IronDust";
     else if(mapname~="roughinery" || mapname~="Rough")
-       mapname="DM-1on1-Roughinery";
+        mapname="DM-1on1-Roughinery";
     else if(mapname~="roughFPS" || mapname~="Rough-FPS")
-       mapname="DM-1on1-Roughinery-FPS";
+        mapname="DM-1on1-Roughinery-FPS";
     else if(mapname~="Lea")
-       mapname="DM-1on1-Lea";
+        mapname="DM-1on1-Lea";
     else if(mapname~="DeckFPS" || mapname~="Deck--FPS")
-       mapname="DM-1on1-Roughinery-FPS";
+        mapname="DM-1on1-Roughinery-FPS";
     else if(mapname~="camp" || mapname~="campgrounds" || mapname~="dm6")
-       mapname="DM-Campgrounds2004-G1E";
-
-
-
-
+        mapname="DM-Campgrounds2004-G1E";
     else if(mapname~="Spirit")
-       mapname="DM-1on1-Spirit";
+        mapname="DM-1on1-Spirit";
     else if(mapname~="Squader")
-       mapname="DM-1on1-Squader";
+        mapname="DM-1on1-Squader";
     else if(mapname~="Trite")
-       mapname="DM-1on1-Trite";
+        mapname="DM-1on1-Trite";
     else if(mapname~="Ant" || mapname~="Antalus")
-       mapname="DM-Antalus";
+        mapname="DM-Antalus";
     else if(mapname~="Asb" || mapname~="Asbestos")
-       mapname="DM-Asbestos";
+        mapname="DM-Asbestos";
     else if(mapname~="comp" || mapname~="Compressed")
-       mapname="DM-Compressed";
+        mapname="DM-Compressed";
     else if(mapname~="corr" || mapname~="Corrugation")
-       mapname="DM-Corrugation";
+        mapname="DM-Corrugation";
     else if(mapname~="curse" || mapname~="curse4")
-       mapname="DM-Curse4";
+        mapname="DM-Curse4";
     else if(mapname~="Deck" || mapname~="Deck17")
-       mapname="DM-Deck17";
+        mapname="DM-Deck17";
     //begin dnx3 code
     else if(mapname~= "Torlan")
-       mapName="ONS-Torlan";
-   else if(mapname~= "Sev" || mapname~= "Severance")
-       mapName="ONS-Severance";
-   else if(mapname~= "Red" || mapname~= "Redplanet")
-       mapName="ONS-Redplanet";
-   else if(mapname~= "Prime" || mapname~= "Prim" || mapname~= "Primeval")
-       mapName="ONS-Primeval";
-   else if(mapname~= "Frost" || mapname~= "Frostbite")
-       mapName="ONS-Frostbite";
-   else if(mapname~= "Dria")
-       mapName="ONS-Dria";
-   else if(mapname~= "Dawn")
-       mapName="ONS-Dawn";
-   else if(mapname~= "Cross" || mapname~= "Crossfire")
-       mapName="ONS-Crossfire";
-   else if(mapname~= "Arc" || mapname~= "Arctic" || mapname~= "Arcticstronghold")
-       mapName="ONS-Arcticstronghold";
-   else if(mapname~= "RRajigar" || mapname~= "rra")
+        mapName="ONS-Torlan";
+    else if(mapname~= "Sev" || mapname~= "Severance")
+        mapName="ONS-Severance";
+    else if(mapname~= "Red" || mapname~= "Redplanet")
+        mapName="ONS-Redplanet";
+    else if(mapname~= "Prime" || mapname~= "Prim" || mapname~= "Primeval")
+        mapName="ONS-Primeval";
+    else if(mapname~= "Frost" || mapname~= "Frostbite")
+        mapName="ONS-Frostbite";
+    else if(mapname~= "Dria")
+        mapName="ONS-Dria";
+    else if(mapname~= "Dawn")
+        mapName="ONS-Dawn";
+    else if(mapname~= "Cross" || mapname~= "Crossfire")
+        mapName="ONS-Crossfire";
+    else if(mapname~= "Arc" || mapname~= "Arctic" || mapname~= "Arcticstronghold")
+        mapName="ONS-Arcticstronghold";
+    else if(mapname~= "RRajigar" || mapname~= "rra")
         mapName="DM-RRajigar";
-   else if(mapname~= "Rankin" || mapname~= "Rank" || mapname~= "Ran")
-       mapName="DM-Rankin";
-   else if(mapname~= "Morph" || mapname~= "Morpheus" || mapname~= "Morpheus3")
-       mapName="DM-Morpheus3";
-   else if(mapname~= "IronDeity")
-    mapName="DM-Irondeity";
-   else if(mapname~= "Ins" || mapname~= "Insidious")
-       mapName="DM-Insidious";
-   else if(mapname~= "Gol" || mapname~= "Goliath")
-       mapName="DM-Goliath";
-   else if(mapname~= "Gael")
-       mapName="DM-Gael";
-   else if(mapname~= "Flux" || mapname~= "Flux2")
-       mapName="DM-Flux2";
-   else if(mapname~= "Desert" || mapname~= "Desertisle")
-       mapName="DM-Desertisle";
-   else if(mapname~= "Osi" || mapname~= "Osiris" || mapname~= "Osiris2")
-       mapName="DM-DE-Osiris2";
-   else if(mapname~= "Ironic" || mapname~= "Leet" || mapname~= "BestMap")
-       mapName="DM-DE-Ironic";
-   else if(mapname~= "Grendel" || mapname~= "Gren" || mapname~= "Grendelkeep" || mapname~= "Lame")
-       mapName="DM-DE-Grendelkeep";
-   else if(mapname~= "Achilles" || mapname~= "Ach" || mapname~= "Achil")
-       mapName="DM-CBP2-Achilles";
-   else if(mapname~= "Archipel" || mapname~= "Archipelago")
-       mapName="DM-CBP2-Archipelago";
-   else if(mapname~= "Azures")
-       mapName="DM-CBP2-Azures";
-   else if(mapname~= "Buli" || mapname~= "Buliwyf")
-       mapName="DM-CBP2-Buliwyf";
-   else if(mapname~= "Drak" || mapname~= "Drakonis")
-       mapName="DM-CBP2-Drakonis";
-   else if(mapname~= "Griff" || mapname~= "Griffin")
-       mapName="DM-CBP2-Griffin";
-   else if(mapname~= "Kadath")
-       mapName="DM-CBP2-Kadath";
-   else if(mapname~= "Kero" || mapname~= "Kerosene")
-       mapName="DM-CBP2-Kerosene";
-   else if(mapname~= "Khrono")
-       mapName="DM-CBP2-Khrono";
-   else if(mapname~= "KillBB" || mapname~= "KillbillyBarn")
-       mapName="DM-CBP2-KillbillyBarn";
-   else if(mapname~= "Koma")
-       mapName="DM-CBP2-Koma";
-   else if(mapname~= "Krouj" || mapname~= "KroujKran")
-       mapName="DM-CBP2-KroujKran";
-   else if(mapname~= "Masu" || mapname~= "Masurao")
-       mapName="DM-CBP2-Masurao";
-   else if(mapname~= "Meitak")
-       mapName="DM-CBP2-Meitak";
-   else if(mapname~= "Nifl" || mapname~= "Niflheim")
-       mapName="DM-CBP2-Niflheim";
-   else if(mapname~= "Recon" || mapname~= "Reconstruct")
-       mapName="DM-CBP2-Reconstruct";
-   else if(mapname~= "Summit")
-       mapName="DM-CBP2-Summit";
-   else if(mapname~= "TelMeco" || mapname~= "TelMecoMex")
-       mapName="DM-CBP2-TelMecoMEX";
-   else if(mapname~= "Temp" || mapname~= "Tempest")
-       mapName="DM-CBP2-Tempest";
-   else if(mapname~= "Tensile" || mapname~= "TensileSteel")
-       mapName="DM-CBP2-TensileSteel";
-   else if(mapname~= "Tork" || mapname~= "Torken" || mapname~= "Torkenstein")
-       mapName="DM-CBP2-Torkenstein";
-   else if(mapname~= "Tydal")
-       mapName="DM-CBP2-Tydal";
-   else if(mapname~= "Bah" || mapname~= "Bahe" || mapname~= "Bahera")
-       mapName="CTF-CBP2-Bahera";
-   else if(mapname~= "Botanic")
-       mapName="CTF-CBP2-Botanic";
-   else if(mapname~= "Deca" || mapname~= "Decadence")
-       mapName="CTF-CBP2-Decadence";
-   else if(mapname~= "Deep")
-       mapName="CTF-CBP2-Deep";
-   else if(mapname~= "Gaz" || mapname~= "Gazpacho")
-       mapName="CTF-CBP2-Gazpacho";
-   else if(mapname~= "Pist" || mapname~= "Pistola")
-       mapName="CTF-CBP2-Pistola";
-   else if(mapname~= "Sko" || mapname~= "Skorb" || mapname~= "Skorbut")
-       mapName="CTF-CBP2-Skorbut";
-   else if(mapname~= "Argento")
-       mapName="ONS-CBP2-Argento";
-   else if(mapname~= "Brass" || mapname~= "Brassed")
-       mapName="ONS-CBP2-Brassed";
-   else if(mapname~= "Mirage")
-       mapName="ONS-CBP2-Mirage";
-   else if(mapname~= "Pasar" || mapname~= "Pasargadae")
-       mapName="ONS-CBP2-Pasargadae";
-   else if(mapname~= "Trop" || mapname~= "Tropica")
-       mapName="ONS-CBP2-Tropica";
-   else if(mapname~= "Val" || mapname~= "Valarna")
-       mapName="ONS-CBP2-Valarna";
-   else if(mapname~= "Yorda")
-       mapName="ONS-CBP2-Yorda";
-   else if(mapname~= "Icarus")
-       mapName="ONS-Icarus";
-   else if(mapname~= "Ari" || mapname~= "Aridoom")
-       mapName="ONS-Aridoom";
-   else if(mapname~= "Asc" || mapname~= "Ascend" || mapname~= "Ascendancy")
-       mapName="ONS-Ascendancy";
-   else if(mapname~= "Goose" || mapname~= "Goose2k4")
-       mapName="DM-Goose2k4";
-   return MapName;
+    else if(mapname~= "Rankin" || mapname~= "Rank" || mapname~= "Ran")
+        mapName="DM-Rankin";
+    else if(mapname~= "Morph" || mapname~= "Morpheus" || mapname~= "Morpheus3")
+        mapName="DM-Morpheus3";
+    else if(mapname~= "IronDeity")
+        mapName="DM-Irondeity";
+    else if(mapname~= "Ins" || mapname~= "Insidious")
+        mapName="DM-Insidious";
+    else if(mapname~= "Gol" || mapname~= "Goliath")
+        mapName="DM-Goliath";
+    else if(mapname~= "Gael")
+        mapName="DM-Gael";
+    else if(mapname~= "Flux" || mapname~= "Flux2")
+        mapName="DM-Flux2";
+    else if(mapname~= "Desert" || mapname~= "Desertisle")
+        mapName="DM-Desertisle";
+    else if(mapname~= "Osi" || mapname~= "Osiris" || mapname~= "Osiris2")
+        mapName="DM-DE-Osiris2";
+    else if(mapname~= "Ironic" || mapname~= "Leet" || mapname~= "BestMap")
+        mapName="DM-DE-Ironic";
+    else if(mapname~= "Grendel" || mapname~= "Gren" || mapname~= "Grendelkeep" || mapname~= "Lame")
+        mapName="DM-DE-Grendelkeep";
+    else if(mapname~= "Achilles" || mapname~= "Ach" || mapname~= "Achil")
+        mapName="DM-CBP2-Achilles";
+    else if(mapname~= "Archipel" || mapname~= "Archipelago")
+        mapName="DM-CBP2-Archipelago";
+    else if(mapname~= "Azures")
+        mapName="DM-CBP2-Azures";
+    else if(mapname~= "Buli" || mapname~= "Buliwyf")
+        mapName="DM-CBP2-Buliwyf";
+    else if(mapname~= "Drak" || mapname~= "Drakonis")
+        mapName="DM-CBP2-Drakonis";
+    else if(mapname~= "Griff" || mapname~= "Griffin")
+        mapName="DM-CBP2-Griffin";
+    else if(mapname~= "Kadath")
+        mapName="DM-CBP2-Kadath";
+    else if(mapname~= "Kero" || mapname~= "Kerosene")
+        mapName="DM-CBP2-Kerosene";
+    else if(mapname~= "Khrono")
+        mapName="DM-CBP2-Khrono";
+    else if(mapname~= "KillBB" || mapname~= "KillbillyBarn")
+        mapName="DM-CBP2-KillbillyBarn";
+    else if(mapname~= "Koma")
+        mapName="DM-CBP2-Koma";
+    else if(mapname~= "Krouj" || mapname~= "KroujKran")
+        mapName="DM-CBP2-KroujKran";
+    else if(mapname~= "Masu" || mapname~= "Masurao")
+        mapName="DM-CBP2-Masurao";
+    else if(mapname~= "Meitak")
+        mapName="DM-CBP2-Meitak";
+    else if(mapname~= "Nifl" || mapname~= "Niflheim")
+        mapName="DM-CBP2-Niflheim";
+    else if(mapname~= "Recon" || mapname~= "Reconstruct")
+        mapName="DM-CBP2-Reconstruct";
+    else if(mapname~= "Summit")
+        mapName="DM-CBP2-Summit";
+    else if(mapname~= "TelMeco" || mapname~= "TelMecoMex")
+        mapName="DM-CBP2-TelMecoMEX";
+    else if(mapname~= "Temp" || mapname~= "Tempest")
+        mapName="DM-CBP2-Tempest";
+    else if(mapname~= "Tensile" || mapname~= "TensileSteel")
+        mapName="DM-CBP2-TensileSteel";
+    else if(mapname~= "Tork" || mapname~= "Torken" || mapname~= "Torkenstein")
+        mapName="DM-CBP2-Torkenstein";
+    else if(mapname~= "Tydal")
+        mapName="DM-CBP2-Tydal";
+    else if(mapname~= "Bah" || mapname~= "Bahe" || mapname~= "Bahera")
+        mapName="CTF-CBP2-Bahera";
+    else if(mapname~= "Botanic")
+        mapName="CTF-CBP2-Botanic";
+    else if(mapname~= "Deca" || mapname~= "Decadence")
+        mapName="CTF-CBP2-Decadence";
+    else if(mapname~= "Deep")
+        mapName="CTF-CBP2-Deep";
+    else if(mapname~= "Gaz" || mapname~= "Gazpacho")
+        mapName="CTF-CBP2-Gazpacho";
+    else if(mapname~= "Pist" || mapname~= "Pistola")
+        mapName="CTF-CBP2-Pistola";
+    else if(mapname~= "Sko" || mapname~= "Skorb" || mapname~= "Skorbut")
+        mapName="CTF-CBP2-Skorbut";
+    else if(mapname~= "Argento")
+        mapName="ONS-CBP2-Argento";
+    else if(mapname~= "Brass" || mapname~= "Brassed")
+        mapName="ONS-CBP2-Brassed";
+    else if(mapname~= "Mirage")
+        mapName="ONS-CBP2-Mirage";
+    else if(mapname~= "Pasar" || mapname~= "Pasargadae")
+        mapName="ONS-CBP2-Pasargadae";
+    else if(mapname~= "Trop" || mapname~= "Tropica")
+        mapName="ONS-CBP2-Tropica";
+    else if(mapname~= "Val" || mapname~= "Valarna")
+        mapName="ONS-CBP2-Valarna";
+    else if(mapname~= "Yorda")
+        mapName="ONS-CBP2-Yorda";
+    else if(mapname~= "Icarus")
+        mapName="ONS-Icarus";
+    else if(mapname~= "Ari" || mapname~= "Aridoom")
+        mapName="ONS-Aridoom";
+    else if(mapname~= "Asc" || mapname~= "Ascend" || mapname~= "Ascendancy")
+        mapName="ONS-Ascendancy";
+    else if(mapname~= "Goose" || mapname~= "Goose2k4")
+        mapName="DM-Goose2k4";
+    return MapName;
 }
 
 event TeamMessage( PlayerReplicationInfo PRI, coerce string S, name Type  )
@@ -2288,24 +2226,24 @@ event TeamMessage( PlayerReplicationInfo PRI, coerce string S, name Type  )
     //replace the color codes
     if(class'UTComp_Settings'.default.bAllowColoredMessages)
     {
-       for(k=7; k>=0; k--)
-       {
-          S=Repl(S, "^"$k, ColorReplace(k));
-       }
-      // S=Repl(S, "^r", RandomColor());
+        for(k=7; k>=0; k--)
+        {
+            S=Repl(S, "^"$k, ColorReplace(k));
+        }
     }
     else
     {
-       for(k=7; k>=0; k--)
-       {
-          S=Repl(S, "^"$k, "");
-       }
-     //  S=Repl(S, "^r", "");
+        for(k=7; k>=0; k--)
+        {
+            S=Repl(S, "^"$k, "");
+        }
     }
     if ( myHUD != None )
-    {   if (class'UTComp_Settings'.default.bEnableColoredNamesInTalk)
-           Message( PRI, c$S, Type );
-        else myHud.Message( PRI, c$S, Type );
+    {
+        if (class'UTComp_Settings'.default.bEnableColoredNamesInTalk)
+            Message( PRI, c$S, Type );
+        else
+            myHud.Message( PRI, c$S, Type );
     }
     if ( (Player != None) && (Player.Console != None) )
     {
@@ -2355,46 +2293,46 @@ function ServerTeamSay( string Msg )
     {
         if(!playerreplicationInfo.bOnlySpectator)
         {
-           Say( Msg );
-           return;
+            Say( Msg );
+            return;
         }
         else
         {
-          SpecDMSay(msg);
-          return;
+            SpecDMSay(msg);
+            return;
         }
     }
     if(GameReplicationInfo.bTeamGame && IsCoaching() && PlayerReplicationInfo.bOnlySpectator)
         SpecLockTeamSay(msg);
     else
-       Level.Game.BroadcastTeam( self, Level.Game.ParseMessageString( Level.Game.BaseMutator , self, Msg ) , 'TeamSay');
+        Level.Game.BroadcastTeam( self, Level.Game.ParseMessageString( Level.Game.BaseMutator , self, Msg ) , 'TeamSay');
 }
 
 function SpecDMSay(string msg)
 {
-   local playercontroller P;
-   local controller C;
+    local playercontroller P;
+    local controller C;
 
-   for(C=Level.ControllerList; C!=None; C=C.NextController)
-   {
-      P=PlayerController(C);
-      if(P!=None && P.PlayerReplicationInfo!=None && P.PlayerReplicationInfo.bOnlySpectator)
-          Level.Game.BroadcastHandler.BroadcastText(PlayerReplicationInfo, P, msg, 'teamsay');
-   }
+    for(C=Level.ControllerList; C!=None; C=C.NextController)
+    {
+        P=PlayerController(C);
+        if(P!=None && P.PlayerReplicationInfo!=None && P.PlayerReplicationInfo.bOnlySpectator)
+            Level.Game.BroadcastHandler.BroadcastText(PlayerReplicationInfo, P, msg, 'teamsay');
+    }
 }
 
 function SpecLockTeamSay(string msg)
 {
-   local playercontroller P;
-   local controller C;
+    local playercontroller P;
+    local controller C;
 
-   for(C=Level.ControllerList; C!=None; C=C.NextController)
-   {
-      P=PlayerController(C);
-      if(P!=None && P.PlayerReplicationInfo!=None && P.PlayerReplicationInfo.Team !=None && P.PlayerReplicationInfo.Team.TeamIndex==UTCompPRI.CoachTeam)
-          Level.Game.BroadcastHandler.BroadcastText(PlayerReplicationInfo, P, msg, 'coachteamsay');
-   }
-   Level.Game.BroadCastHandler.BroadCastText(PlayerReplicationInfo, self, msg, 'coachteamsay');
+    for(C=Level.ControllerList; C!=None; C=C.NextController)
+    {
+        P=PlayerController(C);
+        if(P!=None && P.PlayerReplicationInfo!=None && P.PlayerReplicationInfo.Team !=None && P.PlayerReplicationInfo.Team.TeamIndex==UTCompPRI.CoachTeam)
+            Level.Game.BroadcastHandler.BroadcastText(PlayerReplicationInfo, P, msg, 'coachteamsay');
+    }
+    Level.Game.BroadCastHandler.BroadCastText(PlayerReplicationInfo, self, msg, 'coachteamsay');
 }
 
 simulated function Message( PlayerReplicationInfo PRI, coerce string Msg, name MsgType )
@@ -2408,13 +2346,13 @@ simulated function Message( PlayerReplicationInfo PRI, coerce string Msg, name M
                 return;
 
             if(class'UTComp_Util'.Static.GetUTCompPRI(PRI)==None || class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName=="")
-               Msg = PRI.PlayerName$": "$Msg;
+                Msg = PRI.PlayerName$": "$Msg;
             else if(pri.team!= none && PRI.Team.TeamIndex == 0)
-               Msg= class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(RedMessageColor)$": "$Msg;
+                Msg= class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(RedMessageColor)$": "$Msg;
             else if(pri.team!= none && PRI.Team.TeamIndex == 1)
-               Msg= class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(blueMessageColor)$": "$Msg;
+                Msg= class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(blueMessageColor)$": "$Msg;
             else
-               MSG= class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(yellowMessageColor)$": "$Msg;
+                MSG= class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(yellowMessageColor)$": "$Msg;
             LocalMessageClass2 = class'SayMessagePlus';
             break;
 
@@ -2422,33 +2360,37 @@ simulated function Message( PlayerReplicationInfo PRI, coerce string Msg, name M
             if ( PRI == None )
                 return;
             if(class'UTComp_Util'.Static.GetUTCompPRI(PRI)==None || class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName=="")
-               Msg = PRI.PlayerName$"("$PRI.GetLocationName()$"): "$Msg;
+                Msg = PRI.PlayerName$"("$PRI.GetLocationName()$"): "$Msg;
             else
-               Msg = class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(GreenMessageColor)$"("$PRI.GetLocationName()$"): "$Msg;
+                Msg = class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(GreenMessageColor)$"("$PRI.GetLocationName()$"): "$Msg;
             LocalMessageClass2 = class'TeamSayMessagePlus';
             break;
+
         case 'CoachTeamSay':
             if ( PRI == None )
                 return;
             if(class'UTComp_Util'.Static.GetUTCompPRI(PRI)==None || class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName=="")
-               Msg = PRI.PlayerName$"("$PRI.GetLocationName()$"): "$Msg;
+                Msg = PRI.PlayerName$"("$PRI.GetLocationName()$"): "$Msg;
             else
-               Msg = class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(GrayMessageColor)$"("$PRI.GetLocationName()$"): "$Msg;
+                Msg = class'UTComp_Util'.Static.GetUTCompPRI(PRI).ColoredName$class'UTComp_Util'.Static.MakeColorCode(GrayMessageColor)$"("$PRI.GetLocationName()$"): "$Msg;
             LocalMessageClass2 = class'CoachTeamSayMessagePlus';
             break;
+
         case 'CriticalEvent':
             LocalMessageClass2 = class'CriticalEventPlus';
             myHud.LocalizedMessage( LocalMessageClass2, 0, None, None, None, Msg );
             return;
+
         case 'DeathMessage':
             LocalMessageClass2 = class'xDeathMessage';
             break;
+
         default:
             LocalMessageClass2 = class'StringMessagePlus';
             break;
     }
     if(myHud!=None)
-    myHud.AddTextMessage(Msg,LocalMessageClass2,PRI);
+        myHud.AddTextMessage(Msg,LocalMessageClass2,PRI);
 }
 
 function GetMapList()
@@ -2458,21 +2400,21 @@ function GetMapList()
 
 function string randomcolor()
 {
-   local color thecolor;
-   theColor.R=Rand(250);
-   theColor.G=Rand(250);
-   theColor.B=Rand(250);
-   return class'UTComp_Util'.Static.MakeColorCode(thecolor);
+    local color thecolor;
+    theColor.R=Rand(250);
+    theColor.G=Rand(250);
+    theColor.B=Rand(250);
+    return class'UTComp_Util'.Static.MakeColorCode(thecolor);
 }
 
 function string ColorReplace(int k)   //makes the 8 primary colors
 {
-   local color theColor;
+    local color theColor;
 
-   theColor.R=GetBit(k,0)*250;
-   theColor.G=GetBit(k,1)*250;
-   theColor.B=GetBit(k,2)*250;  //cant be 255 because of the chat window
-   return class'UTComp_Util'.Static.MakeColorCode(theColor);
+    theColor.R=GetBit(k,0)*250;
+    theColor.G=GetBit(k,1)*250;
+    theColor.B=GetBit(k,2)*250;  //cant be 255 because of the chat window
+    return class'UTComp_Util'.Static.MakeColorCode(theColor);
 }
 
 simulated function int GetBit(int theInt, int bitNum)
@@ -2589,29 +2531,29 @@ function TurnOffNetCode()
 {
     local inventory inv;
     if(Pawn == none)
-       return;
+        return;
     for(inv = Pawn.Inventory; inv!=None; inv=inv.inventory)
     {
         if(Weapon(inv)!=None)
         {
-              if(NewNet_AssaultRifle(Inv)!=None)
-                  NewNet_AssaultRifle(Inv).DisableNet();
-               else if( NewNet_BioRifle(Inv)!=None)
-                  NewNet_BioRifle(Inv).DisableNet();
-               else if(NewNet_ShockRifle(Inv)!=None)
-                  NewNet_ShockRifle(Inv).DisableNet();
-               else if(NewNet_MiniGun(Inv)!=None)
-                  NewNet_MiniGun(Inv).DisableNet();
-               else if(NewNet_LinkGun(Inv)!=None)
-                  NewNet_LinkGun(Inv).DisableNet();
-               else if(NewNet_RocketLauncher(Inv)!=None)
-                  NewNet_RocketLauncher(inv).DisableNet();
-               else if(NewNet_FlakCannon(inv)!=None)
-                  NewNet_FlakCannon(inv).DisableNet();
-               else if(NewNet_SniperRifle(inv)!=None)
-                  NewNet_SniperRifle(inv).DisableNet();
-               else if(NewNet_ClassicSniperRifle(inv)!=None)
-                  NewNet_ClassicSniperRifle(inv).DisableNet();
+            if(NewNet_AssaultRifle(Inv)!=None)
+                NewNet_AssaultRifle(Inv).DisableNet();
+            else if( NewNet_BioRifle(Inv)!=None)
+                NewNet_BioRifle(Inv).DisableNet();
+            else if(NewNet_ShockRifle(Inv)!=None)
+                NewNet_ShockRifle(Inv).DisableNet();
+            else if(NewNet_MiniGun(Inv)!=None)
+                NewNet_MiniGun(Inv).DisableNet();
+            else if(NewNet_LinkGun(Inv)!=None)
+                NewNet_LinkGun(Inv).DisableNet();
+            else if(NewNet_RocketLauncher(Inv)!=None)
+                NewNet_RocketLauncher(inv).DisableNet();
+            else if(NewNet_FlakCannon(inv)!=None)
+                NewNet_FlakCannon(inv).DisableNet();
+            else if(NewNet_SniperRifle(inv)!=None)
+                NewNet_SniperRifle(inv).DisableNet();
+            else if(NewNet_ClassicSniperRifle(inv)!=None)
+                NewNet_ClassicSniperRifle(inv).DisableNet();
         }
     }
 }
@@ -2727,12 +2669,16 @@ function UpdateRotation(float DeltaTime, float maxPitch)
         if(Pawn != None && Pawn.Physics != PHYS_Flying) // mmmmm
         {
             // Ensure we are not setting the pawn to a rotation beyond its desired
-            if( Pawn.DesiredRotation.Roll < 65535 &&
-                (ViewRotation.Roll < Pawn.DesiredRotation.Roll || ViewRotation.Roll > 0))
+            if (Pawn.DesiredRotation.Roll < 65535 &&
+                (ViewRotation.Roll < Pawn.DesiredRotation.Roll || ViewRotation.Roll > 0)
+            ) {
                 ViewRotation.Roll = 0;
-            else if( Pawn.DesiredRotation.Roll > 0 &&
-                (ViewRotation.Roll > Pawn.DesiredRotation.Roll || ViewRotation.Roll < 65535))
+
+            } else if (Pawn.DesiredRotation.Roll > 0 &&
+                (ViewRotation.Roll > Pawn.DesiredRotation.Roll || ViewRotation.Roll < 65535)
+            ) {
                 ViewRotation.Roll = 0;
+            }
         }
 
         DesiredRotation = ViewRotation; //save old rotation

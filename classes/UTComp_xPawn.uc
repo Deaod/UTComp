@@ -501,7 +501,7 @@ simulated function Setup(xUtil.PlayerRecord rec, optional bool bLoadNow)
        ||  (Level.NetMode==NM_DedicatedServer && class'DeathMatch'.default.bForceDefaultCharacter) || (Level.NetMode!= NM_DedicatedServer && ShouldForceModel()))
 		    rec = class'xUtil'.static.FindPlayerRecord(GetDefaultCharacter());
     // check causes CPB skins to fuckup, erm?
-    if(/*Level.NetMode!=NM_DedicatedServer && FindSkinMode()>2 &&*/ !Material(DynamicLoadObject(rec.BodySkinName, class'Material', true)).IsA('Texture') && !Material(DynamicLoadObject(rec.BodySkinName, class'Material', true)).IsA('FinalBlend'))
+    if(!Material(DynamicLoadObject(rec.BodySkinName, class'Material', true)).IsA('Texture') && !Material(DynamicLoadObject(rec.BodySkinName, class'Material', true)).IsA('FinalBlend'))
     {
         rec = class'xUtil'.static.FindPlayerRecord(class'UTComp_Settings'.default.FallbackCharacterName);
     }
