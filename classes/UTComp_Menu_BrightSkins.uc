@@ -924,7 +924,7 @@ defaultproperties
 		WinTop=0.330583
          OnChange=UTComp_Menu_BrightSkins.InternalOnChange
      End Object
-     ch_EnemySkins=moCheckBox'UTCompv18a.UTComp_Menu_BrightSkins.EnemyBasedSkinCheck'
+     ch_EnemySkins=moCheckBox'UTCompv18b.UTComp_Menu_BrightSkins.EnemyBasedSkinCheck'
 
     Begin Object Class=moCheckBox Name=EnemyBasedModelCheck
         Caption="Enemy Based models"
@@ -935,7 +935,7 @@ defaultproperties
 		WinTop=0.330583
          OnChange=UTComp_Menu_BrightSkins.InternalOnChange
      End Object
-     ch_Enemymodels=moCheckBox'UTCompv18a.UTComp_Menu_BrightSkins.EnemyBasedModelCheck'
+     ch_Enemymodels=moCheckBox'UTCompv18b.UTComp_Menu_BrightSkins.EnemyBasedModelCheck'
 
      Begin Object Class=GUIComboBox Name=TeamSelectCombo
 		WinWidth=0.421875
@@ -945,7 +945,7 @@ defaultproperties
          OnChange=UTComp_Menu_BrightSkins.InternalOnChange
          OnKeyEvent=TeamSelectCombo.InternalOnKeyEvent
      End Object
-     co_TeamSelect=GUIComboBox'UTCompv18a.UTComp_Menu_BrightSkins.TeamSelectCombo'
+     co_TeamSelect=GUIComboBox'UTCompv18b.UTComp_Menu_BrightSkins.TeamSelectCombo'
 
      Begin Object Class=GUIComboBox Name=TypeSkinSelectCombo
 		WinWidth=0.423438
@@ -955,7 +955,7 @@ defaultproperties
          OnChange=UTComp_Menu_BrightSkins.InternalOnChange
          OnKeyEvent=TypeSkinSelectCombo.InternalOnKeyEvent
      End Object
-     co_TypeSkinSelect=GUIComboBox'UTCompv18a.UTComp_Menu_BrightSkins.TypeSkinSelectCombo'
+     co_TypeSkinSelect=GUIComboBox'UTCompv18b.UTComp_Menu_BrightSkins.TypeSkinSelectCombo'
 
      Begin Object Class=GUIComboBox Name=ModelSelectCombo
 		 WinWidth=0.417188
@@ -965,7 +965,7 @@ defaultproperties
          OnChange=UTComp_Menu_BrightSkins.InternalOnChange
          OnKeyEvent=UTComp_Menu_BrightSkins.InternalOnKeyEvent
      End Object
-     co_ModelSelect=GUIComboBox'UTCompv18a.UTComp_Menu_BrightSkins.ModelSelectCombo'
+     co_ModelSelect=GUIComboBox'UTCompv18b.UTComp_Menu_BrightSkins.ModelSelectCombo'
 
      Begin Object Class=GUIComboBox Name=EpicSkinSelectCombo
 		WinWidth=0.420313
@@ -975,7 +975,7 @@ defaultproperties
          OnChange=UTComp_Menu_BrightSkins.InternalOnChange
          OnKeyEvent=EpicSkinSelectCombo.InternalOnKeyEvent
      End Object
-     co_EpicSkinSelect=GUIComboBox'UTCompv18a.UTComp_Menu_BrightSkins.EpicSkinSelectCombo'
+     co_EpicSkinSelect=GUIComboBox'UTCompv18b.UTComp_Menu_BrightSkins.EpicSkinSelectCombo'
 
      Begin Object Class=GUIEditBox Name=ClanSkinEditBox
 		WinWidth=0.187500
@@ -987,7 +987,7 @@ defaultproperties
          OnKeyType=ClanSkinEditBox.InternalOnKeyType
          OnKeyEvent=UTComp_Menu_BrightSkins.InternalOnKeyEvent
      End Object
-     eb_ClanSkin=GUIEditBox'UTCompv18a.UTComp_Menu_BrightSkins.ClanSkinEditBox'
+     eb_ClanSkin=GUIEditBox'UTCompv18b.UTComp_Menu_BrightSkins.ClanSkinEditBox'
 
      Begin Object Class=GUISlider Name=RedSkinSlider
          MaxValue=128.000000
@@ -1002,7 +1002,7 @@ defaultproperties
          OnKeyEvent=RedSkinSlider.InternalOnKeyEvent
          OnCapturedMouseMove=RedSkinSlider.InternalCapturedMouseMove
      End Object
-     sl_RedSkin=GUISlider'UTCompv18a.UTComp_Menu_BrightSkins.RedSkinSlider'
+     sl_RedSkin=GUISlider'UTCompv18b.UTComp_Menu_BrightSkins.RedSkinSlider'
 
      Begin Object Class=GUISlider Name=GreenSkinSlider
          MaxValue=128.000000
@@ -1017,7 +1017,7 @@ defaultproperties
          OnKeyEvent=GreenSkinSlider.InternalOnKeyEvent
          OnCapturedMouseMove=GreenSkinSlider.InternalCapturedMouseMove
      End Object
-     sl_GreenSkin=GUISlider'UTCompv18a.UTComp_Menu_BrightSkins.GreenSkinSlider'
+     sl_GreenSkin=GUISlider'UTCompv18b.UTComp_Menu_BrightSkins.GreenSkinSlider'
 
      Begin Object Class=GUISlider Name=BlueSkinSlider
          MaxValue=128.000000
@@ -1032,7 +1032,7 @@ defaultproperties
          OnKeyEvent=BlueSkinSlider.InternalOnKeyEvent
          OnCapturedMouseMove=BlueSkinSlider.InternalCapturedMouseMove
      End Object
-     sl_BlueSkin=GUISlider'UTCompv18a.UTComp_Menu_BrightSkins.BlueSkinSlider'
+     sl_BlueSkin=GUISlider'UTCompv18b.UTComp_Menu_BrightSkins.BlueSkinSlider'
 
      Begin Object Class=moCheckBox Name=ForceThisModelCheck
          Caption="Force This Model"
@@ -1043,7 +1043,7 @@ defaultproperties
 		WinTop=0.702431
          OnChange=UTComp_Menu_BrightSkins.InternalOnChange
      End Object
-     ch_ForceThisModel=moCheckBox'UTCompv18a.UTComp_Menu_BrightSkins.ForceThisModelCheck'
+     ch_ForceThisModel=moCheckBox'UTCompv18b.UTComp_Menu_BrightSkins.ForceThisModelCheck'
 
      Begin Object Class=moCheckBox Name=DarkSkinCheck
          Caption="Darken Dead Bodies"
@@ -1054,7 +1054,7 @@ defaultproperties
 		WinTop=0.330916
          OnChange=UTComp_Menu_BrightSkins.InternalOnChange
      End Object
-     ch_DarkSkins=moCheckBox'UTCompv18a.UTComp_Menu_BrightSkins.DarkSkinCheck'
+     ch_DarkSkins=moCheckBox'UTCompv18b.UTComp_Menu_BrightSkins.DarkSkinCheck'
 
      Begin Object Class=GUIButton Name=DeleteClanSkinButton
          Caption="Delete ClanSkin"
@@ -1065,7 +1065,7 @@ defaultproperties
          OnClick=UTComp_Menu_BrightSkins.InternalOnClick
          OnKeyEvent=DeleteClanSkinButton.InternalOnKeyEvent
      End Object
-     bu_DeleteClanSkin=GUIButton'UTCompv18a.UTComp_Menu_BrightSkins.DeleteClanSkinButton'
+     bu_DeleteClanSkin=GUIButton'UTCompv18b.UTComp_Menu_BrightSkins.DeleteClanSkinButton'
 
      Begin Object Class=GUIButton Name=AddClanSkinButton
          Caption="Add Clanskin"
@@ -1076,7 +1076,7 @@ defaultproperties
          OnClick=UTComp_Menu_BrightSkins.InternalOnClick
          OnKeyEvent=AddClanSkinButton.InternalOnKeyEvent
      End Object
-     bu_AddClanSkin=GUIButton'UTCompv18a.UTComp_Menu_BrightSkins.AddClanSkinButton'
+     bu_AddClanSkin=GUIButton'UTCompv18b.UTComp_Menu_BrightSkins.AddClanSkinButton'
 
      Begin Object Class=GUILabel Name=RedSkinLabel
          Caption="Red"
@@ -1084,7 +1084,7 @@ defaultproperties
          WinTop=0.570000
          WinLeft=0.100000
      End Object
-     l_RedSkin=GUILabel'UTCompv18a.UTComp_Menu_BrightSkins.RedSkinLabel'
+     l_RedSkin=GUILabel'UTCompv18b.UTComp_Menu_BrightSkins.RedSkinLabel'
 
      Begin Object Class=GUILabel Name=BlueSkinLabel
          Caption="Blue"
@@ -1092,7 +1092,7 @@ defaultproperties
          WinTop=0.650000
          WinLeft=0.100000
      End Object
-     l_BlueSkin=GUILabel'UTCompv18a.UTComp_Menu_BrightSkins.BlueSkinLabel'
+     l_BlueSkin=GUILabel'UTCompv18b.UTComp_Menu_BrightSkins.BlueSkinLabel'
 
      Begin Object Class=GUILabel Name=GreenSkinLabel
          Caption="Green"
@@ -1100,7 +1100,7 @@ defaultproperties
          WinTop=0.610000
          WinLeft=0.100000
      End Object
-     l_GreenSkin=GUILabel'UTCompv18a.UTComp_Menu_BrightSkins.GreenSkinLabel'
+     l_GreenSkin=GUILabel'UTCompv18b.UTComp_Menu_BrightSkins.GreenSkinLabel'
 
      	Begin Object class=GUIImage Name=spinnydudeboundsimage
 		bScaleToParent=true

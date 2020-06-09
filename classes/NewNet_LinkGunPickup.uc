@@ -3,5 +3,5 @@ class NewNet_LinkGunPickup extends LinkGunPickup;
 
 defaultproperties
 {
-     InventoryType=Class'UTCompv18a.NewNet_LinkGun'
+     InventoryType=Class'UTCompv18b.NewNet_LinkGun'
 }

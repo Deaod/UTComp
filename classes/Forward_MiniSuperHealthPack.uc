@@ -5,13 +5,13 @@ class Forward_MiniSuperHealthPack extends Forward_HealthPack
 HideDropDown
 CacheExempt;
 
-#exec OBJ LOAD FILE=StaticMeshes/MiniSuperHealth.usx PACKAGE=UTCompv18a
+#exec OBJ LOAD FILE=StaticMeshes/MiniSuperHealth.usx PACKAGE=UTCompv18b
 
 
 static function StaticPrecache(LevelInfo L)
 {
     super.StaticPrecache( L );
-    L.AddPrecacheStaticMesh(  StaticMesh'UTCompv18a.MiniSuperHealth');
+    L.AddPrecacheStaticMesh(  StaticMesh'UTCompv18b.MiniSuperHealth');
 }
 
 auto state Pickup
@@ -39,7 +39,7 @@ auto state Pickup
 defaultproperties
 {
     HealingAmount=65
-    StaticMesh = StaticMesh'UTCompv18a.MiniSuperHealth'
+    StaticMesh = StaticMesh'UTCompv18b.MiniSuperHealth'
     DrawScale=0.45
      bSuperHeal=True
      MaxDesireability=2.000000

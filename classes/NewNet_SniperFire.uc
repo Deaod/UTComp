@@ -225,25 +225,35 @@ function DoTrace(Vector Start, Rotator Dir)
 		EffectOffset = Weapon.EffectOffset;
 
     Weapon.GetViewAxes(X, Y, Z);
-    if ( Weapon.WeaponCentered() || SniperRifle(Weapon).zoomed )
-        arcEnd = (Instigator.Location +
-			EffectOffset.Z * Z);
-	else if ( Weapon.Hand == 0 )
-	{
-		if ( class'PlayerController'.Default.bSmallWeapons )
-			arcEnd = (Instigator.Location +
-				EffectOffset.X * X);
-		else
-			arcEnd = (Instigator.Location +
-				EffectOffset.X * X
-				- 0.5 * EffectOffset.Z * Z);
-	}
-	else
-        arcEnd = (Instigator.Location +
-			Instigator.CalcDrawOffset(Weapon) +
-			EffectOffset.X * X +
-			Weapon.Hand * EffectOffset.Y * Y +
-			EffectOffset.Z * Z);
+    if (Level.NetMode == NM_DedicatedServer) {
+        arcEnd = (
+            Instigator.Location +
+            Instigator.BaseEyeHeight * vect(0,0,1) +
+            EffectOffset.Z * Z +
+            EffectOffset.Y * Y +
+            EffectOffset.X * X
+        );
+    } else {
+        if ( Weapon.WeaponCentered() || SniperRifle(Weapon).zoomed )
+            arcEnd = (Instigator.Location +
+                EffectOffset.Z * Z);
+        else if ( Weapon.Hand == 0 )
+        {
+            if ( class'PlayerController'.Default.bSmallWeapons )
+                arcEnd = (Instigator.Location +
+                    EffectOffset.X * X);
+            else
+                arcEnd = (Instigator.Location +
+                    EffectOffset.X * X
+                    - 0.5 * EffectOffset.Z * Z);
+        }
+        else
+            arcEnd = (Instigator.Location +
+                Instigator.CalcDrawOffset(Weapon) +
+                EffectOffset.X * X +
+                Weapon.Hand * EffectOffset.Y * Y +
+                EffectOffset.Z * Z);
+    }
 
     arcsRemaining = NumArcs;
 

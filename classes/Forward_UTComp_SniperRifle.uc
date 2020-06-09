@@ -7,5 +7,5 @@ CacheExempt;
 
 DefaultProperties
 {
-    FireModeClass[0]= Class'UTCompv18a.Forward_UTComp_SniperFire'
+    FireModeClass[0]= Class'UTCompv18b.Forward_UTComp_SniperFire'
 }
