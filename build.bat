@@ -29,7 +29,7 @@ ucc compress %PACKAGE_NAME%.u
 
 :: Dump i18n strings
 del %PACKAGE_NAME%.int
-ucc dumpint %BUILD_DIR%System\%PACKAGE_NAME%.u
+ucc dumpint %PACKAGE_NAME%.u
 
 :: copy to release location
 copy %PACKAGE_NAME%.u     %BUILD_DIR%System >NUL
