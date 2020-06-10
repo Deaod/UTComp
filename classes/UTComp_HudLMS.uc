@@ -13,9 +13,10 @@ simulated function UpdatePrecacheMaterials()
 
 exec function NextStats()
 {
-   Super.NextStats();
-   if(ScoreBoard!=None)
-       ScoreBoard.NextStats();
+    if (ScoreBoard == none || bShowScoreBoard == false)
+        Super.NextStats();
+    else
+        ScoreBoard.NextStats();
 }
 
 function DisplayEnemyName(Canvas C, PlayerReplicationInfo PRI)
