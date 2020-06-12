@@ -169,8 +169,6 @@ function PreBeginPlay()
 
 function SetupDD()
 {
-   //if(Level.Game.IsA('UTComp_Duel'))
-   //   bEnableDoubleDamage=UTComp_Duel(Level.Game).bEnableDoubleDamage;
 }
 
 function SetupColoredDeathMessages()
@@ -404,7 +402,6 @@ simulated function Tick(float DeltaTime)
             counter+=1;
             StampArray[counter%256] = ClientTimeStamp;
             AverDT = (9.0*AverDT + DeltaTime) * 0.1;
-          //  StampInfo.ReplicatetimeStamp(ClientTimeStamp);
             SetPawnStamp();
             if(ClientTimeStamp > LastReplicatedAverDT + AVERDT_SEND_PERIOD)
             {
@@ -588,12 +585,6 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	    	         	return true;
 
         }
-   /* 	else if (Weapon(Other) != None)
-    	{
-    		for (x = 0; x < ArrayCount(ReplacedWeaponClasses); x++)
-	    		if (Other.Class == ReplacedWeaponClasses[x])
-	    	 		return false;
-     	}   */
 	    else if (WeaponPickup(Other) != None)
     	{
              for (x = 0; x < ArrayCount(ReplacedWeaponPickupClasses); x++)
@@ -740,10 +731,6 @@ function ModifyLogin(out string Portal, out string Options)
     {
         Level.Game.ScoreBoardType="UTCompv18b.UTComp_ScoreBoard_Mutant";
     }
-/*   else if(Level.Game.ScoreBoardType~="BonusPack.ScoreBoardLMS")
-    {
-         Level.Game.ScoreBoardType="UTCompv18b.UTComp_ScoreBoard_LMS";
-    }  */
 
     Super.ModifyLogin(Portal, Options);
 
@@ -782,7 +769,6 @@ function GetServerPlayers( out GameInfo.ServerResponseLine ServerState )
         ServerState.PlayerInfo.Length = i+1;
         ServerState.PlayerInfo[i].PlayerName = Chr(0x1B)$chr(10)$chr(245)$chr(10)$"Red Team Score";
         ServerState.PlayerInfo[i].Score = TeamGame(Level.Game).Teams[0].Score;
-     //   ServerState.PlayerInfo[i].Ping = 1337;
     }
 
     if(bShowTeamScoresInServerBrowser && TeamGame(Level.Game).Teams[1]!=None)
@@ -791,7 +777,6 @@ function GetServerPlayers( out GameInfo.ServerResponseLine ServerState )
         ServerState.PlayerInfo.Length = i+1;
         ServerState.PlayerInfo[i].PlayerName =  Chr(0x1B)$chr(10)$chr(245)$chr(10)$"Blue Team Score";
         ServerState.PlayerInfo[i].Score = TeamGame(Level.Game).Teams[1].Score;
-     //   ServerState.PlayerInfo[i].Ping = 1337;
     }
 }
 
@@ -876,7 +861,6 @@ function ParseURL(string Url)
                Forward=Right(Parts[i], Len(Parts[i])-Len("Forward")-1);
        }
    }
- //  Log("DD Value"$DD);
    if(Skinz0r !="" && int(Skinz0r)<4 && int(Skinz0r)>0)
    {
        default.EnableBrightskinsMode=Int(Skinz0r);
@@ -1149,40 +1133,18 @@ function bool ReplaceWith(actor Other, string aClassName)
 
 function string GetInventoryClassOverride(string InventoryClassName)
 {
-	// here, in mutator subclass, change InventoryClassName if desired.  For example:
-	// if ( InventoryClassName == "Weapons.DorkyDefaultWeapon"
-	//		InventoryClassName = "ModWeapons.SuperDisintegrator"
-
     local int x;
+
     if(bEnhancedNetCodeEnabledAtStartOfMap && !GetForward())
-    {
         for(x=0; x<ArrayCount(WeaponClassNames); x++)
-        {
            if(InventoryClassName ~= WeaponClassNames[x])
-           {
                return string(WeaponClasses[x]);
-           }
-        }
-    }
+
     if ( NextMutator != None )
 		return NextMutator.GetInventoryClassOverride(InventoryClassName);
+
 	return InventoryClassName;
 }
-
-// function bool AlwaysKeep (Actor Other)
-// {
-// 	local int i;
-
-// 	for(i = 0; i < ArrayCount(WeaponPickupClasses); i++)
-// 	{
-// 		if ( Other.class == WeaponPickupClasses[i]  && Level.Game!=None && !Level.Game.IsA('UTComp_ClanArena') && !Level.Game.IsA('XGame.InstagibCTF') )
-// 		{
-// 			return True;
-// 		}
-// 	}
-// 	return Super.AlwaysKeep(Other);
-// }
-
 
 defaultproperties
 {
