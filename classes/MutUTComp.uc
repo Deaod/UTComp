@@ -530,7 +530,7 @@ function PostBeginPlay()
     SetupTeamOverlay();
     SetupWarmup();
     if(bForward)
-        Level.Game.AddMutator("utcompv17asrc.Forward_Mutator", true);
+        Level.Game.AddMutator("UTCompv18b.Forward_Mutator", true);
     SpawnReplicationClass();
 
     G = spawn(class'UTComp_GameRules');
