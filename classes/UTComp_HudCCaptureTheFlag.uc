@@ -91,7 +91,7 @@ simulated function OldDrawCrosshair(Canvas C)
     local int i, CurrentCrosshair;
     local float OldScale,OldW, CurrentCrosshairScale;
     local color CurrentCrosshairColor;
-	local SpriteWidget CHtexture;
+	local SpriteWidget CHTexture;
 
 	if ( PawnOwner.bSpecialCrosshair )
 	{
