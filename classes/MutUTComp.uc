@@ -184,31 +184,34 @@ function ModifyPlayer(Pawn Other)
     local inventory inv;
     local int i;
 
-    if(WarmupClass!=None && !Level.Game.IsA('UTComp_ClanArena')&& (WarmupClass.bInWarmup==True || WarmupClass.bGivePlayerWeaponHack ))                       //Give all weps if its warmup
+    //Give all weps if its warmup
+    if(WarmupClass!=None && !Level.Game.IsA('UTComp_ClanArena')&& (WarmupClass.bInWarmup==True || WarmupClass.bGivePlayerWeaponHack ))
     {
-         switch(EnableWarmupWeaponsMode)
-         {
-         case 0: break;
+        switch(EnableWarmupWeaponsMode)
+        {
+        case 0: break;
 
-         case 3:
-                 Other.CreateInventory("Onslaught.ONSGrenadeLauncher");
-                 Other.CreateInventory("Onslaught.ONSAVRiL");
-                 Other.CreateInventory("Onslaught.ONSMineLayer");
-         case 2:
-                 Other.CreateInventory("XWeapons.SniperRifle");
-                 Other.CreateInventory("XWeapons.RocketLauncher");
-                 Other.CreateInventory("XWeapons.FlakCannon");
-                 Other.CreateInventory("XWeapons.MiniGun");
-                 Other.CreateInventory("XWeapons.LinkGun");
-                 Other.CreateInventory("XWeapons.ShockRifle");
-                 Other.CreateInventory("XWeapons.BioRifle");
-                 Other.CreateInventory("XWeapons.AssaultRifle");
-                 Other.CreateInventory("XWeapons.ShieldGun"); break;
+        case 3:
+            Other.CreateInventory("Onslaught.ONSGrenadeLauncher");
+            Other.CreateInventory("Onslaught.ONSAVRiL");
+            Other.CreateInventory("Onslaught.ONSMineLayer");
+        case 2:
+            Other.CreateInventory("XWeapons.SniperRifle");
+            Other.CreateInventory("XWeapons.RocketLauncher");
+            Other.CreateInventory("XWeapons.FlakCannon");
+            Other.CreateInventory("XWeapons.MiniGun");
+            Other.CreateInventory("XWeapons.LinkGun");
+            Other.CreateInventory("XWeapons.ShockRifle");
+            Other.CreateInventory("XWeapons.BioRifle");
+            Other.CreateInventory("XWeapons.AssaultRifle");
+            Other.CreateInventory("XWeapons.ShieldGun");
+            break;
 
-        case 1: if(!WarmupClass.bWeaponsChecked)
-                    WarmupClass.FindWhatWeaponsToGive();
-                for(i=0; i<WarmupClass.sWeaponsToGive.Length; i++)
-                    Other.CreateInventory(WarmupClass.sWeaponsToGive[i]);
+        case 1:
+            if(!WarmupClass.bWeaponsChecked)
+                WarmupClass.FindWhatWeaponsToGive();
+            for(i=0; i<WarmupClass.sWeaponsToGive.Length; i++)
+                Other.CreateInventory(WarmupClass.sWeaponsToGive[i]);
         }
 
         for(Inv=Other.Inventory; Inv!=None; Inv=Inv.Inventory)
