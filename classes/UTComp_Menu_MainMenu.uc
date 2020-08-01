@@ -13,28 +13,28 @@ function InitComponent(GUIController MyController, GUIComponent MyComponent)
 function bool InternalOnClick(GUIComponent C)
 {
     if(C==UTCompMenuButtons[0])
-        PlayerOwner().ClientReplaceMenu("UTCompv18b.UTComp_Menu_BrightSkins");
+        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_BrightSkins");
 
     else if(C==UTCompMenuButtons[1])
-        PlayerOwner().ClientReplaceMenu("UTCompv18b.UTComp_Menu_ColorNames");
+        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_ColorNames");
 
     else if(C==UTCompMenuButtons[2])
-        PlayerOwner().ClientReplaceMenu("UTCompv18b.UTComp_Menu_TeamOverlay");
+        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_TeamOverlay");
 
     else if(C==UTCompMenuButtons[3])
-        PlayerOwner().ClientReplaceMenu("UTCompv18b.UTComp_Menu_Crosshairs");
+        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Crosshairs");
 
     else if(C==UTCompMenuButtons[4])
-        PlayerOwner().ClientReplaceMenu("UTCompv18b.UTComp_Menu_Hitsounds");
+        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Hitsounds");
 
     else if(C==UTCompMenuButtons[5])
-        PlayerOwner().ClientReplaceMenu("UTCompv18b.UTComp_Menu_Voting");
+        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Voting");
 
     else if(C==UTCompMenuButtons[6])
-        PlayerOwner().ClientReplaceMenu("UTCompv18b.UTComp_Menu_AutoDemoSS");
+        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_AutoDemoSS");
 
     else if(C==UTCompMenuButtons[7])
-        PlayerOwner().ClientReplaceMenu("UTCompv18b.UTComp_Menu_Miscellaneous");
+        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Miscellaneous");
 
     return false;
 }
@@ -146,7 +146,7 @@ defaultproperties
          bAcceptsInput=True
          OnActivate=LoginMenuTC.InternalOnActivate
      End Object
-     c_Main=GUITabControl'UTCompv18b.UTComp_Menu_MainMenu.LoginMenuTC'
+     c_Main=GUITabControl'UTCompv18c.UTComp_Menu_MainMenu.LoginMenuTC'
 
 
      Begin Object Class=FloatingImage Name=FloatingFrameBackground
@@ -163,7 +163,7 @@ defaultproperties
          DropShadowX=0
          DropShadowY=0
      End Object
-     i_FrameBG=FloatingImage'UTCompv18b.UTComp_Menu_MainMenu.FloatingFrameBackground'
+     i_FrameBG=FloatingImage'UTCompv18c.UTComp_Menu_MainMenu.FloatingFrameBackground'
 
      Begin Object Class=FloatingImage Name=FloatingFrameBackground2
          Image=Texture'2K4Menus.NewControls.Display95'
@@ -179,7 +179,7 @@ defaultproperties
          DropShadowX=0
          DropShadowY=0
      End Object
-     i_FrameBG2=FloatingImage'UTCompv18b.UTComp_Menu_MainMenu.FloatingFrameBackground2'
+     i_FrameBG2=FloatingImage'UTCompv18c.UTComp_Menu_MainMenu.FloatingFrameBackground2'
 
 
   /*   bResizeWidthAllowed=False

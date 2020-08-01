@@ -7,6 +7,6 @@ CacheExempt;
 
 DefaultProperties
 {
-   FireModeClass[0] = Class'UTCompv18b.Forward_NewNet_MinigunFire';
-   FireModeClass[1] = Class'UTCompv18b.Forward_NewNet_MinigunAltFire';
+   FireModeClass[0] = Class'UTCompv18c.Forward_NewNet_MinigunFire';
+   FireModeClass[1] = Class'UTCompv18c.Forward_NewNet_MinigunAltFire';
 }
