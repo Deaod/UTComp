@@ -99,6 +99,8 @@ var bool bUseNewEyeHeightAlgorithm;
 // Fractional Parts of Pitch/Yaw Input
 var transient float PitchFraction, YawFraction;
 
+var PlayerInput PlayerInput2;
+
 replication
 {
     unreliable if(Role==Role_Authority)
@@ -186,6 +188,19 @@ simulated function PostBeginPlay()
     Super.PostBeginPlay();
     AssignStatNames();
     ChangeDeathMessageOrder();
+}
+
+// Variable PlayerInput of Engine.PlayerController is private.
+// This gets our own reference to it.
+event InitInputSystem()
+{
+    // this actually creates the PlayerInput object
+    super.InitInputSystem();
+
+    // so that we can now capture it
+    foreach AllObjects(class'Engine.PlayerInput', PlayerInput2)
+        if (PlayerInput2.Outer == self)
+            break;
 }
 
 simulated function ChangeDeathMessageOrder()
