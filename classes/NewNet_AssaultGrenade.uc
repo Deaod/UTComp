@@ -72,12 +72,12 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir)
 
            Velocity = Speed * Vector(OutDir);
            if(Other == none)
-               g = Weapon.Spawn(ProjectileClass,,, End, NewDir);
+               g = Grenade(Weapon.Spawn(ProjectileClass,,, End, NewDir));
            else
-               g = Weapon.Spawn(ProjectileClass,,, HitLocation - Vector(Newdir)*16.0, NewDir);
+               g = Grenade(Weapon.Spawn(ProjectileClass,,, HitLocation - Vector(Newdir)*16.0, NewDir));
     }
     else
-        g = Weapon.Spawn(ProjectileClass, instigator,, Start, Dir);
+        g = Grenade(Weapon.Spawn(ProjectileClass, instigator,, Start, Dir));
 
 
     if(g==None)
