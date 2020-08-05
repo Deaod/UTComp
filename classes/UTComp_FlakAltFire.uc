@@ -15,4 +15,5 @@ event ModeDoFire()
 
 defaultproperties
 {
+    ProjectileClass=class'UTComp_FlakShell'
 }
