@@ -6,6 +6,7 @@ var bool bEnableVoting;
 var byte EnableBrightSkinsMode;
 var bool bEnableClanSkins;
 var bool bEnableTeamOverlay;
+var bool bEnablePowerupsOverlay;
 var bool bEnableExtraHudClock;
 var byte EnableHitSoundsMode;
 var bool bEnableScoreboard;
@@ -20,6 +21,7 @@ var bool bEnableBrightskinsVoting;
 var bool bEnableHitsoundsVoting;
 var bool bEnableWarmupVoting;
 var bool bEnableTeamOverlayVoting;
+var bool bEnablePowerupsOverlayVoting;
 var bool bEnableMapVoting;
 var bool bEnableGametypeVoting;
 var bool bEnableDoubleDamageVoting;
@@ -49,9 +51,9 @@ replication
 {
     reliable if(Role==Role_Authority)
         bEnableVoting, EnableBrightSkinsMode, EnableHitSoundsMode,
-        bEnableClanSkins, bEnableTeamOverlay,
+        bEnableClanSkins, bEnableTeamOverlay, bEnablePowerupsOverlay,
         bEnableWarmup, bEnableBrightskinsVoting,
-        bEnableHitsoundsVoting, bEnableTeamOverlayVoting,
+        bEnableHitsoundsVoting, bEnableTeamOverlayVoting, bEnablePowerupsOverlayVoting,
         bEnableMapVoting, bEnableGametypeVoting, VotingNames,
         benableDoubleDamage, ServerMaxPlayers, bEnableTimedOvertime,
         MaxPlayersClone, bEnableAdvancedVotingOptions, VotingOptions, LinePRI, bEnableTimedOvertimeVoting,
@@ -65,6 +67,7 @@ defaultproperties
      EnableBrightSkinsMode=3
      bEnableClanSkins=True
      bEnableTeamOverlay=True
+     bEnablePowerupsOverlay=True;
      EnableHitSoundsMode=1
      bEnableScoreboard=True
      bEnableWarmup=True
@@ -74,6 +77,7 @@ defaultproperties
      bEnableHitsoundsVoting=True
      bEnableWarmupVoting=True
      bEnableTeamOverlayVoting=True
+     bEnablePowerupsOverlayVoting=True;
      bEnableMapVoting=True
      bEnableGametypeVoting=True
      bEnableDoubleDamageVoting=True

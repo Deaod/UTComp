@@ -1,9 +1,9 @@
 //-----------------------------------------------------------
 //
 //-----------------------------------------------------------
-class UTComp_Settings extends Info
-HideDropDown
-CacheExempt;
+class UTComp_Settings extends Object
+    Config(UTComp)
+    PerObjectConfig;
 
 #exec AUDIO IMPORT FILE=Sounds\HitSound.wav     GROUP=Sounds
 #exec AUDIO IMPORT FILE=Sounds\HitSoundFriendly.wav    GROUP=Sounds
@@ -33,7 +33,10 @@ var config array<byte> DontDrawInStats;
 var config int CurrentSelectedColoredName;
 var config color ColorName[20];
 
-var config bool bDisableSpeed, bDisableBooster, bDisableInvis, bDisableberserk;
+var config bool bDisableSpeed;
+var config bool bDisableBooster;
+var config bool bDisableInvis;
+var config bool bDisableberserk;
 
 struct ColoredNamePair
 {
@@ -90,26 +93,26 @@ defaultproperties
     ballowcoloredmessages=True
     bEnableColoredNamesInTalk=True
     CurrentSelectedColoredName=255
-    colorname(0)=(R=255,G=255,B=255,A=255)
-    colorname(1)=(R=255,G=255,B=255,A=255)
-    colorname(2)=(R=255,G=255,B=255,A=255)
-    colorname(3)=(R=255,G=255,B=255,A=255)
-    colorname(4)=(R=255,G=255,B=255,A=255)
-    colorname(5)=(R=255,G=255,B=255,A=255)
-    colorname(6)=(R=255,G=255,B=255,A=255)
-    colorname(7)=(R=255,G=255,B=255,A=255)
-    colorname(8)=(R=255,G=255,B=255,A=255)
-    colorname(9)=(R=255,G=255,B=255,A=255)
-    colorname(10)=(R=255,G=255,B=255,A=255)
-    colorname(11)=(R=255,G=255,B=255,A=255)
-    colorname(12)=(R=255,G=255,B=255,A=255)
-    colorname(13)=(R=255,G=255,B=255,A=255)
-    colorname(14)=(R=255,G=255,B=255,A=255)
-    colorname(15)=(R=255,G=255,B=255,A=255)
-    colorname(16)=(R=255,G=255,B=255,A=255)
-    colorname(17)=(R=255,G=255,B=255,A=255)
-    colorname(18)=(R=255,G=255,B=255,A=255)
-    colorname(19)=(R=255,G=255,B=255,A=255)
+    ColorName(0)=(R=255,G=255,B=255,A=255)
+    ColorName(1)=(R=255,G=255,B=255,A=255)
+    ColorName(2)=(R=255,G=255,B=255,A=255)
+    ColorName(3)=(R=255,G=255,B=255,A=255)
+    ColorName(4)=(R=255,G=255,B=255,A=255)
+    ColorName(5)=(R=255,G=255,B=255,A=255)
+    ColorName(6)=(R=255,G=255,B=255,A=255)
+    ColorName(7)=(R=255,G=255,B=255,A=255)
+    ColorName(8)=(R=255,G=255,B=255,A=255)
+    ColorName(9)=(R=255,G=255,B=255,A=255)
+    ColorName(10)=(R=255,G=255,B=255,A=255)
+    ColorName(11)=(R=255,G=255,B=255,A=255)
+    ColorName(12)=(R=255,G=255,B=255,A=255)
+    ColorName(13)=(R=255,G=255,B=255,A=255)
+    ColorName(14)=(R=255,G=255,B=255,A=255)
+    ColorName(15)=(R=255,G=255,B=255,A=255)
+    ColorName(16)=(R=255,G=255,B=255,A=255)
+    ColorName(17)=(R=255,G=255,B=255,A=255)
+    ColorName(18)=(R=255,G=255,B=255,A=255)
+    ColorName(19)=(R=255,G=255,B=255,A=255)
     FallbackCharacterName="Arclite"
     ClientSkinModeRedTeammate=3
     ClientSkinModeBlueEnemy=3

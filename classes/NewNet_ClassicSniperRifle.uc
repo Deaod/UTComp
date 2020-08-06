@@ -34,7 +34,7 @@ simulated function ClientStartFire(int mode)
 
 simulated event SuperClientStartFire(int Mode)
 {
-    if(Level.NetMode!=NM_Client || !class'BS_xPlayer'.static.UseNewNet())
+    if(Level.NetMode!=NM_Client || !BS_xPlayer(Level.GetLocalPlayerController()).UseNewNet())
         super(Weapon).ClientStartFire(mode);
     else
         NewNet_ClientStartFire(mode);

@@ -60,7 +60,7 @@ simulated function ClientStartFire(int mode)
     }
     else
     {
-        if(class'BS_xPlayer'.static.UseNewNet())
+        if(BS_xPlayer(Level.GetLocalPlayerController()).UseNewNet())
             NewNet_ClientStartFire(mode);
         else
             super(Weapon).ClientStartFire(mode);

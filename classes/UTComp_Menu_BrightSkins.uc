@@ -33,8 +33,8 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 
     Super.InitComponent(myController,MyOwner);
 
-    ch_EnemySkins.Checked(class'UTComp_Settings'.default.bEnemyBasedSkins);
-    ch_EnemyModels.Checked(class'UTComp_Settings'.default.bEnemyBasedModels);
+    ch_EnemySkins.Checked(Settings.bEnemyBasedSkins);
+    ch_EnemyModels.Checked(Settings.bEnemyBasedModels);
 
     //Team Select Combobox
     if(ch_EnemySkins.IsChecked())
@@ -63,8 +63,8 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
             co_TeamSelect.AddItem("Blue Team");
         }
     }
-    for(i=0; i<class'UTComp_Settings'.default.ClanSkins.Length; i++)
-        co_TeamSelect.AddItem(class'UTComp_Settings'.default.ClanSkins[i].PlayerName);
+    for(i=0; i<Settings.ClanSkins.Length; i++)
+        co_TeamSelect.AddItem(Settings.ClanSkins[i].PlayerName);
 
     //Type Skin Select Combobox
     foreach PlayerOwner().DynamicActors(class'UTComp_ServerReplicationInfo', RepInfo)
@@ -89,7 +89,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     else
         co_EpicSkinSelect.AddItem("Brighter Purple Skin (Server Disabled)");
 
-    ch_DarkSkins.Checked(class'UTComp_Settings'.default.bEnableDarkSkinning);
+    ch_DarkSkins.Checked(Settings.bEnableDarkSkinning);
 
     UpdateAllComponents();
 
@@ -112,7 +112,7 @@ event Opened(guicomponent sender)
 
     InitializationComplete=False;
     co_TeamSelect.SetIndex(0);
-    Temp=class'UTComp_Settings'.default.ClientSkinModeRedTeammate;
+    Temp=Settings.ClientSkinModeRedTeammate;
 
     co_TypeSkinSelect.Clear();
     co_TypeSkinSelect.AddItem("Epic Style");
@@ -174,12 +174,12 @@ function InternalOnChange( GUIComponent C )
         return;
     Switch(C)
     {
-        case ch_EnemySkins:  class'UTComp_Settings'.default.bEnemyBasedSkins=ch_EnemySkins.IsChecked();
+        case ch_EnemySkins:  Settings.bEnemyBasedSkins=ch_EnemySkins.IsChecked();
                              ChangeComboBoxCaption();
                              if(!bUpdatingCrap)
                                  UpdateAllComponents(); break;
 
-        case ch_EnemyModels: class'UTComp_Settings'.default.bEnemyBasedModels=ch_EnemyModels.IsChecked();
+        case ch_EnemyModels: Settings.bEnemyBasedModels=ch_EnemyModels.IsChecked();
                              ChangeComboBoxCaption();
                              if(!bUpdatingCrap)
                                  UpdateAllComponents(); break;
@@ -187,80 +187,79 @@ function InternalOnChange( GUIComponent C )
                                   UpdateAllComponents();
                              break;
         case sl_RedSkin:  if(Team==0)
-                              class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.R=sl_RedSkin.Value;
+                              Settings.RedTeammateUTCompSkinColor.R=sl_RedSkin.Value;
                           else if(Team==1)
-                              class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.R=sl_RedSkin.Value;
-                          else if(Team>=2 && class'UTComp_Settings'.default.ClanSkins.Length>Team-2)
-                              class'UTComp_Settings'.default.ClanSkins[Team-2].PlayerColor.R=sl_RedSkin.Value;
+                              Settings.BlueEnemyUTCompSkinColor.R=sl_RedSkin.Value;
+                          else if(Team>=2 && Settings.ClanSkins.Length>Team-2)
+                              Settings.ClanSkins[Team-2].PlayerColor.R=sl_RedSkin.Value;
                               if(!bUpdatingCrap)
                                   UpdateSpinnyDude(); break;
 
         case sl_GreenSkin:  if(Team==0)
-                              class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.G=sl_GreenSkin.Value;
+                              Settings.RedTeammateUTCompSkinColor.G=sl_GreenSkin.Value;
                           else if(Team==1)
-                              class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.G=sl_GreenSkin.Value;
-                          else if(Team>=2 && class'UTComp_Settings'.default.ClanSkins.Length>Team-2)
-                              class'UTComp_Settings'.default.ClanSkins[Team-2].PlayerColor.G=sl_GreenSkin.Value;
+                              Settings.BlueEnemyUTCompSkinColor.G=sl_GreenSkin.Value;
+                          else if(Team>=2 && Settings.ClanSkins.Length>Team-2)
+                              Settings.ClanSkins[Team-2].PlayerColor.G=sl_GreenSkin.Value;
                               if(!bUpdatingCrap)
                                   UpdateSpinnyDude(); break;
 
         case sl_BlueSkin: if(Team==0)
-                              class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.B=sl_BlueSkin.Value;
+                              Settings.RedTeammateUTCompSkinColor.B=sl_BlueSkin.Value;
                           else if(Team==1)
-                              class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.B=sl_BlueSkin.Value;
-                          else if(Team>=2 && class'UTComp_Settings'.default.ClanSkins.Length>Team-2)
-                              class'UTComp_Settings'.default.ClanSkins[Team-2].PlayerColor.B=sl_BlueSkin.Value;
+                              Settings.BlueEnemyUTCompSkinColor.B=sl_BlueSkin.Value;
+                          else if(Team>=2 && Settings.ClanSkins.Length>Team-2)
+                              Settings.ClanSkins[Team-2].PlayerColor.B=sl_BlueSkin.Value;
                               if(!bUpdatingCrap)
                                   UpdateSpinnyDude(); break;
 
        case co_EpicSkinSelect:  if(Team==0 && co_EpicSkinSelect.GetIndex()>=0)
-                                    class'UTComp_Settings'.default.PreferredSkinColorRedTeammate=co_EpicSkinSelect.GetIndex();
+                                    Settings.PreferredSkinColorRedTeammate=co_EpicSkinSelect.GetIndex();
                                 else if(Team==1 && co_EpicSkinSelect.GetIndex()>=0)
-                                    class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy=co_EpicSkinSelect.GetIndex();
+                                    Settings.PreferredSkinColorBlueEnemy=co_EpicSkinSelect.GetIndex();
                                 if(!bUpdatingCrap)
                                     UpdateAllComponents();
                                 if(!bUpdatingCrap)
                                     UpdateSpinnyDude(); break;
        case co_TypeSkinSelect:  if(Team==0)
-                                    class'UTComp_Settings'.default.ClientSkinModeRedTeammate=co_TypeSkinSelect.GetIndex()+1;
+                                    Settings.ClientSkinModeRedTeammate=co_TypeSkinSelect.GetIndex()+1;
                                 else if(Team==1)
-                                    class'UTComp_Settings'.default.ClientSkinModeBlueEnemy=co_TypeSkinSelect.GetIndex()+1;
+                                    Settings.ClientSkinModeBlueEnemy=co_TypeSkinSelect.GetIndex()+1;
                                 if(!bUpdatingCrap)
                                     UpdateAllComponents();
                                 break;
        case ch_ForceThisModel:
                                 if(Team==0)
-                                    class'UTComp_Settings'.default.bRedTeammateModelsForced=ch_ForceThisModel.IsChecked();
+                                    Settings.bRedTeammateModelsForced=ch_ForceThisModel.IsChecked();
                                 else if(Team==1)
-                                    class'UTComp_Settings'.default.bBlueEnemyModelsForced=ch_ForceThisModel.IsChecked();
+                                    Settings.bBlueEnemyModelsForced=ch_ForceThisModel.IsChecked();
                                 if(Ch_ForceThisModel.IsChecked())
                                     co_ModelSelect.EnableMe();
                                 else
                                     co_ModelSelect.DisableMe();
                                 break;
-       case ch_DarkSkins:  class'UTComp_Settings'.default.bEnableDarkSkinning=ch_DarkSkins.IsChecked(); break;
+       case ch_DarkSkins:  Settings.bEnableDarkSkinning=ch_DarkSkins.IsChecked(); break;
 
        case co_ModelSelect:
        if(bUpdatingCrap)
             break;
-        if(co_TeamSelect.GetIndex()>=2 && class'UTComp_Settings'.default.ClanSkins.Length>co_TeamSelect.GetIndex()-2)
+        if(co_TeamSelect.GetIndex()>=2 && Settings.ClanSkins.Length>co_TeamSelect.GetIndex()-2)
         {
-            class'UTComp_Settings'.default.ClanSkins[co_TeamSelect.GetIndex()-2].PlayerName=eb_ClanSkin.GetText();
-            class'UTComp_Settings'.default.ClanSkins[co_TeamSelect.GetIndex()-2].ModelName = co_ModelSelect.GetText();
+            Settings.ClanSkins[co_TeamSelect.GetIndex()-2].PlayerName=eb_ClanSkin.GetText();
+            Settings.ClanSkins[co_TeamSelect.GetIndex()-2].ModelName = co_ModelSelect.GetText();
         }
     else if(co_TeamSelect.GetIndex()==0)
-        class'UTComp_Settings'.default.RedTeammateModelName=co_ModelSelect.GetText();
+        Settings.RedTeammateModelName=co_ModelSelect.GetText();
     else if(co_TeamSelect.GetIndex()==1)
-        class'UTComp_Settings'.default.BlueEnemyModelName=co_ModelSelect.GetText();
+        Settings.BlueEnemyModelName=co_ModelSelect.GetText();
         if(!bUpdatingCrap)
            UpdateSpinnyDude(); break;
     }
 
     BS_xPlayer(PlayerOwner()).ReSkinAll();
     BS_xPlayer(PlayerOwner()).MatchHudColor();
-    BS_xPlayer(PlayerOwner()).MakeSureSaveConfig();
     class'UTComp_xPawn'.static.StaticSaveConfig();
-    class'UTComp_Settings'.static.staticSaveConfig();
+    SaveSettings();
 }
 
 function bool InternalOnKeyEvent(out byte Key, out byte State, float delta)
@@ -287,18 +286,18 @@ function bool InternalOnKeyEvent(out byte Key, out byte State, float delta)
 		}
 	}
 
-    if(co_TeamSelect.GetIndex()>=2 && class'UTComp_Settings'.default.ClanSkins.Length>co_TeamSelect.GetIndex()-2)
+    if(co_TeamSelect.GetIndex()>=2 && Settings.ClanSkins.Length>co_TeamSelect.GetIndex()-2)
     {
-        class'UTComp_Settings'.default.ClanSkins[co_TeamSelect.GetIndex()-2].PlayerName = eb_ClanSkin.GetText();
-        class'UTComp_Settings'.default.ClanSkins[co_TeamSelect.GetIndex()-2].ModelName = co_ModelSelect.GetText();
+        Settings.ClanSkins[co_TeamSelect.GetIndex()-2].PlayerName = eb_ClanSkin.GetText();
+        Settings.ClanSkins[co_TeamSelect.GetIndex()-2].ModelName = co_ModelSelect.GetText();
     }
     else if(co_TeamSelect.GetIndex()==0)
-        class'UTComp_Settings'.default.RedTeammateModelName=co_ModelSelect.GetText();
+        Settings.RedTeammateModelName=co_ModelSelect.GetText();
     else if(co_TeamSelect.GetIndex()==1)
-        class'UTComp_Settings'.default.BlueEnemyModelName=co_ModelSelect.GetText();
+        Settings.BlueEnemyModelName=co_ModelSelect.GetText();
     ChangeComboBoxCaption();
     class'UTComp_xPawn'.static.StaticSaveConfig();
-    class'UTComp_Settings'.static.staticSaveConfig();
+    SaveSettings();
     UpdateSpinnyDude();
 
     return true;
@@ -312,11 +311,11 @@ function bool InternalOnClick( GUIComponent Sender )
     switch (Sender)
     {
         case bu_AddClanSkin:   InitializationComplete=False;
-                               n=class'UTComp_Settings'.default.ClanSkins.Length;
-                               class'UTComp_Settings'.default.ClanSkins.Length=n+1;
-                               class'UTComp_Settings'.default.ClanSkins[n].PlayerColor.G=128;
-                               class'UTComp_Settings'.default.ClanSkins[n].ModelName="Arclite";
-                               class'UTComp_Settings'.default.ClanSkins[n].PlayerName="Player"$n;
+                               n=Settings.ClanSkins.Length;
+                               Settings.ClanSkins.Length=n+1;
+                               Settings.ClanSkins[n].PlayerColor.G=128;
+                               Settings.ClanSkins[n].ModelName="Arclite";
+                               Settings.ClanSkins[n].PlayerName="Player"$n;
                                co_TeamSelect.ReadOnly(False);
                                co_TeamSelect.Clear();
                                if(ch_EnemySkins.IsChecked())
@@ -329,8 +328,8 @@ function bool InternalOnClick( GUIComponent Sender )
                                     co_TeamSelect.AddItem("Red Team");
                                     co_TeamSelect.AddItem("Blue Team");
                                 }
-                                for(i=0; i<class'UTComp_Settings'.default.ClanSkins.Length; i++)
-                                    co_TeamSelect.AddItem(class'UTComp_Settings'.default.ClanSkins[i].PlayerName);
+                                for(i=0; i<Settings.ClanSkins.Length; i++)
+                                    co_TeamSelect.AddItem(Settings.ClanSkins[i].PlayerName);
                                co_TeamSelect.ReadOnly(True);
 
                                co_TeamSelect.SetIndex(n+2);
@@ -342,7 +341,7 @@ function bool InternalOnClick( GUIComponent Sender )
 
                                InitializationComplete=False;
                                n=co_TeamSelect.GetIndex();
-                               class'UTComp_Settings'.default.ClanSkins.Remove(n-2,1);
+                               Settings.ClanSkins.Remove(n-2,1);
                                co_TeamSelect.ReadOnly(False);
                                co_TeamSelect.Clear();
                                if(ch_EnemySkins.IsChecked())
@@ -355,8 +354,8 @@ function bool InternalOnClick( GUIComponent Sender )
                                     co_TeamSelect.AddItem("Red Team");
                                     co_TeamSelect.AddItem("Blue Team");
                                 }
-                                for(i=0; i<class'UTComp_Settings'.default.ClanSkins.Length; i++)
-                                    co_TeamSelect.AddItem(class'UTComp_Settings'.default.ClanSkins[i].PlayerName);
+                                for(i=0; i<Settings.ClanSkins.Length; i++)
+                                    co_TeamSelect.AddItem(Settings.ClanSkins[i].PlayerName);
                                co_TeamSelect.ReadOnly(True);
                                co_TeamSelect.SetIndex(0);
                                InitializationComplete=True; break;
@@ -403,12 +402,12 @@ function ChangeComboBoxCaption()
             co_TeamSelect.AddItem("Blue Team");
         }
     }
-    for(i=0; i<class'UTComp_Settings'.default.ClanSkins.Length; i++)
+    for(i=0; i<Settings.ClanSkins.Length; i++)
     {
-        if(class'UTComp_Settings'.default.ClanSkins[i].PlayerName=="")
+        if(Settings.ClanSkins[i].PlayerName=="")
             co_TeamSelect.AddItem("_");
         else
-            co_TeamSelect.AddItem(class'UTComp_Settings'.default.ClanSkins[i].PlayerName);
+            co_TeamSelect.AddItem(Settings.ClanSkins[i].PlayerName);
     }
     co_TeamSelect.SetIndex(Team);
     InitializationComplete=True;
@@ -441,13 +440,13 @@ function UpdateAllComponents()
         co_ModelSelect.EnableMe();
         eb_ClanSkin.DisableMe();
 
-        co_TypeSkinSelect.SetIndex(class'UTComp_Settings'.default.ClientSkinModeRedTeammate-1);
+        co_TypeSkinSelect.SetIndex(Settings.ClientSkinModeRedTeammate-1);
 
         SkinStyle=co_TypeSkinSelect.GetIndex();
 
         if(SkinStyle<2)
         {
-            co_EpicSkinSelect.SetIndex(class'UTComp_Settings'.default.PreferredSkinColorRedTeammate);
+            co_EpicSkinSelect.SetIndex(Settings.PreferredSkinColorRedTeammate);
             co_EpicSkinSelect.EnableMe();
             sl_RedSkin.DisableMe();
             sl_GreenSkin.DisableMe();
@@ -462,17 +461,17 @@ function UpdateAllComponents()
             sl_BlueSkin.EnableMe();
             co_EpicSkinSelect.SetIndex(-1);
 
-            sl_RedSkin.SetValue(class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.R);
-            sl_GreenSkin.SetValue(class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.G);
-            sl_BlueSkin.SetValue(class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.B);
+            sl_RedSkin.SetValue(Settings.RedTeammateUTCompSkinColor.R);
+            sl_GreenSkin.SetValue(Settings.RedTeammateUTCompSkinColor.G);
+            sl_BlueSkin.SetValue(Settings.RedTeammateUTCompSkinColor.B);
         }
-        co_ModelSelect.SetIndex(co_ModelSelect.FindIndex(class'UTComp_Settings'.default.RedTeammateModelName));
+        co_ModelSelect.SetIndex(co_ModelSelect.FindIndex(Settings.RedTeammateModelName));
         ch_ForceThisModel.EnableMe();
         if(ch_EnemyModels.IsChecked())
             ch_ForceThismodel.mylabel.Caption="Force Teammate Models";
         else
             ch_ForceThismodel.mylabel.Caption="Force Red Models";
-        ch_ForceThisModel.Checked(class'UTComp_Settings'.default.bRedTeammateModelsForced);
+        ch_ForceThisModel.Checked(Settings.bRedTeammateModelsForced);
     }
     else if(Team==1)
     {
@@ -480,13 +479,13 @@ function UpdateAllComponents()
         co_ModelSelect.EnableMe();
         eb_ClanSkin.DisableMe();
 
-        co_TypeSkinSelect.SetIndex(class'UTComp_Settings'.default.ClientSkinModeBlueEnemy-1);
+        co_TypeSkinSelect.SetIndex(Settings.ClientSkinModeBlueEnemy-1);
 
         SkinStyle=co_TypeSkinSelect.GetIndex();
 
         if(SkinStyle<2)
         {
-            co_EpicSkinSelect.SetIndex(class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy);
+            co_EpicSkinSelect.SetIndex(Settings.PreferredSkinColorBlueEnemy);
             co_EpicSkinSelect.EnableMe();
             sl_RedSkin.DisableMe();
             sl_GreenSkin.DisableMe();
@@ -500,17 +499,17 @@ function UpdateAllComponents()
             sl_GreenSkin.EnableMe();
             sl_BlueSkin.EnableMe();
 
-            sl_RedSkin.SetValue(class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.R);
-            sl_GreenSkin.SetValue(class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.G);
-            sl_BlueSkin.SetValue(class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.B);
+            sl_RedSkin.SetValue(Settings.BlueEnemyUTCompSkinColor.R);
+            sl_GreenSkin.SetValue(Settings.BlueEnemyUTCompSkinColor.G);
+            sl_BlueSkin.SetValue(Settings.BlueEnemyUTCompSkinColor.B);
         }
-        co_ModelSelect.SetIndex(co_ModelSelect.FindIndex(class'UTComp_Settings'.default.BlueEnemyModelName));
+        co_ModelSelect.SetIndex(co_ModelSelect.FindIndex(Settings.BlueEnemyModelName));
         ch_ForceThisModel.EnableMe();
         if(ch_EnemyModels.IsChecked())
             ch_ForceThismodel.mylabel.Caption="Force Enemy Models";
         else
             ch_ForceThismodel.mylabel.Caption="Force Blue Models";
-        ch_ForceThisModel.Checked(class'UTComp_Settings'.default.bBlueEnemyModelsForced);
+        ch_ForceThisModel.Checked(Settings.bBlueEnemyModelsForced);
     }
     else if(Team>=2)
     {
@@ -521,20 +520,20 @@ function UpdateAllComponents()
         co_EpicSkinSelect.SetIndex(-1);
 
         eb_ClanSkin.EnableMe();
-        if(class'UTComp_Settings'.default.ClanSkins.Length > Team-2)
-           eb_ClanSkin.SetText(class'UTComp_Settings'.default.ClanSkins[Team-2].PlayerName);
+        if(Settings.ClanSkins.Length > Team-2)
+           eb_ClanSkin.SetText(Settings.ClanSkins[Team-2].PlayerName);
 
         sl_RedSkin.EnableMe();
         sl_GreenSkin.EnableMe();
         sl_BlueSkin.EnableMe();
 
-        if(class'UTComp_Settings'.default.ClanSkins.Length > Team-2)
+        if(Settings.ClanSkins.Length > Team-2)
         {
-            sl_RedSkin.SetValue(class'UTComp_Settings'.default.ClanSkins[Team-2].PlayerColor.R);
-            sl_GreenSkin.SetValue(class'UTComp_Settings'.default.ClanSkins[Team-2].PlayerColor.G);
-            sl_BlueSkin.SetValue(class'UTComp_Settings'.default.ClanSkins[Team-2].PlayerColor.B);
+            sl_RedSkin.SetValue(Settings.ClanSkins[Team-2].PlayerColor.R);
+            sl_GreenSkin.SetValue(Settings.ClanSkins[Team-2].PlayerColor.G);
+            sl_BlueSkin.SetValue(Settings.ClanSkins[Team-2].PlayerColor.B);
 
-            co_ModelSelect.SetIndex(co_ModelSelect.FindIndex(class'UTComp_Settings'.default.ClanSkins[Team-2].ModelName));
+            co_ModelSelect.SetIndex(co_ModelSelect.FindIndex(Settings.ClanSkins[Team-2].ModelName));
         }
         ch_ForceThismodel.mylabel.Caption="Force This Model";
         ch_ForceThisModel.DisableMe();
@@ -799,13 +798,13 @@ simulated function material ChangeOnlyColor(material SkinToChange)
 
     if(co_TeamSelect.GetIndex()==1)
     {
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy;
-        OtherColorMode=class'UTComp_Settings'.default.PreferredSkinColorRedTeammate;
+        ColorMode=Settings.PreferredSkinColorBlueEnemy;
+        OtherColorMode=Settings.PreferredSkinColorRedTeammate;
     }
     else if(co_TeamSelect.GetIndex()==0)
     {
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorRedTeammate;
-        OtherColorMode=class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy;
+        ColorMode=Settings.PreferredSkinColorRedTeammate;
+        OtherColorMode=Settings.PreferredSkinColorBlueEnemy;
     }
     else
         return SkinToChange;
@@ -833,9 +832,9 @@ simulated function material ChangeColorAndBrightness(material SkinToChange, int 
     local byte ColorMode;
 
     if(co_TeamSelect.GetIndex()==1)
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy;
+        ColorMode=Settings.PreferredSkinColorBlueEnemy;
     else if(co_TeamSelect.GetIndex()==0)
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorRedTeammate;
+        ColorMode=Settings.PreferredSkinColorRedTeammate;
     switch ColorMode
     {
         case 0:  return class'UTComp_xPawn'.static.MakeDMSkin(SkinToChange);  break;

@@ -37,7 +37,7 @@ function DisableNet()
 //// client only ////
 simulated event ClientStartFire(int Mode)
 {
-    if(Level.NetMode!=NM_Client || !class'BS_xPlayer'.static.UseNewNet() || NewNet_ShockBeamFire(FireMode[Mode]) == None)
+    if(Level.NetMode!=NM_Client || !BS_xPlayer(Level.GetLocalPlayerController()).UseNewNet() || NewNet_ShockBeamFire(FireMode[Mode]) == None)
         super.ClientStartFire(mode);
     else
         NewNet_ClientStartFire(mode);

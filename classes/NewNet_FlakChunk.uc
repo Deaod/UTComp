@@ -43,7 +43,10 @@ simulated function DoSetLoc(Vector V)
 
 simulated function bool CheckOwned()
 {
-    if(class'UTComp_Settings'.default.bEnableEnhancedNetCode==false)
+    local UTComp_Settings S;
+    foreach AllObjects(class'UTComp_Settings', S)
+        break;
+    if(S != none && S.bEnableEnhancedNetCode==false)
         return false;
     bOwned = (PC!=None && PC.Pawn!=None && PC.Pawn == Instigator);
     return bOwned;

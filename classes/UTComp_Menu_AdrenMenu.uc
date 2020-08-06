@@ -14,22 +14,22 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
     super.InitComponent(MyController,MyOwner);
 
-    ch_booster.Checked(!class'UTComp_Settings'.default.bDisableBooster);
-    ch_speed.Checked(!class'UTComp_Settings'.default.bDisableSpeed);
-    ch_berserk.Checked(!class'UTComp_Settings'.default.bDisableBerserk);
-    ch_invis.Checked(!class'UTComp_Settings'.default.bDisableInvis);
+    ch_booster.Checked(!Settings.bDisableBooster);
+    ch_speed.Checked(!Settings.bDisableSpeed);
+    ch_berserk.Checked(!Settings.bDisableBerserk);
+    ch_invis.Checked(!Settings.bDisableInvis);
 }
 
 function InternalOnChange( GUIComponent C )
 {
     switch(C)
     {
-        case ch_booster: class'UTComp_Settings'.default.bDisableBooster=!ch_booster.IsChecked(); break;
-        case ch_invis:  class'UTComp_Settings'.default.bDisableInvis=!ch_Invis.IsChecked();
-        case ch_speed:  class'UTComp_Settings'.default.bDisableSpeed=!ch_Speed.IsChecked(); break;
-        case ch_berserk: class'UTComp_Settings'.default.bDisableberserk=!ch_Berserk.IsChecked(); break;
+        case ch_booster: Settings.bDisableBooster=!ch_booster.IsChecked(); break;
+        case ch_invis:  Settings.bDisableInvis=!ch_Invis.IsChecked();
+        case ch_speed:  Settings.bDisableSpeed=!ch_Speed.IsChecked(); break;
+        case ch_berserk: Settings.bDisableberserk=!ch_Berserk.IsChecked(); break;
     }
-    class'UTComp_Settings'.static.staticSaveConfig();
+    SaveSettings();
 }
 
 

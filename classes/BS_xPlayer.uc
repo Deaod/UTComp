@@ -92,6 +92,14 @@ var float errorsamples, totalerror;
 
 var bool bDisableSpeed, bDisableBooster, bDisableInvis, bDisableberserk;
 
+var bool bSpecingViewGoal;
+
+var vector PlayerMouse;
+var float LastHUDSizeX;
+var float LastHUDSizeY;
+var UTComp_OVerlay Overlay;
+
+
 var UTComp_PRI currentStatDraw;
 
 var bool bUseNewEyeHeightAlgorithm;
@@ -99,7 +107,10 @@ var bool bUseNewEyeHeightAlgorithm;
 // Fractional Parts of Pitch/Yaw Input
 var transient float PitchFraction, YawFraction;
 
-var PlayerInput PlayerInput2;
+var transient PlayerInput PlayerInput2;
+
+var UTComp_Settings Settings;
+var UTComp_HUDSettings HUDSettings;
 
 replication
 {
@@ -111,17 +122,24 @@ replication
         SetbStats, TurnOffNetCode, ServerSetEyeHeightAlgorithm;
     unreliable if(Role<Role_Authority)
         ServerNextPlayer, ServerGoToPlayer, ServerFindNextNode,
-        serverfindprevnode, servergotonode, ServerGoToWepBase, speclockRed, speclockBlue, CallVote;
+        serverfindprevnode, servergotonode, ServerGoToWepBase, speclockRed, speclockBlue, ServerGoToTarget, CallVote;
     reliable if(Role<Role_Authority)
         ServerAdminReady, BroadCastVote, BroadCastReady;
 
     unreliable if(role < Role_Authority)
-        RequestStats;
+        RequestStats, RequestCTFStats;
     unreliable if(Role == Role_Authority)
         SendHitPrim,SendHitAlt,SendFiredPrim,SendFiredAlt,
-        SendDamagePrim,SendDamageAlt,sendDamageGR,sendPickups;
+        SendDamagePrim,SendDamageAlt,SendDamageGR,SendPickups,
+        SendCTFStats;
 }
 
+simulated function SaveSettings()
+{
+    Log("Saving settings");
+    Settings.SaveConfig();
+    HUDSettings.SaveConfig();
+}
 
 
 exec function SetEnemySkinColor(string S)
@@ -132,10 +150,10 @@ exec function SetEnemySkinColor(string S)
 
     if(Parts.length >=3)
     {
-        class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.R=byte(Parts[0]);
-        class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.G=byte(Parts[1]);
-        class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor.B=byte(Parts[2]);
-        class'utcomp_settings'.StaticSaveConfig();
+        Settings.BlueEnemyUTCompSkinColor.R=byte(Parts[0]);
+        Settings.BlueEnemyUTCompSkinColor.G=byte(Parts[1]);
+        Settings.BlueEnemyUTCompSkinColor.B=byte(Parts[2]);
+        SaveSettings();
     }
     else
     echo("Invalid command, need 3 colors");
@@ -148,10 +166,10 @@ exec function SetFriendSkinColor(string S)
     Split(S, " ", Parts);
     if(Parts.length >=3)
     {
-        class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.R=byte(Parts[0]);
-        class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.G=byte(Parts[1]);
-        class'UTComp_Settings'.default.RedTeammateUTCompSkinColor.B=byte(Parts[2]);
-        class'utcomp_settings'.StaticSaveConfig();
+        Settings.RedTeammateUTCompSkinColor.R=byte(Parts[0]);
+        Settings.RedTeammateUTCompSkinColor.G=byte(Parts[1]);
+        Settings.RedTeammateUTCompSkinColor.B=byte(Parts[2]);
+        SaveSettings();
     }
     else
     echo("Invalid command, need 3 colors");
@@ -168,19 +186,9 @@ exec function SetRedSkinColor(string S)
   SetFriendSkinColor(S);
 }
 
-function ServertopStats()
-{
-}
-
 exec function SetStats(int i)
 {
 
-}
-
-
-
-simulated function MakeSureSaveConfig()
-{
 }
 
 simulated function PostBeginPlay()
@@ -188,6 +196,18 @@ simulated function PostBeginPlay()
     Super.PostBeginPlay();
     AssignStatNames();
     ChangeDeathMessageOrder();
+
+    foreach AllObjects(class'UTComp_Settings', Settings)
+        break;
+
+    if (Settings == none)
+        Settings = new(none, "ClientSettings") class'UTComp_Settings';
+
+    foreach AllObjects(class'UTComp_HUDSettings', HUDSettings)
+        break;
+
+    if (HUDSettings == none)
+        HUDSettings = new(none, "ClientHUDSettings") class'UTComp_HUDSettings';
 }
 
 // Variable PlayerInput of Engine.PlayerController is private.
@@ -286,27 +306,27 @@ simulated function InitializeStuff()
 {
     InitializeScoreboard();
     SetInitialColoredName();
-    SetShowSelf(class'UTComp_Settings'.default.bShowSelfInTeamOverlay);
+    SetShowSelf(Settings.bShowSelfInTeamOverlay);
     SetBStats(class'UTComp_Scoreboard'.default.bDrawStats || class'UTComp_ScoreBoard'.default.bOverrideDisplayStats);
-    SetEyeHeightAlgorithm(class'UTComp_Settings'.default.bUseNewEyeHeightAlgorithm);
-    if(class'UTComp_Settings'.default.bFirstRun)
+    SetEyeHeightAlgorithm(Settings.bUseNewEyeHeightAlgorithm);
+    if(Settings.bFirstRun)
     {
-        class'UTComp_Settings'.default.bFirstRun=False;
+        Settings.bFirstRun=False;
         ConsoleCommand("Set Input f5 MyMenu");
-        class'UTComp_Settings'.default.bFirstRun=False;
+        Settings.bFirstRun=False;
         if(!class'DeathMatch'.default.bForceDefaultCharacter)
         {
-           class'UTComp_Settings'.default.bRedTeammateModelsForced=False;
-           class'UTComp_Settings'.default.bBlueEnemyModelsForced=False;
+           Settings.bRedTeammateModelsForced=False;
+           Settings.bBlueEnemyModelsForced=False;
            class'UTComp_xPawn'.Static.StaticSaveConfig();
         }
         else
         {
-            class'UTComp_Settings'.default.BlueEnemyModelName=class'xGame.xPawn'.default.PlacedCharacterName;
-            class'UTComp_Settings'.default.RedTeammateModelName=class'xGame.xPawn'.default.PlacedCharacterName;
+            Settings.BlueEnemyModelName=class'xGame.xPawn'.default.PlacedCharacterName;
+            Settings.RedTeammateModelName=class'xGame.xPawn'.default.PlacedCharacterName;
             class'UTComp_xPawn'.static.staticsaveconfig();
         }
-        class'UTComp_Settings'.Static.StaticSaveConfig();
+        SaveSettings();
     }
     MatchHudColor();
     GetMapList();
@@ -316,19 +336,25 @@ simulated function InitializeScoreboard()
 {
     local class<scoreboard> NewScoreboardclass;
 
-    if(myHud!=None && myHUD.ScoreBoard.IsA('UTComp_ScoreBoard') && gamereplicationinfo!=None)
+    if(myHud!=None && myHUD.ScoreBoard.IsA('UTComp_ScoreBoard') && GameReplicationInfo!=None)
     {
-        if(class'UTComp_Settings'.default.bUseDefaultScoreboard)
+        if(Settings.bUseDefaultScoreboard)
         {
-            if(gamereplicationinfo.bTeamGame)
+            if(GameReplicationInfo.bTeamGame)
                 NewScoreboardClass=class'UTCompv18c.UTComp_ScoreBoardTDM';
             else
                 NewScoreboardClass=class'UTCompv18c.UTComp_ScoreBoardDM';
             clientChangedScoreboard=True;
         }
     }
-    else if(ClientChangedScoreBoard && !class'UTComp_Settings'.default.bUseDefaultScoreboard)
-        NewScoreboardClass=class'UTCompv18c.UTComp_ScoreBoard';
+    else if(ClientChangedScoreBoard && !Settings.bUseDefaultScoreboard)
+    {
+        //TODO: SCOREBOARD
+        //if (Level.Game.IsA('xCTFGame'))
+        //    NewScoreboardClass = class'UTCompv18c.UTComp_ScoreBoardCTF';
+        //else
+            NewScoreboardClass = class'UTCompv18c.UTComp_ScoreBoard';
+    }
     if(myHUD!=None && NewScoreBoardClass!=None)
         myHUD.SetScoreBoardClass( NewScoreboardClass);
 }
@@ -342,9 +368,9 @@ simulated function SetInitialColoredName()
 simulated function StartDemo()
 {
     local string S;
-    S=StripIllegalWindowsCharacters(class'UTComp_Settings'.default.DemoRecordingmask);
+    S=StripIllegalWindowsCharacters(Settings.DemoRecordingmask);
 
-    if (class'UTComp_Settings'.default.bEnableUTCompAutoDemorec && (level.NetMode!=NM_DedicatedServer))
+    if (Settings.bEnableUTCompAutoDemorec && (level.NetMode!=NM_DedicatedServer))
     {
         Player.Console.DelayedConsoleCommand("Demorec "$S);
         bAutoDemoStarted=True;
@@ -408,9 +434,9 @@ state GameEnded
     }
     function Timer()
     {
-        if (class'UTComp_Settings'.default.bEnableAutoScreenShot && screenshotstaken==0)
+        if (Settings.bEnableAutoScreenShot && screenshotstaken==0)
         {
-            ConsoleCommand("shot "$StripIllegalWindowsCharacters(class'UTComp_Settings'.default.ScreenShotMask));
+            ConsoleCommand("shot "$StripIllegalWindowsCharacters(Settings.ScreenShotMask));
             screenshotstaken++;
         }
         Super.Timer();
@@ -433,7 +459,7 @@ simulated function ReceiveHit(class<DamageType> DamageType, int Damage, pawn Inj
     else if(Injured.GetTeamNum()==255 || (Injured.GetTeamNum() != GetTeamNum()))
     {
         RegisterEnemyHit(DamageType, Damage);
-        if(class'UTComp_Settings'.default.bCPMAStyleHitsounds && (DamageType == class'DamTypeFlakChunk' || DamageType == class'DamTypeFlakShell') && (RepInfo==None || RepInfo.EnableHitSoundsMode==2 || LineOfSightTo(Injured)))
+        if(Settings.bCPMAStyleHitsounds && (DamageType == class'DamTypeFlakChunk' || DamageType == class'DamTypeFlakShell') && (RepInfo==None || RepInfo.EnableHitSoundsMode==2 || LineOfSightTo(Injured)))
         {
             GroupDamageSound(DamageType, Damage, true);
         }
@@ -443,7 +469,7 @@ simulated function ReceiveHit(class<DamageType> DamageType, int Damage, pawn Inj
     else
     {
         RegisterTeammateHit(DamageType, Damage);
-        if(class'UTComp_Settings'.default.bCPMAStyleHitsounds && (DamageType == class'DamTypeFlakChunk' || DamageType == class'DamTypeFlakShell') && (RepInfo==None || RepInfo.EnableHitSoundsMode==2 || LineOfSightTo(Injured)))
+        if(Settings.bCPMAStyleHitsounds && (DamageType == class'DamTypeFlakChunk' || DamageType == class'DamTypeFlakShell') && (RepInfo==None || RepInfo.EnableHitSoundsMode==2 || LineOfSightTo(Injured)))
         {
             GroupDamageSound(DamageType, Damage, false);
         }
@@ -689,10 +715,10 @@ exec function StatNext()
 
     if (currentStatDraw == None)
     {
-        for(i=0; i<GameReplicationInfo.PRIArray.length; i++)
+        for (i = 0; i < GameReplicationInfo.PRIArray.length; i++)
         {
-            pri = GameREplicationInfo.PRIArray[i];
-            uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameREplicationInfo.PRIArray[i]);
+            pri = GameReplicationInfo.PRIArray[i];
+            uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameReplicationInfo.PRIArray[i]);
             if (uPRI!=None && uPRI!=UTCompPRI && !PRI.bBot && !pri.bOnlySpectator)
             {
                 currentStatDraw=uPRI;
@@ -702,10 +728,10 @@ exec function StatNext()
     }
     else
     {
-        for(i=0; i<GameReplicationInfo.PRIArray.length; i++)
+        for (i = 0; i < GameReplicationInfo.PRIArray.length; i++)
         {
-            uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameREplicationInfo.PRIArray[i]);
-            pri = GameREplicationInfo.PRIArray[i];
+            uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameReplicationInfo.PRIArray[i]);
+            pri = GameReplicationInfo.PRIArray[i];
             if (bUseNext && !PRI.bBot && !pri.bOnlySpectator)
             {
                 currentStatDraw=uPRI;
@@ -715,9 +741,10 @@ exec function StatNext()
             if(currentStatDraw==uPRI)
                 bUseNext=true;
         }
+
         if(bUseNext)
         {
-            for(i=0; i<GameReplicationInfo.PRIArray.length; i++)
+            for (i = 0; i < GameReplicationInfo.PRIArray.length; i++)
             {
                 uPRI = class'UTComp_Util'.static.GetUTCompPRI(GameREplicationInfo.PRIArray[i]);
                 pri = GameREplicationInfo.PRIArray[i];
@@ -728,17 +755,54 @@ exec function StatNext()
         }
     }
 
-    if (startPRI!=None && currentStatDraw == startPRI)
+    if (startPRI != None && currentStatDraw == startPRI)
     {
         currentStatDraw=none;
         StatNext();
         return;
     }
-    if (UTCompPRI!= currentStatDraw && currentStatDraw!=None)
+    if (UTCompPRI != currentStatDraw && currentStatDraw != None)
         RequestStats(currentStatDraw);
 }
 
-simulated function REquestStats(UTComp_PRI uPRI)
+/**
+  This is called in on the server. It thens executes SendCTFStats on the client that requested the stats.
+  */
+simulated function RequestCTFStats(UTComp_PRI uPRI)
+{
+    local string S;
+
+    if (uPRI == None)
+        return;
+
+    S = uPRI.FlagGrabs@uPRI.FlagCaps@uPRI.FlagPickups@uPRI.FlagKills@uPRI.FlagSaves@uPRI.FlagDenials@uPRI.Assists@uPRI.Covers@uPRI.CoverSpree@uPRI.Seals@uPRI.SealSpree@uPRI.DefKills;
+    SendCTFStats(S, uPRI);
+}
+
+/**
+  Receives S from the server and sets the values to the local uPRI in order to display the stats.
+  */
+simulated function SendCTFStats(string S, UTComp_PRI uPRI)
+{
+    local array<string> parts;
+
+    Split(S, " ", Parts);
+
+    uPRI.FlagGrabs=int(Parts[0]);
+    uPRI.FlagCaps=int(Parts[1]);
+    uPRI.FlagPickups=int(Parts[2]);
+    uPRI.FlagKills=int(Parts[3]);
+    uPRI.FlagSaves=int(Parts[4]);
+    uPRI.FlagDenials=int(Parts[5]);
+    uPRI.Assists=int(Parts[6]);
+    uPRI.Covers=int(Parts[7]);
+    uPRI.CoverSpree=int(Parts[8]);
+    uPRI.Seals=int(Parts[9]);
+    uPRI.SealSpree=int(Parts[10]);
+    uPRI.DefKills=int(Parts[11]);
+}
+
+simulated function RequestStats(UTComp_PRI uPRI)
 {
     local string S;
     local int i;
@@ -978,35 +1042,35 @@ simulated function ServerRegisterTeammateHit(class<DamageType> DamageType, int D
 simulated function PlayEnemyHitSound(int Damage)
 {
     local float HitSoundPitch;
-    if(!class'UTComp_Settings'.default.bEnableHitSounds || LastHitSoundTime>Level.TimeSeconds)
+    if(!Settings.bEnableHitSounds || LastHitSoundTime>Level.TimeSeconds)
         return;
     LastHitSoundTime=Level.TimeSeconds+HITSOUNDTWEENTIME;
     HitSoundPitch=1.0;
-    if(class'UTComp_Settings'.default.bCPMAStyleHitSounds)
-        HitSoundPitch=class'UTComp_Settings'.default.CPMAPitchModifier*30.0/Damage;
+    if(Settings.bCPMAStyleHitSounds)
+        HitSoundPitch=Settings.CPMAPitchModifier*30.0/Damage;
     if(LoadedEnemySound == none)
-        LoadedEnemySound = Sound(DynamicLoadObject(class'UTComp_Settings'.default.EnemySound, class'Sound', True));
+        LoadedEnemySound = Sound(DynamicLoadObject(Settings.EnemySound, class'Sound', True));
 
     if(ViewTarget!=None)
-        ViewTarget.PlaySound(LoadedEnemySound,,class'UTComp_Settings'.default.HitSoundVolume,,,HitSoundPitch);
+        ViewTarget.PlaySound(LoadedEnemySound,,Settings.HitSoundVolume,,,HitSoundPitch);
 }
 
 simulated function PlayTeammateHitSound(int Damage)
 {
     local float HitSoundPitch;
 
-    if(!class'UTComp_Settings'.default.bEnableHitSounds || LastHitSoundTime>Level.TimeSeconds)
+    if(!Settings.bEnableHitSounds || LastHitSoundTime>Level.TimeSeconds)
         return;
     LastHitSoundTime=Level.TimeSeconds+HITSOUNDTWEENTIME;
     HitSoundPitch=1.0;
-    if(class'UTComp_Settings'.default.bCPMAStyleHitSounds)
-        HitSoundPitch=class'UTComp_Settings'.default.CPMAPitchModifier*30.0/Damage;
+    if(Settings.bCPMAStyleHitSounds)
+        HitSoundPitch=Settings.CPMAPitchModifier*30.0/Damage;
 
     if(LoadedFriendlySound == none)
-        LoadedFriendlySound = Sound(DynamicLoadObject(class'UTComp_Settings'.default.FriendlySound, class'Sound', True));
+        LoadedFriendlySound = Sound(DynamicLoadObject(Settings.FriendlySound, class'Sound', True));
 
     if(ViewTarget!=None)
-        ViewTarget.PlaySound(LoadedFriendlySound,,class'UTComp_Settings'.default.HitSoundVolume,,,HitSoundPitch);
+        ViewTarget.PlaySound(LoadedFriendlySound,,Settings.HitSoundVolume,,,HitSoundPitch);
 }
 
 exec function myMenu()
@@ -1037,7 +1101,10 @@ function ServerSpecViewGoal()
     local actor NewGoal;
 
     if(!IsCoaching())
+    {
+        bSpecingViewGoal = true;
         super.ServerSpecViewGoal();
+    }
 
     if ( PlayerReplicationInfo.bOnlySpectator && IsInState('Spectating') )
     {
@@ -1048,10 +1115,16 @@ function ServerSpecViewGoal()
             {
                 SetViewTarget(NewGoal);
                 ClientSetViewTarget(NewGoal);
-                bBehindView = true; //bChaseCam;
+                //bBehindView = true; //bChaseCam;
             }
         }
     }
+}
+
+function ServerViewSelf()
+{
+  bSpecingViewGoal = false;
+  Super.ServerViewSelf();
 }
 
 exec function voteyes()
@@ -1158,6 +1231,32 @@ exec function GoToPlayer(int k)
     ServerGoToPlayer(k-1);
 }
 
+function ServerGoToTarget(Actor a)
+{
+    local rotator R;
+
+    bSpecingViewGoal = false;
+
+    if (a.IsA('PlayerReplicationInfo'))
+        ServerSetViewTarget(a.Owner);
+    else
+    {
+        bBehindView = true;
+        ServerSetViewTarget(a);
+        ClientSetBehindview(true);
+        if (a.IsA('Pickup'))
+        {
+            R = Pickup(a).PickUpBase.rotation;
+            R.Yaw += 90*182.0444;
+            R.Pitch -= 15*182.0444;
+        }
+        else
+            R = CalcViewRotation;
+
+        ClientSetLocation(CalcViewLocation, R);
+    }
+}
+
 function bool ServerNextPlayer(int teamindex)
 {
     local int k;
@@ -1214,33 +1313,63 @@ function bool ServerNextPlayer(int teamindex)
     }
 }
 
-exec function GoToItem(string PickupString)
+exec function GoToItem(string CmdLine)
 {
-    if(IsCoaching())
+    local string pickup;
+    local string team;
+    local class<Pickup> pickupClass;
+    local int teamNum;
+
+    teamNum = -1;
+
+    if (IsCoaching())
         return;
-    if (PickupString ~= "50" || PickupString ~="Small"
-        || PickupString ~="50a"
-    ) {
-        ServerGoToWepBase(class'XPickups.ShieldPack');
 
-    } else if(PickupString ~="100" || PickupString ~="100a"
-        || PickupString ~="Large" || PickupString ~="Big"
-    ) {
-        ServerGoToWepBase(class'XPickups.SuperShieldPack');
+    if (!Divide(CmdLine," ", pickup, team))
+        pickup = CmdLine;
 
-    } else if(PickupString ~="DD" || PickupString ~="Amp"
-        || PickupString ~="Double-Damage" || PickupString ~="DoubleDamage"
-    ) {
-        ServerGoToWepBase(class'XPickups.UDamagePack');
-    }
+
+    if(pickup ~= "50" || pickup ~= "Small" || pickup ~= "50a")
+        pickupClass = class'XPickups.ShieldPack';
+    else if(pickup ~= "100" || pickup ~= "100a" || pickup ~= "Large" || pickup ~="Big")
+        pickupClass = class'XPickups.SuperShieldPack';
+    else if(pickup ~= "DD" || pickup ~= "Amp" || pickup ~= "Double-Damage" || pickup ~= "DoubleDamage")
+        pickupClass = class'XPickups.UDamagePack';
+    else if (pickup ~= "keg")
+        pickupClass = class'XPickups.SuperHealthPack';
+
+    if (pickupClass == None)
+        return;
+
+    if (team ~= "0" || team ~= "red")
+        teamNum = 0;
+    else if (team ~= "1" || team ~= "blue")
+        teamNum = 1;
+
+    ServerGoToWepBase(pickupClass, teamNum);
 }
 
-function ServerGoToWepBase(class<Pickup> theClass)
+function bool IsInZone(Actor a, int team)
+{
+    local string loc;
+
+    loc = a.Region.Zone.LocationName;
+
+    if (team == 0)
+        return (Instr(Caps(loc), "RED" ) != -1);
+    else
+        return (Instr(Caps(loc), "BLUE") != -1);
+
+    return false;
+}
+
+function ServerGoToWepBase(class<Pickup> theClass, int team)
 {
     local xPickupBase xPBase;
+
     foreach allactors(class'xPickupBase', xPBase)
     {
-        if(xPBase.PowerUp == theClass)
+        if (xPBase.PowerUp == theClass)
         {
             ServerSetViewTarget(xPBase);
             break;
@@ -1274,9 +1403,9 @@ function ServerSetViewTarget(actor A)
 
 exec function SetSavedSpectateSpeed(float F)
 {
-    class'UTComp_Settings'.default.SavedSpectateSpeed=F;
+    Settings.SavedSpectateSpeed=F;
     SetSpectateSpeed(F);
-    class'UTComp_Settings'.static.staticSaveConfig();
+    SaveSettings();
 }
 
 exec function NextSuperWeapon()
@@ -1342,7 +1471,7 @@ function ServerGoToNode(int k)
     SetViewTarget(ONSOnslaughtGame(Level.Game).PowerCores[k]);
     ClientSetViewTarget(ONSOnslaughtGame(Level.Game).PowerCores[k]);
     bBehindView = true;
-    oldFoundCore=ONSOnslaughtGame(Level.Game).PowerCores[k];
+    OldFoundCore=ONSOnslaughtGame(Level.Game).PowerCores[k];
 }
 
 function ServerFindNextNode()
@@ -1527,23 +1656,40 @@ function ServerToggleBehindView()
 
 state spectating
 {
+    event PlayerTick( float DeltaTime )
+    {
+        Super.PlayerTick(DeltaTime);
+        if (bRun == 1)
+            GoToState('PlayerMousing');
+    }
+
     function BeginState()
     {
-        Super.BeginState();
+        if ( Pawn != None )
+        {
+            SetLocation(Pawn.Location);
+            UnPossess();
+        }
+        bCollideWorld = true;
+
+        // IT was annoying when we were switching to MouseLooking and Spectating state and had zoomed out. Dunno if it'll break something! haha. ha.
+        //CameraDist = Default.CameraDist;
+
         SetTimer(1.0, True);
     }
 
-    exec function Fire( optional float F )
+    exec function Fire(optional float F)
     {
         if ( bFrozen )
         {
-            if ( (TimerRate <= 0.0) || (TimerRate > 1.0) )
+            if ((TimerRate <= 0.0) || (TimerRate > 1.0))
                 bFrozen = false;
             return;
         }
-        if (IsCoachingRed())
+
+        if(IsCoachingRed())
             NextRedPlayer();
-        else if (IsCoachingBlue())
+        else if(IsCoachingBlue())
             NextBluePlayer();
         else
             ServerViewNextPlayer();
@@ -1683,13 +1829,15 @@ simulated function NotifyRestartMap()
 simulated function ResetUTCompStats()
 {
     local int i;
-    for(i=0; i<NormalWepStatsPrim.Length; i++)
+    local UTComp_PRI uPRI;
+
+    for(i = 0; i < NormalWepStatsPrim.Length; i++)
     {
         NormalWepStatsPrim[i].Damage=0;
         NormalWepStatsPrim[i].Hits=0;
         NormalWepStatsPrim[i].Percent=0;
     }
-    for(i=0; i<NormalWepStatsalt.Length; i++)
+    for (i = 0; i < NormalWepStatsalt.Length; i++)
     {
         NormalWepStatsalt[i].Damage=0;
         NormalWepStatsalt[i].Hits=0;
@@ -1697,15 +1845,32 @@ simulated function ResetUTCompStats()
     }
     CustomWepStats.Length=0;
     DamG=0;
+
+    if (PlayerReplicationInfo != None)
+    {
+        uPRI = class'UTComp_Util'.static.GetUTCompPRI(PlayerReplicationInfo);
+        uPRI.FlagGrabs = 0;
+        uPRI.FlagCaps = 0;
+        uPRI.FlagPickups = 0;
+        uPRI.FlagKills = 0;
+        uPRI.FlagSaves = 0;
+        uPRI.FlagDenials = 0;
+        uPRI.Assists = 0;
+        uPRI.Covers = 0;
+        uPRI.CoverSpree = 0;
+        uPRI.Seals = 0;
+        uPRI.SealSpree = 0;
+        uPRI.DefKills = 0;
+    }
 }
 
 simulated function ResetEpicStats()
 {
     local TeamPlayerReplicationInfo tPRI;
     local int i;
-    if(playerReplicationInfo !=None && Teamplayerreplicationinfo(playerreplicationinfo)!=None)
+    if (PlayerReplicationInfo != None && TeamPlayerReplicationInfo(PlayerReplicationInfo)!= None)
     {
-        tPRI=Teamplayerreplicationinfo(playerreplicationinfo);
+        tPRI=Teamplayerreplicationinfo(PlayerReplicationInfo);
         tPRI.bFirstBlood=False;
         tPRI.FlagTouches=0;
         tPRI.FlagReturns=0;
@@ -1802,8 +1967,8 @@ exec function SetName(coerce string S)
     ReplaceText(S, " ", "_");
     ReplaceText(S, "\"", "");
     SetColoredNameOldStyle(Left(S, 20));
-    class'UTComp_Settings'.default.CurrentSelectedColoredName=255;
-    class'UTComp_Settings'.static.staticSaveConfig();staticsaveconfig();
+    Settings.CurrentSelectedColoredName=255;
+    SaveSettings();staticsaveconfig();
 }
 
 exec function SetNameNoReset(coerce string S)
@@ -1832,12 +1997,12 @@ simulated function SetColoredNameOldStyle(optional string S2, optional bool bSho
     for(k=1; k<=Len(S2); k++)
     {
         numdoatonce=1;
-        for(m=k;m<Len(S2)&& class'UTComp_Settings'.default.ColorName[k-1] == class'UTComp_Settings'.default.ColorName[m] ;m++)
+        for(m=k;m<Len(S2)&& Settings.ColorName[k-1] == Settings.ColorName[m] ;m++)
         {
             numdoatonce++;
             k++;
         }
-        S=S$class'UTComp_Util'.Static.MakeColorCode(class'UTComp_Settings'.default.ColorName[k-1])$Right(Left(S2, k), numdoatonce);
+        S=S$class'UTComp_Util'.Static.MakeColorCode(Settings.ColorName[k-1])$Right(Left(S2, k), numdoatonce);
     }
     if (UTCompPRI!=None)
         UTCompPRI.SetColoredName(S);
@@ -1854,11 +2019,11 @@ simulated function string FindColoredName(int CustomColors)
 
     if(S2=="")
     {
-       S2=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedName;
+       S2=Settings.ColoredName[CustomColors].SavedName;
     }
 
     for(i=0; i<Len(S2); i++)
-        S $= class'UTComp_Util'.Static.MakeColorCode(class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[i])$Mid(class'UTComp_Settings'.default.ColoredName[CustomColors].SavedName,i,1);
+        S $= class'UTComp_Util'.Static.MakeColorCode(Settings.ColoredName[CustomColors].SavedColor[i])$Mid(Settings.ColoredName[CustomColors].SavedName,i,1);
     return S;
 }
 
@@ -1871,24 +2036,24 @@ simulated function string AddNewColoredName(int CustomColors)
     local string S2;
 
     if(Level.NetMode==NM_DedicatedServer || PlayerReplicationInfo==None)
-    return "";
+        return "";
 
     if(S2=="")
     {
-       S2=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedName;
+       S2=Settings.ColoredName[CustomColors].SavedName;
     }
     SetNameNoReset(S2);
     for(k=0; k<20; k++)
-        class'UTComp_Settings'.default.ColorName[k]=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k];
+        Settings.ColorName[k]=Settings.ColoredName[CustomColors].SavedColor[k];
     for(k=1; k<=Len(S2); k++)
     {
         numdoatonce=1;
-        for(m=k;m<Len(S2)&& class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k-1] == class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[m] ;m++)
+        for(m=k;m<Len(S2)&& Settings.ColoredName[CustomColors].SavedColor[k-1] == Settings.ColoredName[CustomColors].SavedColor[m] ;m++)
         {
             numdoatonce++;
             k++;
         }
-        S=S$class'UTComp_Util'.Static.MakeColorCode(class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k-1])$Right(Left(S2, k), numdoatonce);
+        S=S$class'UTComp_Util'.Static.MakeColorCode(Settings.ColoredName[CustomColors].SavedColor[k-1])$Right(Left(S2, k), numdoatonce);
     }
     return S;
 }
@@ -1898,13 +2063,13 @@ simulated function SaveNewColoredName()
     local int n;
     local int l;
 
-    n=class'UTComp_Settings'.default.ColoredName.Length+1;
-    class'UTComp_Settings'.default.ColoredName.Length=n;
+    n=Settings.ColoredName.Length+1;
+    Settings.ColoredName.Length=n;
 
-    class'UTComp_Settings'.default.ColoredName[n-1].SavedName=PlayerReplicationInfo.PlayerName;
+    Settings.ColoredName[n-1].SavedName=PlayerReplicationInfo.PlayerName;
 
     for(l=0; l<20; l++)
-        class'UTComp_Settings'.default.ColoredName[n-1].SavedColor[l]=class'UTComp_Settings'.default.ColorName[l];
+        Settings.ColoredName[n-1].SavedColor[l]=Settings.ColorName[l];
 
 }
 
@@ -1912,11 +2077,11 @@ exec function ShowColoredNames()
 {
     local int i, j;
     local string S;
-    for(i=0; i<class'UTComp_Settings'.default.ColoredName.Length; i++)
+    for(i=0; i<Settings.ColoredName.Length; i++)
     {
-        Log(class'UTComp_Settings'.default.ColoredName[i].SavedName);
+        Log(Settings.ColoredName[i].SavedName);
         for(j=0; j<20; j++)
-        S=S$class'UTComp_Settings'.default.ColoredName[i].SavedColor[j].R@class'UTComp_Settings'.default.ColoredName[i].SavedColor[j].G@class'UTComp_Settings'.default.ColoredName[i].SavedColor[j].B;
+            S=S$Settings.ColoredName[i].SavedColor[j].R@Settings.ColoredName[i].SavedColor[j].G@Settings.ColoredName[i].SavedColor[j].B;
         Log(S);
     }
 }
@@ -1930,26 +2095,26 @@ simulated function SetColoredNameOldStyleCustom(optional string S2, optional int
     local byte m;
 
     if(Level.NetMode==NM_DedicatedServer || PlayerReplicationInfo==None)
-    return;
+        return;
 
     if(S2=="")
     {
-       S2=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedName;
+       S2=Settings.ColoredName[CustomColors].SavedName;
     }
     SetNameNoReset(S2);
 
     for(k=0; k<20; k++)
-        class'UTComp_Settings'.default.ColorName[k]=class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k];
-    class'UTComp_Settings'.static.StaticSaveConfig();
+        Settings.ColorName[k]=Settings.ColoredName[CustomColors].SavedColor[k];
+    SaveSettings();
     for(k=1; k<=Len(S2); k++)
     {
         numdoatonce=1;
-        for(m=k;m<Len(S2)&& class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k-1] == class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[m] ;m++)
+        for(m=k;m<Len(S2)&& Settings.ColoredName[CustomColors].SavedColor[k-1] == Settings.ColoredName[CustomColors].SavedColor[m] ;m++)
         {
             numdoatonce++;
             k++;
         }
-        S=S$class'UTComp_Util'.Static.MakeColorCode(class'UTComp_Settings'.default.ColoredName[CustomColors].SavedColor[k-1])$Right(Left(S2, k), numdoatonce);
+        S=S$class'UTComp_Util'.Static.MakeColorCode(Settings.ColoredName[CustomColors].SavedColor[k-1])$Right(Left(S2, k), numdoatonce);
     }
     if(UTCompPRI!=None)
         UTCompPRI.SetColoredName(S);
@@ -1958,14 +2123,14 @@ simulated function SetColoredNameOldStyleCustom(optional string S2, optional int
 exec function ListColoredNames()
 {
     local int i;
-    for(i=0; i<class'UTComp_Settings'.default.ColoredName.Length; i++)
-        echo(class'UTComp_Settings'.default.coloredname[i].SavedName);
+    for(i=0; i<Settings.ColoredName.Length; i++)
+        echo(Settings.coloredname[i].SavedName);
 }
 
 simulated function SetShowSelf(Bool b)
 {
-    class'UTComp_Settings'.default.bShowSelfInTeamOverlay=b;
-    class'UTComp_Settings'.static.staticSaveConfig();staticsaveconfig();
+    Settings.bShowSelfInTeamOverlay=b;
+    SaveSettings();staticsaveconfig();
     if(UTCompPRI!=None)
         UTCompPRI.SetShowSelf(b);
 }
@@ -2242,7 +2407,7 @@ event TeamMessage( PlayerReplicationInfo PRI, coerce string S, name Type  )
         Type = 'TeamSay';
 
     //replace the color codes
-    if(class'UTComp_Settings'.default.bAllowColoredMessages)
+    if(Settings.bAllowColoredMessages)
     {
         for(k=7; k>=0; k--)
         {
@@ -2258,7 +2423,7 @@ event TeamMessage( PlayerReplicationInfo PRI, coerce string S, name Type  )
     }
     if ( myHUD != None )
     {
-        if (class'UTComp_Settings'.default.bEnableColoredNamesInTalk)
+        if (Settings.bEnableColoredNamesInTalk)
             Message( PRI, c$S, Type );
         else
             myHud.Message( PRI, c$S, Type );
@@ -2451,47 +2616,47 @@ simulated function MatchHudColor()
     if(myHud==None || HudCDeathMatch(myHud)==None)
         return;
     DMHud=HudCDeathMatch(myHud);
-    if(!class'UTComp_HudSettings'.default.bMatchHudColor)
+    if(!HUDSettings.bMatchHudColor)
     {
         DMHud.HudColorRed=class'HudCDeathMatch'.default.HudColorRed;
         DMHud.HudColorBlue=class'HudCDeathMatch'.default.HudColorBlue;
         return;
     }
 
-    if(!class'UTComp_Settings'.default.bEnemyBasedSkins)
+    if(!Settings.bEnemyBasedSkins)
     {
-        if(class'UTComp_Settings'.default.ClientSkinModeRedTeammate == 3)
+        if(Settings.ClientSkinModeRedTeammate == 3)
         {
-            DMHud.HudColorRed=class'UTComp_Settings'.default.RedTeammateUTCompSkinColor;
+            DMHud.HudColorRed=Settings.RedTeammateUTCompSkinColor;
         }
-        else if(class'UTComp_Settings'.default.ClientSkinModeRedTeammate == 2
-            || class'UTComp_Settings'.default.ClientSkinModeRedTeammate == 1)
+        else if(Settings.ClientSkinModeRedTeammate == 2
+            || Settings.ClientSkinModeRedTeammate == 1)
         {
-            DMHud.HudColorRed=class'UTComp_xPawn'.default.BrightSkinColors[class'UTComp_Settings'.default.PreferredSkinColorRedTeammate];
+            DMHud.HudColorRed=class'UTComp_xPawn'.default.BrightSkinColors[Settings.PreferredSkinColorRedTeammate];
         }
 
-        if(class'UTComp_Settings'.default.ClientSkinModeBlueEnemy == 3)
+        if(Settings.ClientSkinModeBlueEnemy == 3)
         {
-            DMHud.HudColorBlue=class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor;
+            DMHud.HudColorBlue=Settings.BlueEnemyUTCompSkinColor;
         }
-        else if(class'UTComp_Settings'.default.ClientSkinModeBlueEnemy == 2
-            || class'UTComp_Settings'.default.ClientSkinModeBlueEnemy == 1)
+        else if(Settings.ClientSkinModeBlueEnemy == 2
+            || Settings.ClientSkinModeBlueEnemy == 1)
         {
-            DMHud.HudColorBlue=class'UTComp_xPawn'.default.BrightSkinColors[class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy];
+            DMHud.HudColorBlue=class'UTComp_xPawn'.default.BrightSkinColors[Settings.PreferredSkinColorBlueEnemy];
         }
     }
     else
     {
-        if(class'UTComp_Settings'.default.ClientSkinModeRedTeammate == 3)
+        if(Settings.ClientSkinModeRedTeammate == 3)
         {
-            DMHud.HudColorBlue=class'UTComp_Settings'.default.RedTeammateUTCompSkinColor;
-            DMHud.HudColorRed=class'UTComp_Settings'.default.RedTeammateUTCompSkinColor;
+            DMHud.HudColorBlue=Settings.RedTeammateUTCompSkinColor;
+            DMHud.HudColorRed=Settings.RedTeammateUTCompSkinColor;
         }
-        else if(class'UTComp_Settings'.default.ClientSkinModeRedTeammate == 2
-            || class'UTComp_Settings'.default.ClientSkinModeRedTeammate == 1)
+        else if(Settings.ClientSkinModeRedTeammate == 2
+            || Settings.ClientSkinModeRedTeammate == 1)
         {
-            DMHud.HudColorBlue=class'UTComp_xPawn'.default.BrightSkinColors[class'UTComp_Settings'.default.PreferredSkinColorRedTeammate];
-            DMHud.HudColorRed=class'UTComp_xPawn'.default.BrightSkinColors[class'UTComp_Settings'.default.PreferredSkinColorRedTeammate];
+            DMHud.HudColorBlue=class'UTComp_xPawn'.default.BrightSkinColors[Settings.PreferredSkinColorRedTeammate];
+            DMHud.HudColorRed=class'UTComp_xPawn'.default.BrightSkinColors[Settings.PreferredSkinColorRedTeammate];
         }
     }
 }
@@ -2576,9 +2741,9 @@ exec function GetSensitivity()
 
 // Add in a check for ping here eventually
 // so we shut off if its outside the max
-simulated static function bool UseNewNet()
+simulated function bool UseNewNet()
 {
-    return class'UTComp_Settings'.default.bEnableEnhancedNetCode;
+    return Settings.bEnableEnhancedNetCode;
 }
 
 /* replace calls fro old weapons if newnet is on */
@@ -2622,16 +2787,70 @@ function DoCombo( class<Combo> ComboClass )
 
 function bool ComboDisabled(class<Combo> ComboClass)
 {
-    if(class'UTComp_Settings'.default.bDisableSpeed && ComboClass == class'xGame.ComboSpeed')
+    if(Settings.bDisableSpeed && ComboClass == class'xGame.ComboSpeed')
         return true;
-    if(class'UTComp_Settings'.default.bDisableBooster && ComboClass == class'xGame.ComboDefensive')
+    if(Settings.bDisableBooster && ComboClass == class'xGame.ComboDefensive')
         return true;
-    if(class'UTComp_Settings'.default.bDisableInvis && ComboClass == class'xGame.ComboInvis')
+    if(Settings.bDisableInvis && ComboClass == class'xGame.ComboInvis')
         return true;
-    if(class'UTComp_Settings'.default.bDisableBerserk && ComboClass == class'xGame.ComboBerserk')
+    if(Settings.bDisableBerserk && ComboClass == class'xGame.ComboBerserk')
         return true;
 
     return false;
+}
+
+//--------------------------
+//Additions for UTCompCTF
+//--------------------------
+
+//Override to modify suicide timer
+exec function Suicide()
+{
+    if ((Pawn != None) && (Level.TimeSeconds - Pawn.LastStartTime > class'MutUTComp'.Default.SuicideInterval)) {
+        Pawn.Suicide();
+    }
+}
+
+state PlayerMousing extends Spectating
+{
+
+    event PlayerTick( float DeltaTime )
+    {
+        Super.PlayerTick(DeltaTime);
+        if (bRun == 0)
+            GoToState('Spectating');
+    }
+
+    exec function Fire(float f)
+    {
+        // do stuff here for when players click their fire/select button
+        Overlay.Click();
+        return;
+    }
+
+    simulated function PlayerMove(float DeltaTime)
+    {
+        local vector MouseV, ScreenV;
+
+        // get the new mouse position offset
+        MouseV.X = DeltaTime * aMouseX / (InputClass.default.MouseSensitivity * DesiredFOV * 0.01111) * (class'GUIController'.default.MenuMouseSens * 2);
+        MouseV.Y = DeltaTime * aMouseY / (InputClass.default.MouseSensitivity * DesiredFOV * -0.01111) * (class'GUIController'.default.MenuMouseSens * 2);
+
+        // update mouse position
+        PlayerMouse += MouseV;
+
+        // convert mouse position to screen coords, but only if we have good screen sizes
+        if ((LastHUDSizeX > 0) && (LastHUDSizeY > 0))
+        {
+            ScreenV.X = PlayerMouse.X + LastHUDSizeX * 0.5;
+            ScreenV.Y = PlayerMouse.Y + LastHUDSizeY * 0.5;
+            // here is where you would use the screen coords to do a trace or check HUD elements
+        }
+
+        //Super.PlayerMove(deltaTime);
+
+        return;
+    }
 }
 
 function int FractionCorrection(float in, out float fraction) {

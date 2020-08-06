@@ -7,6 +7,7 @@ var config bool bEnableBrightskinsVoting;
 var config bool bEnableHitsoundsVoting;
 var config bool bEnableWarmupVoting;
 var config bool bEnableTeamOverlayVoting;
+var config bool bEnablePowerupsOverlayVoting;
 var config bool bEnableMapVoting;
 var config bool bEnableGametypeVoting;
 var config bool bEnableTimedOvertimeVoting;
@@ -19,6 +20,7 @@ var config bool bEnableDoubleDamage;
 var config byte EnableBrightSkinsMode;
 var config bool bEnableClanSkins;
 var config bool bEnableTeamOverlay;
+var config bool bEnablePowerupsOverlay;
 var config byte EnableHitSoundsMode;
 var config bool bEnableScoreboard;
 var config bool bEnableWarmup;
@@ -54,6 +56,20 @@ var config int MaxMultiDodges;
 var config int MinNetSpeed;
 var config int MaxNetSpeed;
 
+// CTF-related
+var config int CapBonus, FlagKillBonus, CoverBonus, SealBonus, GrabBonus, MinimalCapBonus;
+var config float BaseReturnBonus, MidReturnBonus, EnemyBaseReturnBonus, CloseSaveReturnBonus;
+
+var config byte CoverMsgType;
+var config byte CoverSpreeMsgType;
+var config byte SealMsgType;
+var config byte SavedMsgType;
+
+var config bool bShowSealRewardConsoleMsg;
+var config bool bShowAssistConsoleMsg;
+
+var config int SuicideInterval;
+
 /* ----Known issues ----
    Mutant:  No Bskins/Forcemodel
    Invasion:  No Bskins/forcemodel on bots (but will on players), no warmup, no custom scoreboard
@@ -85,6 +101,17 @@ var pawn counterpawn;
 
 var string FriendlyVersionPrefix;
 var string FriendlyVersionNumber;
+
+struct PowerupInfoStruct
+{
+    var xPickupBase PickupBase;
+    var int Team;
+    var float NextRespawnTime;
+    var PlayerReplicationInfo LastTaker;
+};
+
+var PowerupInfoStruct PowerupInfo[8];
+
 
 /*    List Of Features to be completed(see utcomp_v2.txt for details)
 ========Not Started========
@@ -155,20 +182,209 @@ var bool bDefaultWeaponsChanged;
 
 function PreBeginPlay()
 {
-
-    SetupDD();
     ReplacePawnAndPC();
     SetupStats();
     SetupVoting();
     SetupColoredDeathMessages();
     StaticSaveConfig();
+    SetupFlags();
+    SetupPowerupInfo();
     bEnhancedNetCodeEnabledAtStartOfMap = bEnableEnhancedNetCode;
 
     super.PreBeginPlay();
 }
 
-function SetupDD()
+function SetupPowerupInfo()
 {
+    local xPickupBase pickupBase;
+    local int i;
+    local byte shieldPickupCount;
+    local byte uDamagePickupCount;
+    local byte kegPickupCount;
+    local bool forceTeam; // Force finding a team if there's 2 powerups of the same type.
+
+    foreach AllActors(class'xPickupBase', pickupBase)
+    {
+
+        if (pickupBase.PowerUp == class'XPickups.SuperShieldPack' || pickupBase.PowerUp == class'XPickups.SuperHealthPack' || pickupBase.PowerUp == class'XPickups.UDamagePack')
+        {
+            PowerupInfo[i].PickupBase = pickupBase;
+
+            if (pickupBase.myPickUp != None)
+                PowerupInfo[i].NextRespawnTime = pickupBase.myPickUp.GetRespawnTime() + pickupBase.myPickup.RespawnEffectTime + Level.GRI.ElapsedTime;
+
+            if (pickupBase.PowerUp == class'XPickups.SuperShieldPack')
+                shieldPickupCount++;
+            else if (pickupBase.PowerUp == class'XPickups.SuperHealthPack')
+                kegPickupCount++;
+            else if (pickupBase.PowerUp == class'XPickups.UDamagePack')
+                uDamagePickupCount++;
+
+            i++;
+
+            if (i == 8)
+            break;
+        }
+    }
+
+    for (i = 0; i < 8; i++)
+    {
+        if (PowerupInfo[i].PickupBase == None)
+            break;
+
+        forceTeam = false;
+
+        if (PowerupInfo[i].PickupBase.PowerUp == class'XPickups.SuperShieldPack' && shieldPickupCount == 2)
+            forceTeam = true;
+        else if (PowerupInfo[i].PickupBase.PowerUp == class'XPickups.SuperHealthPack' && kegPickupCount == 2)
+            forceTeam = true;
+        else if (PowerupInfo[i].PickUpBase.PowerUp == class'XPickups.UDamagePack' && uDamagePickupCount == 2)
+            forceTeam = true;
+
+        PowerupInfo[i].Team = GetTeamNum(PowerupInfo[i].PickupBase, forceTeam);
+    }
+
+}
+
+function LogPickup(Pawn other, Pickup item)
+{
+    local int i;
+
+    for (i = 0; i < 8; i++)
+    {
+        if (PowerupInfo[i].PickupBase == None)
+            break;
+
+        if (PowerupInfo[i].PickupBase.myPickup == item)
+        {
+            PowerupInfo[i].NextRespawnTime = item.GetRespawnTime() - item.RespawnEffectTime + Level.GRI.ElapsedTime;
+            PowerupInfo[i].LastTaker = other.PlayerReplicationInfo;
+        }
+    }
+
+    if (i > 0)
+    {
+        SortPowerupInfo(0, i - 1);
+    }
+}
+
+function SortPowerupInfo(int low, int high)
+{
+  //  low is the lower index, high is the upper index
+  //  of the region of array a that is to be sorted
+  local Int i, j;
+  local float x;
+  Local PowerupInfoStruct Temp;
+
+  i = Low;
+  j = High;
+  x = PowerupInfo[(Low + High) / 2].NextRespawnTime;
+
+  //  partition
+  do
+  {
+   while (PowerupInfo[i].NextRespawnTime < x)
+      i += 1;
+    while ((PowerupInfo[j].NextRespawnTime > x) && (x > 0))
+     j -= 1;
+
+    if (i <= j)
+    {
+     // swap array elements, inlined
+     Temp = PowerupInfo[i];
+      PowerupInfo[i] = PowerupInfo[j];
+      PowerupInfo[j] = Temp;
+      i += 1;
+      j -= 1;
+    }
+  } until (i > j);
+
+  //  recursion
+  if (low < j)
+    SortPowerupInfo(low, j);
+  if (i < high)
+    SortPowerupInfo(i, high);
+}
+
+function int GetTeamNum(Actor a, bool forceTeam)
+{
+    local string locationName;
+    local Volume V;
+    local Volume Best;
+    local CTFBase FlagBase;
+    local CTFBase RedFlagBase;
+    local CTFBase BlueFlagBase;
+
+    locationName = a.Region.Zone.LocationName;
+
+    if (Instr(Caps(locationName), "RED" ) != -1)
+        return 0;
+
+    if (Instr(Caps(locationName), "BLUE" ) != -1)
+        return 1;
+
+    // For example the 100 in Citadel, we need to find in what volume it is.
+    foreach AllActors( class'Volume', V )
+    {
+        if( V.LocationName == "" || V.LocationName == class'Volume'.default.LocationName)
+            continue;
+
+        if( (Best != None) && (V.LocationPriority <= Best.LocationPriority) )
+            continue;
+
+        if( V.Encompasses(a) )
+            Best = V;
+    }
+
+    if (Best != None)
+    {
+        Log("BestName"@a@Best.LocationName);
+        if (Instr(Caps(Best.LocationName), "RED" ) != -1)
+            return 0;
+        if (Instr(Caps(Best.LocationName), "BLUE" ) != -1)
+            return 1;
+    }
+
+    if (forceTeam && Level.Game.IsA('xCTFGame'))
+    {
+        // Well we will look at the distance from the flag base...
+
+
+        ForEach DynamicActors(class 'CTFBase', FlagBase)
+        {
+            if (FlagBase.DefenderTeamIndex == 0)
+                RedFlagBase = flagBase;
+            else
+                BlueFlagBase = flagBase;
+        }
+
+        if (RedFlagBase != None && BlueFlagBase != None)
+        {
+            if (VSize(a.Location - RedFlagBase.Location) < VSize(a.Location - BlueFlagBase.Location))
+                return 0;
+            else
+                return 1;
+        }
+    }
+
+    return 255;
+}
+
+/* Change the flags the the UTComp one so we can track caps and assists. */
+function SetupFlags()
+{
+    local CTFBase FlagBase;
+
+    if (!Level.Game.IsA('xCTFGame'))
+        return;
+
+    ForEach DynamicActors(class 'CTFBase', FlagBase)
+    {
+        if (FlagBase.DefenderTeamIndex == 0)
+            FlagBase.FlagType = class'UTCompv18c.UTComp_xRedFlag';
+        else
+            FlagBase.FlagType = class'UTCompv18c.UTComp_xBlueFlag';
+    }
 }
 
 function SetupColoredDeathMessages()
@@ -286,7 +502,7 @@ static function bool IsPredicted(actor A)
 
 function SetupTeamOverlay()
 {
-    if(!bEnableTeamOverlay || !Level.Game.bTeamGame)
+    if((!bEnableTeamOverlay && !bEnablePowerupsOverlay) || !Level.Game.bTeamGame)
         return;
     if (OverlayClass==None)
     {
@@ -429,7 +645,7 @@ simulated function Tick(float DeltaTime)
 
     if(PC!=None)
     {
-        PC.Player.InteractionMaster.AddInteraction("UTCompv18c.UTComp_Overlay", PC.Player);
+        BS_xPlayer(PC).Overlay = UTComp_Overlay(PC.Player.InteractionMaster.AddInteraction("UTCompv18c.UTComp_Overlay", PC.Player));
         bHasInteraction=True;
         class'DamTypeLinkShaft'.default.bSkeletize=false;
     }
@@ -481,6 +697,7 @@ function SpawnReplicationClass()
     RepInfo.EnableBrightSkinsMode=Clamp(EnableBrightSkinsMode,1,3);
     RepInfo.bEnableClanSkins=bEnableClanSkins;
     RepInfo.bEnableTeamOverlay=bEnableTeamOverlay;
+    RepInfo.bEnablePowerupsOverlay=bEnablePowerupsOverlay;
     RepInfo.EnableHitSoundsMode=EnableHitSoundsMode;
     RepInfo.bEnableScoreboard=bEnableScoreboard;
     RepInfo.bEnableWarmup=bEnableWarmup;
@@ -490,6 +707,7 @@ function SpawnReplicationClass()
     RepInfo.bEnableHitsoundsVoting=bEnableHitsoundsVoting;
     RepInfo.bEnableWarmupVoting=bEnableWarmupVoting;
     RepInfo.bEnableTeamOverlayVoting=bEnableTeamOverlayVoting;
+    RepInfo.bEnablePowerupsOverlayVoting=bEnablePowerupsOverlayVoting;
     RepInfo.bEnableMapVoting=bEnableMapVoting;
     RepInfo.bEnableGametypeVoting=bEnableGametypeVoting;
     RepInfo.ServerMaxPlayers=ServerMaxPlayers;
@@ -679,7 +897,6 @@ function bool SniperCheckReplacement( Actor Other, out byte bSuperRelevant )
 
 function bool getDoubleDamage()
 {
-   SetupDD();
    return bEnableDoubleDamage;
 }
 
@@ -722,7 +939,13 @@ function ModifyLogin(out string Portal, out string Options)
     else if(Level.Game.ScoreBoardType~="xInterface.ScoreBoardTeamDeathMatch")
     {
         if(bEnableScoreBoard)
-            Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoard";
+        {
+            //TODO: SCOREBOARD
+            //if (Level.Game.IsA('xCTFGame'))
+            //    Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoardCTF";
+            //else
+                Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoard";
+        }
         else
             Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoardTDM";
     }
@@ -830,8 +1053,8 @@ function ServerTraveling(string URL, bool bItems)
 
 function ParseURL(string Url)
 {
-   local string Skinz0r, Sounds, overlay, warmup, dd, TimedOver
-   , TimedOverLength, grenadesonspawn, enableenhancednetcode, forward;
+   local string Skinz0r, Sounds, overlay, powerupsOverlay, warmup, dd, TimedOver
+   , TimedOverLength, grenadesonspawn, enableenhancednetcode, forward, suicideIntervalString;
    local array<string> Parts;
    local int i;
 
@@ -848,6 +1071,8 @@ function ParseURL(string Url)
                Sounds=Right(Parts[i], Len(Parts[i])-Len("HitSoundsMode")-1);
            if(Left(Parts[i],Len("EnableTeamOverlay"))~= "EnableTeamOverlay")
                Overlay=Right(Parts[i], Len(Parts[i])-Len("EnableTeamOverlay")-1);
+           if (Left(Parts[i],Len("EnablePowerupsOverlay"))~= "EnablePowerupsOverlay")
+               PowerupsOverlay=Right(Parts[i], Len(Parts[i])-Len("EnablePowerupsOverlay")-1);
            if(Left(Parts[i],Len("EnableWarmup"))~= "EnableWarmup")
                Warmup=Right(Parts[i], Len(Parts[i])-Len("EnableWarmup")-1);
            if(Left(Parts[i],Len("DoubleDamage"))~= "DoubleDamage")
@@ -862,6 +1087,8 @@ function ParseURL(string Url)
                EnableEnhancedNetcode=Right(Parts[i], Len(Parts[i])-Len("EnableEnhancedNetcode")-1);
            if(Left(Parts[i],Len("Forward"))~= "Forward")
                Forward=Right(Parts[i], Len(Parts[i])-Len("Forward")-1);
+           if (Left(Parts[i], Len("SuicideInterval")) ~= "SuicideInterval")
+               suicideIntervalString = Right(Parts[i], Len(Parts[i])-Len("SuicideInterval")-1);
        }
    }
    if(Skinz0r !="" && int(Skinz0r)<4 && int(Skinz0r)>0)
@@ -878,6 +1105,11 @@ function ParseURL(string Url)
    {
        default.bEnableTeamOverlay=Overlay~="True";
        bEnableTeamOverlay = default.bEnableTeamOverlay;
+   }
+   if(PowerupsOverlay !="" && (PowerupsOverlay~="False" || PowerupsOverlay~="True"))
+   {
+       default.bEnablePowerupsOverlay=PowerupsOverlay~="True";
+       bEnablePowerupsOverlay = default.bEnablePowerupsOverlay;
    }
    if(Warmup !="" && (Warmup~="False" || Warmup~="True"))
    {
@@ -916,6 +1148,11 @@ function ParseURL(string Url)
        default.bEnableEnhancedNetcode=(EnableEnhancedNetcode~="True");
        bEnhancedNetCodeEnabledAtStartOfMap=default.bEnableEnhancedNetcode;
        bEnableEnhancedNetcode = default.bEnableEnhancedNetCode;
+   }
+   if (suicideIntervalString != "")
+   {
+      default.SuicideInterval = Int(suicideIntervalString);
+      SuicideInterval = default.SuicideInterval;
    }
    StaticSaveConfig();
 }
@@ -1047,6 +1284,7 @@ static function FillPlayInfo (PlayInfo PlayInfo)
     PlayInfo.AddSetting("UTComp Settings", "bEnableDoubleDamage", "Enable Double Damage", 1, 1, "Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableAutoDemoRec", "Enable Serverside Demo-Recording", 1, 1, "Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableTeamOverlay", "Enable Team Overlay", 1, 1, "Check");
+    PlayInfo.AddSetting("UTComp Settings", "bEnablePowerupsOverlay", "Enable Powerups Overlay for spectators", 1, 1, "Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableEnhancedNetcode", "Enable Enhanced Netcode", 1, 1, "Check");
     PlayInfo.AddSetting("UTComp Settings", "bForward", "Enable the Forward gameplay modification", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "ServerMaxPlayers", "Voting Max Players",255, 1, "Text","2;0:32",,True,True);
@@ -1060,6 +1298,7 @@ static function FillPlayInfo (PlayInfo PlayInfo)
     PlayInfo.AddSetting("UTComp Settings", "bEnableWarmupVoting", "Allow players to vote on Warmup setting", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableHitsoundsVoting", "Allow players to vote on Hitsounds settings", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableTeamOverlayVoting", "Allow players to vote on team overlay setting", 1, 1,"Check");
+    PlayInfo.AddSetting("UTComp Settings", "bEnablePowerupsOverlayVoting", "Allow players to vote on powerups overlay setting", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableEnhancedNetcodeVoting", "Allow players to vote on enhanced netcode setting", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "bEnableMapVoting", "Allow players to vote for map changes", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "WarmupTime", "Warmup Time",1, 1, "Text","0;0:1800",,True,True);
@@ -1082,11 +1321,13 @@ static event string GetDescriptionText(string PropName)
         case "NumGrenadesOnSpawn": return "Set this to the number of Assault Rifle grenades you wish a player to spawn with.";
         case "MaxMultiDodges": return "Additional dodges players can perform without landing.";
         case "bEnableTeamOverlay": return "Check this to enable the team overlay.";
+        case "bEnablePowerupsOverlay": return "Check this to enable the powerups overlay for spectators.";
         case "bEnableEnhancedNetcode": return "Check this to enable the enhanced netcode.";
         case "bEnableVoting": return "Check this to enable voting.";
         case "bEnableBrightSkinsVoting": return "Check this to enable voting for brightskins.";
         case "bEnablehitsoundsVoting": return "Check this to enable voting for hitsounds.";
         case "bEnableTeamOverlayVoting": return "Check this to enable voting for Team Overlay.";
+        case "bEnablePowerupsOverlayVoting": return "Check this to enable voting for powerups overlay for spectators.";
         case "bEnableEnhancedNetcodeVoting": return "Check this to enable voting for Enhanced Netcode.";
         case "bEnableWarmupVoting": return "Check this to enable voting for Warmup.";
         case "bEnableMapVoting": return "Check this to enable voting for Maps.";
@@ -1157,6 +1398,7 @@ defaultproperties
      bEnableHitsoundsVoting=True
      bEnableWarmupVoting=True
      bEnableTeamOverlayVoting=True
+     bEnablePowerupsOverlayVoting=True
      bEnableMapVoting=True
      bEnableGametypeVoting=True
      VotingPercentRequired=51.000000
@@ -1164,7 +1406,7 @@ defaultproperties
      benableDoubleDamage=True
      EnableBrightSkinsMode=3
      bEnableClanSkins=True
-     bEnableTeamOverlay=True
+     bEnablePowerupsOverlay=True
      EnableHitSoundsMode=1
      bEnableScoreboard=True
      bEnableWarmup=True
@@ -1288,4 +1530,26 @@ defaultproperties
      bShieldFix=true
 
      bAllowRestartVoteEvenIfMapVotingIsTurnedOff=false
+
+     CapBonus = 5
+     FlagKillBonus = 3
+     CoverBonus = 4
+     SealBonus = 4
+     GrabBonus = 0
+     MinimalCapBonus = 5
+     BaseReturnBonus = 0.500000
+     MidReturnBonus = 2.000000
+     EnemyBaseReturnBonus = 5.000000
+     CloseSaveReturnBonus = 10.000000
+
+
+     CoverMsgType = 3
+     CoverSpreeMsgType = 3
+     SealMsgType = 3
+     SavedMsgType = 3
+
+     bShowSealRewardConsoleMsg = true;
+     bShowAssistConsoleMsg = true;
+
+     SuicideInterval = 3
 }

@@ -828,12 +828,14 @@ function DrawOtherStats(Canvas C)
     local float TextOffsetX;
     local float TextOffsetY;
     local bool bShouldDraw;
+    local UTComp_Settings S;
 
 
     bDisplayMessages=!class'UTComp_ScoreBoard'.default.bDrawStats;
     if(!class'UTComp_ScoreBoard'.default.bDrawStats || !Owner.IsA('BS_xPlayer') || BS_xPlayer(Owner).UTCompPRI==None)
         return;
 
+    S = BS_xPlayer(Owner).Settings;
 
     UxP=BS_xPlayer(Owner).currentStatDraw;
     UxP.UpdatePercentages();
@@ -852,8 +854,8 @@ function DrawOtherStats(Canvas C)
         bShouldDraw=True;
         if(UxP.NormalWepStatsPrim[i]!=0 || UxP.NormalWepStatsAlt[i]!=0 || UxP.NormalWepStatsAltHit[i]!=0 || UxP.NormalWepStatsPrimHit[i]!=0)
         {
-            for(j=0; j<class'UTComp_Settings'.default.DontDrawInStats.Length; j++)
-                if(class'UTComp_Settings'.default.DontDrawInStats[j]==i)
+            for(j=0; j<S.DontDrawInStats.Length; j++)
+                if(S.DontDrawInStats[j]==i)
                     bShouldDraw=False;
             if(bShouldDraw)
             {
@@ -1009,11 +1011,14 @@ function DrawStats(Canvas C)
     local float TextOffsetX;
     local float TextOffsetY;
     local bool bShouldDraw;
+    local UTComp_Settings S;
 
 
     bDisplayMessages=!class'UTComp_ScoreBoard'.default.bDrawStats;
     if(!class'UTComp_ScoreBoard'.default.bDrawStats || !Owner.IsA('BS_xPlayer') || BS_xPlayer(Owner).UTCompPRI==None)
         return;
+
+    S = BS_xPlayer(Owner).Settings;
 
     UxP=BS_xPlayer(Owner);
 
@@ -1040,8 +1045,8 @@ function DrawStats(Canvas C)
         bShouldDraw=True;
         if(UxP.UTCompPRI.NormalWepStatsPrim[i]!=0 || UxP.UTCompPRI.NormalWepStatsAlt[i]!=0 || UxP.NormalWepStatsAlt[i].Hits!=0 || UxP.NormalWepStatsPrim[i].Hits!=0)
         {
-            for(j=0; j<class'UTComp_Settings'.default.DontDrawInStats.Length; j++)
-                if(class'UTComp_Settings'.default.DontDrawInStats[j]==i)
+            for(j=0; j<S.DontDrawInStats.Length; j++)
+                if(S.DontDrawInStats[j]==i)
                     bShouldDraw=False;
             if(bShouldDraw)
             {

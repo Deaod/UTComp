@@ -26,6 +26,9 @@ var float OldBaseEyeHeight;
 var float EyeHeightOffset;
 var vector OldLocation;
 
+var UTComp_Settings Settings;
+var UTComp_HUDSettings HUDSettings;
+
 replication
 {
   unreliable if (Role==Role_authority)
@@ -37,6 +40,20 @@ simulated event PostNetBeginPlay()
     super.PostNetBeginPlay();
     OldBaseEyeHeight = default.BaseEyeHeight;
     OldLocation = Location;
+}
+
+simulated event PostBeginPlay() {
+    super.PostBeginPlay();
+
+    foreach AllObjects(class'UTComp_Settings', Settings)
+        break;
+    if (Settings == none)
+        Warn(self@"Settings object not found!");
+
+    foreach AllObjects(class'UTComp_HUDSettings', HUDSettings)
+        break;
+    if (HUDSettings == none)
+        Warn(self@"HUDSettings object not found!");
 }
 
 function int ShieldAbsorb( int dam )
@@ -233,15 +250,15 @@ simulated function string GetDefaultCharacter()
 
     if(!PawnIsEnemyOrBlue(True))
     {
-        for(i=0; i<class'UTComp_Settings'.default.ClanSkins.Length; i++)
-            if(PlayerReplicationInfo!=None && InStrNonCaseSensitive(PlayerReplicationInfo.PlayerName, class'UTComp_Settings'.default.ClanSkins[i].PlayerName))
-                return IsAcceptable(class'UTComp_Settings'.default.ClanSkins[i].ModelName);
+        for(i=0; i<Settings.ClanSkins.Length; i++)
+            if(PlayerReplicationInfo!=None && InStrNonCaseSensitive(PlayerReplicationInfo.PlayerName, Settings.ClanSkins[i].PlayerName))
+                return IsAcceptable(Settings.ClanSkins[i].ModelName);
     }
 
-    if(PawnIsEnemyOrBlue(class'UTComp_Settings'.default.bEnemyBasedModels))
-        return IsAcceptable(class'UTComp_Settings'.default.BlueEnemyModelName);
+    if(PawnIsEnemyOrBlue(Settings.bEnemyBasedModels))
+        return IsAcceptable(Settings.BlueEnemyModelName);
     else
-        return IsAcceptable(class'UTComp_Settings'.default.RedTeammateModelName);
+        return IsAcceptable(Settings.RedTeammateModelName);
 }
 
 /* -- S2 in S -- */
@@ -261,10 +278,10 @@ simulated function bool ShouldForceModel()
    if(Level.NetMode==NM_DedicatedServer)
        return true;
 
-   if(PawnIsEnemyOrBlue(class'UTComp_Settings'.default.bEnemyBasedModels))
-       return class'UTComp_Settings'.default.bBlueEnemyModelsForced;
+   if(PawnIsEnemyOrBlue(Settings.bEnemyBasedModels))
+       return Settings.bBlueEnemyModelsForced;
    else
-       return class'UTComp_Settings'.default.bRedTeammateModelsForced;
+       return Settings.bRedTeammateModelsForced;
 }
 
 /*  Includes all defualt characters as of ECE release  */
@@ -510,11 +527,11 @@ simulated function Setup(xUtil.PlayerRecord rec, optional bool bLoadNow)
     // check causes CPB skins to fuckup, erm?
     if(!Material(DynamicLoadObject(rec.BodySkinName, class'Material', true)).IsA('Texture') && !Material(DynamicLoadObject(rec.BodySkinName, class'Material', true)).IsA('FinalBlend'))
     {
-        rec = class'xUtil'.static.FindPlayerRecord(class'UTComp_Settings'.default.FallbackCharacterName);
+        rec = class'xUtil'.static.FindPlayerRecord(Settings.FallbackCharacterName);
     }
     else if(!ShouldUseModel(Rec.DefaultName))
     {
-        rec = class'xUtil'.static.FindPlayerRecord(class'UTComp_Settings'.default.FallbackCharacterName);
+        rec = class'xUtil'.static.FindPlayerRecord(Settings.FallbackCharacterName);
     }
     Species = rec.Species;
 	RagdollOverride = rec.Ragdoll;
@@ -582,10 +599,10 @@ simulated function material ChangeColorOfSkin(material SkinToChange, byte SkinNu
 
 simulated function byte FindSkinMode()
 {
-    if(PawnIsEnemyOrBlue(class'UTComp_Settings'.default.bEnemyBasedSkins))
-        return  class'UTComp_Settings'.default.ClientSkinModeBlueEnemy;
+    if(PawnIsEnemyOrBlue(Settings.bEnemyBasedSkins))
+        return  Settings.ClientSkinModeBlueEnemy;
     else
-        return  class'UTComp_Settings'.default.ClientSkinModeRedTeammate;
+        return  Settings.ClientSkinModeRedTeammate;
 }
 
 simulated function int GetColorMode()
@@ -603,10 +620,10 @@ simulated function int GetColorMode()
 simulated function int GetColorModeBright()
 {
     local int colormode;
-    if(PawnIsEnemyOrBlue(class'UTComp_Settings'.default.bEnemyBasedSkins))
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy;
+    if(PawnIsEnemyOrBlue(Settings.bEnemyBasedSkins))
+        ColorMode=Settings.PreferredSkinColorBlueEnemy;
     else
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorRedTeammate;
+        ColorMode=Settings.PreferredSkinColorRedTeammate;
     return Colormode%4;
 }
 
@@ -615,15 +632,15 @@ simulated function int GetColorModeEpic()
     local byte ColorMode;
     local byte OtherColorMode;
 
-    if(PawnIsEnemyOrBlue(class'UTComp_Settings'.default.bEnemyBasedSkins))
+    if(PawnIsEnemyOrBlue(Settings.bEnemyBasedSkins))
     {
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy;
-        OtherColorMode=class'UTComp_Settings'.default.PreferredSkinColorRedTeammate;
+        ColorMode=Settings.PreferredSkinColorBlueEnemy;
+        OtherColorMode=Settings.PreferredSkinColorRedTeammate;
     }
     else
     {
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorRedTeammate;
-        OtherColorMode=class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy;
+        ColorMode=Settings.PreferredSkinColorRedTeammate;
+        OtherColorMode=Settings.PreferredSkinColorBlueEnemy;
     }
     if(ColorMode > 3)
         ColorMode-=4;
@@ -647,15 +664,15 @@ simulated function material ChangeOnlyColor(material SkinToChange)
     local byte ColorMode;
     local byte OtherColorMode;
 
-    if(PawnIsEnemyOrBlue(class'UTComp_Settings'.default.bEnemyBasedSkins))
+    if(PawnIsEnemyOrBlue(Settings.bEnemyBasedSkins))
     {
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy;
-        OtherColorMode=class'UTComp_Settings'.default.PreferredSkinColorRedTeammate;
+        ColorMode=Settings.PreferredSkinColorBlueEnemy;
+        OtherColorMode=Settings.PreferredSkinColorRedTeammate;
     }
     else
     {
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorRedTeammate;
-        OtherColorMode=class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy;
+        ColorMode=Settings.PreferredSkinColorRedTeammate;
+        OtherColorMode=Settings.PreferredSkinColorBlueEnemy;
     }
     if(ColorMode > 3)
         ColorMode-=4;
@@ -679,10 +696,10 @@ simulated function material ChangeColorAndBrightness(material SkinToChange, int 
 {
     local byte ColorMode;
 
-    if(PawnIsEnemyOrBlue(class'UTComp_Settings'.default.bEnemyBasedSkins))
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorBlueEnemy;
+    if(PawnIsEnemyOrBlue(Settings.bEnemyBasedSkins))
+        ColorMode=Settings.PreferredSkinColorBlueEnemy;
     else
-        ColorMode=class'UTComp_Settings'.default.PreferredSkinColorRedTeammate;
+        ColorMode=Settings.PreferredSkinColorRedTeammate;
     switch ColorMode
     {
         case 0:  return MakeDMSkin(SkinToChange);  break;
@@ -718,10 +735,10 @@ simulated function material ChangeToUTCompSkin(material SkinToChange, byte SkinN
 
     C.CombineOperation=CO_Add;
     C.Material1=MakeDMSkin(SkinToChange);
-    if(PawnIsEnemyOrBlue(class'UTComp_Settings'.default.bEnemyBasedSkins))
-        CC.Color=MakeClanSkin(class'UTComp_Settings'.default.BlueEnemyUTCompSkinColor);
+    if(PawnIsEnemyOrBlue(Settings.bEnemyBasedSkins))
+        CC.Color=MakeClanSkin(Settings.BlueEnemyUTCompSkinColor);
     else
-        CC.Color=MakeClanSkin(class'UTComp_Settings'.default.RedTeammateUTCompSkinColor);
+        CC.Color=MakeClanSkin(Settings.RedTeammateUTCompSkinColor);
 
     SavedColor=CC.Color;
     C.Material2=CC;
@@ -736,10 +753,10 @@ simulated function color MakeClanSkin(color PreviousColor)
     local int i;
     if(RepInfo==None || (RepInfo.bEnableClanSkins && !PawnIsEnemyOrBlue(True)))
     {
-        for(i=0; i<class'UTComp_Settings'.default.ClanSkins.Length && PlayerReplicationInfo !=None; i++)
-            if(InStrNonCaseSensitive(PlayerReplicationInfo.PlayerName, class'UTComp_Settings'.default.ClanSkins[i].PlayerName))
+        for(i=0; i<Settings.ClanSkins.Length && PlayerReplicationInfo !=None; i++)
+            if(InStrNonCaseSensitive(PlayerReplicationInfo.PlayerName, Settings.ClanSkins[i].PlayerName))
             {
-                PreviousColor=class'UTComp_Settings'.default.ClanSkins[i].PlayerColor;
+                PreviousColor=Settings.ClanSkins[i].PlayerColor;
                 break;
             }
     }
@@ -947,7 +964,7 @@ state dying
     }
     simulated function DarkSkinMe()
     {
-        if(Level.NetMode==NM_DedicatedServer || !class'UTComp_Settings'.default.benableDarkSkinning)
+        if(Level.NetMode==NM_DedicatedServer || !Settings.benableDarkSkinning)
             return;
         if(Skins.Length >= 1 && Skins[0].IsA('Combiner'))
         {
@@ -963,9 +980,9 @@ state dying
 simulated function bool ShouldUseModel(string S)
 {
     local int i;
-    for(i=0; i<class'UTComp_Settings'.default.DisallowedEnemyNames.Length; i++)
+    for(i=0; i<Settings.DisallowedEnemyNames.Length; i++)
     {
-        if(class'UTComp_Settings'.default.DisallowedEnemyNames[i]~=S)
+        if(Settings.DisallowedEnemyNames[i]~=S)
             return false;
     }
     return true;

@@ -1,6 +1,6 @@
-
-
-class UTComp_HudSettings extends Object;
+class UTComp_HUDSettings extends Object
+    Config(UTComp)
+    PerObjectConfig;
 
 struct SpecialCrosshair
 {

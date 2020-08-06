@@ -6,6 +6,10 @@ simulated static function UTComp_PRI GetUTCompPRI(PlayerReplicationInfo PRI)
 {
     local LinkedReplicationInfo lPRI;
 
+    
+    if (PRI == None)
+        return None;
+
     if(PRI.CustomReplicationInfo==None)
         return None;  //shouldn't happen
 

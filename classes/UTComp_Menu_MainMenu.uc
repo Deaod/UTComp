@@ -4,10 +4,26 @@ class UTComp_Menu_MainMenu extends PopupPageBase;
 var automated array<GUIButton> UTCompMenuButtons;
 var automated GUITabControl c_Main;
 var automated FloatingImage i_FrameBG2;
+var UTComp_Settings Settings;
+var UTComp_HUDSettings HUDSettings;
+
+simulated function SaveSettings()
+{
+    Log("Saving settings");
+    Settings.SaveConfig();
+}
+
+simulated function SaveHUDSettings()
+{
+    Log("Saving HUD settings");
+    HUDSettings.SaveConfig();
+}
 
 function InitComponent(GUIController MyController, GUIComponent MyComponent)
 {
 	super.InitComponent(MyController, MyComponent);
+    Settings = BS_xPlayer(PlayerOwner()).Settings;
+    HUDSettings = BS_xPlayer(PlayerOwner()).HUDSettings;
 }
 
 function bool InternalOnClick(GUIComponent C)

@@ -50,6 +50,22 @@ var int TotalMapsToBeReceived;
 var bool bIsLegitPlayer;
 var int totaldamageg;
 
+// CTF stats
+var int FlagGrabs;
+var int FlagCaps;
+var int FlagPickups;
+var int FlagKills;
+var int FlagSaves; // Returned the flag at the last second
+var int FlagDenials; // Killed the EFC at the last second
+var int Assists;
+var int Covers;
+var int CoverSpree;
+var int Seals;
+var int SealSpree;
+var int DefKills;
+
+
+
 const iMAXPLAYERS = 8;
 
 struct TeamOverlayInfo
@@ -60,22 +76,42 @@ struct TeamOverlayInfo
     var PlayerReplicationInfo PRI;
 };
 
-var byte bHasDD[iMAXPLAYERS];
+
+var TeamOverlayInfo OverlayInfoRed[iMAXPLAYERS];
+var TeamOverlayInfo OverlayInfoBlue[iMAXPLAYERS];
 
 
-var TeamOverlayInfo OverlayInfo[iMAXPLAYERS];
+// Don't be stupid and try to move those in the TeamOverlayInfo. It breaks the replication
+// Lost 3 hours to learn that lesson. I imagine lotus and co. learned that the hard way too, 
+// but didn't care enough to point it out. &?/*()%
+var byte bHasDDRed[iMAXPLAYERS];
+var byte bHasDDBlue[iMAXPLAYERS];
+
+struct PowerupInfoStruct
+{
+    var Pickup Pickup;
+    var int Team;
+    var float NextRespawnTime;
+    var PlayerReplicationInfo LastTaker;
+};
+
+var PowerupInfoStruct PowerupInfo[8];
+
 
 var bool bMapListCompleted;
 
 var localized string WepStatNames[15];
 
-var string HitPrim,HitAlt,FiredPrim,FiredAlt,DamagePrim,DamageAlt;
+var string HitPrim, HitAlt, FiredPrim, FiredAlt, DamagePrim, DamageAlt;
 
 replication
 {
     reliable if(Role==Role_Authority)
          bIsReady, CoachTeam, CurrentVoteID,
-         ColoredName, RealKills;
+         ColoredName, RealKills,
+         FlagGrabs, FlagCaps, FlagPickups, FlagKills, FlagSaves, FlagDenials,
+         Assists, Covers, CoverSpree, Seals, SealSpree, DefKills;
+
     unreliable if(Role==Role_Authority && bNetOwner)
         PickedUpFifty, PickedUpHundred, PickedUpAmp,
         PickedUpVial, PickedUpHealth, PickedUpKeg,
@@ -84,11 +120,14 @@ replication
 
     unreliable if(Role==Role_Authority && bNetOwner && bSendWepStats)
         NormalWepStatsPrim, NormalWepStatsAlt;
+
     unreliable if(Role==Role_Authority && bNetOwner)
-        OverlayInfo, VotedYes, VotedNo, bHasDD;
+        OverlayInfoRed, OverlayInfoBlue, bHasDDRed, bHasDDBlue, VotedYes, VotedNo, PowerupInfo;
+
     reliable if(Role<Role_Authority)
         Ready, NotReady, SetVoteMode, SetCoachTeam,
         CallVote, PassVote, SetColoredName, SetShowSelf, GetMapList, ReplyToMapSend;
+        
     reliable if(Role==Role_Authority && bNetOwner)
         MapListSend, SendTotalMapNumber;
 }

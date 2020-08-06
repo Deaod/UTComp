@@ -24,7 +24,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 
      Super.InitComponent(myController,MyOwner);
 
-     for(i=0; i<class'UTComp_Settings'.default.ColoredName.Length; i++)
+     for(i=0; i<Settings.ColoredName.Length; i++)
          co_SavedNames.AddItem(BS_xPlayer(PlayerOwner()).FindColoredName(i));
      co_SavedNames.ReadOnly(True);
 
@@ -32,10 +32,10 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 
      SetColorSliders(0);
 
-     ch_ColorChat.Checked(class'UTComp_Settings'.default.bEnableColoredNamesInTalk);
+     ch_ColorChat.Checked(Settings.bEnableColoredNamesInTalk);
      ch_ColorScoreboard.Checked(class'UTComp_ScoreBoard'.default.bEnableColoredNamesOnScoreboard);
-     ch_ColorQ3.Checked(class'UTComp_Settings'.default.bAllowColoredMessages);
-     ch_EnemyNames.Checked(class'UTComp_Settings'.default.bEnableColoredNamesOnEnemies);
+     ch_ColorQ3.Checked(Settings.bAllowColoredMessages);
+     ch_EnemyNames.Checked(Settings.bEnableColoredNamesOnEnemies);
    //  ch_ColorRedBlue.Checked(class'UTComp_xDeathMessage'.default.bEnableTeamColoredDeaths);
    //  ch_ColorDeath.Checked(class'UTComp_xDeathMessage'.default.drawcolorednamesindeathmessages);
      co_DeathSelect.AddItem("Disabled");
@@ -55,14 +55,14 @@ function InitSliderAndLetters()
 
      for(i=0; i<Len(PlayerOwner().PlayerReplicationInfo.PlayerName); i++)
      {
-          class'UTComp_Settings'.default.ColorName[i].A=255;     //make sure someone didnt change this
+          Settings.ColorName[i].A=255;     //make sure someone didnt change this
           l_ColorNameLetters[i].TextFont="UT2LargeFont";
           l_ColorNameLetters[i].WinTop=0.50;
           l_ColorNameLetters[i].WinWidth=0.029;
           l_ColorNameLetters[i].WinLeft=(0.50-(0.50*0.030*Len(PlayerOwner().PlayerReplicationInfo.PlayerName))+(0.030*i));
           l_ColorNameLetters[i].StyleName="TextLabel";
           l_ColorNameLetters[i].Caption=Right(Left(PlayerOwner().PlayerReplicationInfo.PlayerName, (i+1)), 1);
-          l_ColorNameLetters[i].TextColor=class'UTComp_Settings'.default.ColorName[i];
+          l_ColorNameLetters[i].TextColor=Settings.ColorName[i];
           l_ColorNameLetters[i].TextAlign=TXTA_Center;
      }
      for(i=Len(PlayerOwner().PlayerReplicationInfo.PlayerName); i<20; i++)
@@ -80,19 +80,19 @@ function SpecialInitSliderAndLetters(int j)
 {
      local int i;
 
-     for(i=0; i<Len(class'UTComp_Settings'.default.ColoredName[j].SavedName); i++)
+     for(i=0; i<Len(Settings.ColoredName[j].SavedName); i++)
      {
-          class'UTComp_Settings'.default.ColorName[i].A=255;     //make sure someone didnt change this
+          Settings.ColorName[i].A=255;     //make sure someone didnt change this
           l_ColorNameLetters[i].TextFont="UT2LargeFont";
           l_ColorNameLetters[i].WinTop=0.50;
           l_ColorNameLetters[i].WinWidth=0.029;
-          l_ColorNameLetters[i].WinLeft=(0.50-(0.50*0.030*Len(class'UTComp_Settings'.default.ColoredName[j].SavedName))+(0.030*i));
+          l_ColorNameLetters[i].WinLeft=(0.50-(0.50*0.030*Len(Settings.ColoredName[j].SavedName))+(0.030*i));
           l_ColorNameLetters[i].StyleName="TextLabel";
-          l_ColorNameLetters[i].Caption=Right(Left(class'UTComp_Settings'.default.ColoredName[j].SavedName, (i+1)), 1);
-          l_ColorNameLetters[i].TextColor=class'UTComp_Settings'.default.ColoredName[j].SavedColor[i];
+          l_ColorNameLetters[i].Caption=Right(Left(Settings.ColoredName[j].SavedName, (i+1)), 1);
+          l_ColorNameLetters[i].TextColor=Settings.ColoredName[j].SavedColor[i];
           l_ColorNameLetters[i].TextAlign=TXTA_Center;
      }
-     for(i=Len(class'UTComp_Settings'.default.ColoredName[j].SavedName); i<20; i++)
+     for(i=Len(Settings.ColoredName[j].SavedName); i<20; i++)
           l_ColorNameLetters[i].Caption="";
 
       sl_LetterSelect.MinValue=1;
@@ -104,9 +104,9 @@ function SpecialInitSliderAndLetters(int j)
 }
 function SetColorSliders(byte offset)
 {
-    sl_RedColor.SetValue(class'UTComp_Settings'.default.colorname[offset].R);
-    sl_BlueColor.SetValue(class'UTComp_Settings'.default.colorname[offset].B);
-    sl_GreenColor.SetValue(class'UTComp_Settings'.default.colorname[offset].G);
+    sl_RedColor.SetValue(Settings.colorname[offset].R);
+    sl_BlueColor.SetValue(Settings.colorname[offset].B);
+    sl_GreenColor.SetValue(Settings.colorname[offset].G);
 }
 
 function InternalOnChange( GUIComponent C )
@@ -114,23 +114,23 @@ function InternalOnChange( GUIComponent C )
 
     switch(C)
     {
-    case ch_ColorChat: class'UTComp_Settings'.default.bEnableColoredNamesInTalk=ch_ColorChat.IsChecked();  break;
+    case ch_ColorChat: Settings.bEnableColoredNamesInTalk=ch_ColorChat.IsChecked();  break;
     case ch_ColorScoreboard: class'UTComp_ScoreBoard'.default.bEnableColoredNamesOnScoreboard=ch_ColorScoreboard.IsChecked(); break;
-    case ch_ColorQ3: class'UTComp_Settings'.default.bAllowColoredMessages=ch_ColorQ3.IsChecked(); break;
-    case ch_EnemyNames: class'UTComp_Settings'.default.bEnableColoredNamesOnEnemies=ch_EnemyNames.IsChecked(); break;
+    case ch_ColorQ3: Settings.bAllowColoredMessages=ch_ColorQ3.IsChecked(); break;
+    case ch_EnemyNames: Settings.bEnableColoredNamesOnEnemies=ch_EnemyNames.IsChecked(); break;
   //  case ch_ColorRedBlue: class'UTComp_xDeathMessage'.default.bEnableTeamColoredDeaths=ch_ColorRedBlue.IsChecked(); break;
  //   case ch_ColorDeath: class'UTComp_xDeathMessage'.default.drawcolorednamesindeathmessages=ch_ColorDeath.IsChecked(); break;
     case co_DeathSelect:  class'UTComp_xDeathMessage'.default.bEnableTeamColoredDeaths=(co_DeathSelect.GetIndex()==2);
                           class'UTComp_xDeathMessage'.default.drawcolorednamesindeathmessages=(co_DeathSelect.GetIndex()==1); break;
     case sl_LetterSelect: SetColorSliders(sl_LetterSelect.Value-1); break;
 
-    case sl_RedColor:   class'UTComp_Settings'.default.ColorName[sl_LetterSelect.Value-1].R=sl_RedColor.Value;
+    case sl_RedColor:   Settings.ColorName[sl_LetterSelect.Value-1].R=sl_RedColor.Value;
                         BS_xPlayer(PlayerOwner()).SetColoredNameOldStyle();
                         l_ColorNameLetters[sl_LetterSelect.Value-1].TextColor.R=sl_RedColor.Value;  break;
-    case sl_BlueColor:  class'UTComp_Settings'.default.ColorName[sl_LetterSelect.Value-1].B=sl_BlueColor.Value;
+    case sl_BlueColor:  Settings.ColorName[sl_LetterSelect.Value-1].B=sl_BlueColor.Value;
                         BS_xPlayer(PlayerOwner()).SetColoredNameOldStyle();
                         l_ColorNameLetters[sl_LetterSelect.Value-1].TextColor.B=sl_BlueColor.Value;  break;
-    case sl_GreenColor: class'UTComp_Settings'.default.ColorName[sl_LetterSelect.Value-1].G=sl_GreenColor.Value;
+    case sl_GreenColor: Settings.ColorName[sl_LetterSelect.Value-1].G=sl_GreenColor.Value;
                         BS_xPlayer(PlayerOwner()).SetColoredNameOldStyle();
                         l_ColorNameLetters[sl_LetterSelect.Value-1].TextColor.G=sl_GreenColor.Value;  break;
 
@@ -138,11 +138,10 @@ function InternalOnChange( GUIComponent C )
                            BS_xPlayer(PlayerOwner()).SetInitialColoredName();
                            InitSliderAndLetters();*/   break;
     }
-    BS_xPlayer(PlayerOwner()).MakeSureSaveConfig();
     class'BS_xPlayer'.Static.StaticSaveConfig();
     class'UTComp_ScoreBoard'.Static.StaticSaveConfig();
     class'UTComp_xDeathMessage'.Static.StaticSaveConfig();
-    class'UTComp_Settings'.static.staticSaveConfig();
+    SaveSettings();
 }
 
 function bool InternalOnClick( GUIComponent Sender )
@@ -155,35 +154,34 @@ function bool InternalOnClick( GUIComponent Sender )
     case bu_SaveName:
                        BS_xPlayer(PlayerOwner()).SaveNewColoredName();
                        co_SavedNames.ReadOnly(False);
-                       co_SavedNames.AddItem(BS_xPlayer(PlayerOwner()).AddNewColoredName(class'UTComp_Settings'.default.ColoredName.Length-1));
+                       co_SavedNames.AddItem(BS_xPlayer(PlayerOwner()).AddNewColoredName(Settings.ColoredName.Length-1));
                        co_SavedNames.ReadOnly(True); break;
 
 
-    case bu_DeleteName:  if(class'UTComp_Settings'.default.ColoredName.Length>co_SavedNames.GetIndex() && co_SavedNames.GetIndex()>=0)
-                             class'UTComp_Settings'.default.ColoredName.Remove(co_SavedNames.GetIndex(), 1);
-                        // BS_xPlayer(PlayerOwner()).ColoredName=class'UTComp_Settings'.default.ColoredName;
+    case bu_DeleteName:  if(Settings.ColoredName.Length>co_SavedNames.GetIndex() && co_SavedNames.GetIndex()>=0)
+                             Settings.ColoredName.Remove(co_SavedNames.GetIndex(), 1);
+                        // BS_xPlayer(PlayerOwner()).ColoredName=Settings.ColoredName;
                          co_SavedNames.ReadOnly(False);
                          co_SavedNames.RemoveItem(co_SavedNames.GetIndex());
                          co_SavedNames.ReadOnly(True); break;
 
     case bu_ResetWhite:   for(i=0; i<20; i++)
                           {
-                              class'UTComp_Settings'.default.colorname[i].R=255;
-                              class'UTComp_Settings'.default.colorname[i].G=255;
-                              class'UTComp_Settings'.default.colorname[i].B=255;
+                              Settings.colorname[i].R=255;
+                              Settings.colorname[i].G=255;
+                              Settings.colorname[i].B=255;
                               l_ColorNameLetters[i].TextColor.R=255;
                               l_ColorNameLetters[i].TextColor.G=255;
                               l_ColorNameLetters[i].TextColor.B=255;
                           }   break;
     case bu_Apply:
                     BS_xPlayer(PlayerOwner()).SetColoredNameOldStyleCustom(,co_SavedNames.GetIndex());
-                    class'UTComp_Settings'.default.CurrentSelectedColoredName=co_savedNames.GetIndex();
+                    Settings.CurrentSelectedColoredName=co_savedNames.GetIndex();
                     SpecialInitSliderAndLetters(co_SavedNames.GetIndex());
                     SetColorSliders(sl_LetterSelect.Value-1);  break;
     }
-    BS_xPlayer(PlayerOwner()).MakeSureSaveConfig();
     class'BS_xPlayer'.Static.StaticSaveConfig();
-    class'UTComp_Settings'.static.staticSaveConfig();
+    SaveSettings();
 
     Super.InternalOnClick(Sender);
     return true;

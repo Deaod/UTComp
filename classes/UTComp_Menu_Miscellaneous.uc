@@ -25,40 +25,39 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
     super.InitComponent(MyController,MyOwner);
 
-    ch_UseScoreboard.Checked(!class'UTComp_Settings'.default.bUseDefaultScoreboard);
+    ch_UseScoreboard.Checked(!Settings.bUseDefaultScoreboard);
     ch_WepStats.Checked(class'UTComp_Scoreboard'.default.bDrawStats);
     ch_PickupStats.Checked(class'UTComp_Scoreboard'.default.bDrawPickups);
     ch_FootSteps.Checked(class'UTComp_xPawn'.default.bPlayOwnFootSteps);
-    ch_MatchHudColor.Checked(class'UTComp_HudSettings'.default.bMatchHudColor);
-    ch_UseEyeHeightAlgo.Checked(class'UTComp_Settings'.default.bUseNewEyeHeightAlgorithm);
-    ch_UseNewNet.Checked(class'UTComp_Settings'.default.bEnableEnhancedNetCode);
+    ch_MatchHudColor.Checked(HUDSettings.bMatchHudColor);
+    ch_UseEyeHeightAlgo.Checked(Settings.bUseNewEyeHeightAlgorithm);
+    ch_UseNewNet.Checked(Settings.bEnableEnhancedNetCode);
 }
 
 function InternalOnChange( GUIComponent C )
 {
     switch(C)
     {
-        case ch_UseScoreboard: class'UTComp_Settings'.default.bUseDefaultScoreboard=!ch_UseScoreBoard.IsChecked(); break;
+        case ch_UseScoreboard: Settings.bUseDefaultScoreboard=!ch_UseScoreBoard.IsChecked(); break;
         case ch_WepStats:  class'UTComp_Scoreboard'.default.bDrawStats=ch_WepStats.IsChecked();
                            BS_xPlayer(PlayerOwner()).SetBStats(class'UTComp_Scoreboard'.default.bDrawStats);break;
         case ch_PickupStats:  class'UTComp_Scoreboard'.default.bDrawPickups=ch_PickupStats.IsChecked(); break;
         case ch_FootSteps: class'UTComp_xPawn'.default.bPlayOwnFootSteps=ch_FootSteps.IsChecked(); break;
-        case ch_MatchHudColor:  class'UTComp_HudSettings'.default.bMatchHudColor=ch_MatchHudColor.IsChecked(); break;
+        case ch_MatchHudColor:  HUDSettings.bMatchHudColor=ch_MatchHudColor.IsChecked(); break;
         case ch_UseEyeHeightAlgo:
-            class'UTComp_Settings'.default.bUseNewEyeHeightAlgorithm=ch_UseEyeHeightAlgo.IsChecked();
+            Settings.bUseNewEyeHeightAlgorithm=ch_UseEyeHeightAlgo.IsChecked();
             BS_xPlayer(PlayerOwner()).SetEyeHeightAlgorithm(ch_UseEyeHeightAlgo.IsChecked());
             break;
-        case ch_UseNewNet:  class'UTComp_Settings'.default.bEnableEnhancedNetCode=ch_UseNewNet.IsChecked();
+        case ch_UseNewNet:  Settings.bEnableEnhancedNetCode=ch_UseNewNet.IsChecked();
                             BS_xPlayer(PlayerOwner()).TurnOffNetCode(); break;
     }
     class'UTComp_Overlay'.static.StaticSaveConfig();
     class'BS_xPlayer'.static.StaticSaveConfig();
-    class'UTComp_Settings'.static.staticSaveConfig();
+    SaveSettings();
     class'UTComp_Scoreboard'.static.StaticSaveConfig();
     class'UTComp_xPawn'.static.StaticSaveConfig();
     class'UTComp_HudCDeathMatch'.Static.StaticSaveConfig();
-    class'UTComp_HudSettings'.static.StaticSaveConfig();
-    BS_xPlayer(PlayerOwner()).MakeSureSaveConfig();
+    SaveHUDSettings();
     BS_xPlayer(PlayerOwner()).MatchHudColor();
 
 }

@@ -118,10 +118,9 @@ function TakeActionOnVote(byte VoteType, byte VoteSwitch, string Options)
     }
     else if(VoteType==6 && UTCompMutator.bEnableGameTypeVoting && UTCompMutator.bEnableMapVoting)
     {
-        if(!UTCompMutator.bForceMapVoteMatchPrefix || MatchesGametypePrefix(sVotingOptions, UTCompMutator.VotingGameType[Voteswitch].GameTypeOptions))
-        {
-        }
-        else
+        if ((UTCompMutator.bForceMapVoteMatchPrefix && !MatchesGametypePrefix(sVotingOptions, UTCompMutator.VotingGameType[Voteswitch].GameTypeOptions))
+            || !ValidVotingOptions(sVotingOptions)
+            || !ValidVotingOptions(sVotingOptionsAlt))
         {
             BroadcastLocalizedMessage(class'UTComp_VoteFailed');
             return;
@@ -323,7 +322,16 @@ function TakeActionOnVote(byte VoteType, byte VoteSwitch, string Options)
     else if(VoteType==7 && UTCompMutator.bEnableMapVoting)
     {
         if(!UTCompMutator.bForceMapVoteMatchPrefix || Left(sVotingOptions, Len(Level.Game.MapPrefix))~=Level.Game.MapPrefix)
+        {
+            // Should only contain a map name! No other options.
+            if (InstrNonCaseSensitive(sVotingOptions, "?"))
+            {
+                Log("UTComp_Vote: Tried to vote for a map change, but specified advanced parameters:"@sVotingOptions);
+                BroadcastLocalizedMessage(class'UTComp_VoteFailed');
+            }
+            else
             Level.ServerTravel(sVotingOptions, False);
+        }
         else
             BroadcastLocalizedMessage(class'UTComp_VoteFailed');
     }
@@ -345,6 +353,93 @@ function TakeActionOnVote(byte VoteType, byte VoteSwitch, string Options)
         UTCompMutator.default.bForward=(VoteSwitch==1);
     }
     UTCompMutator.static.StaticSaveConfig();
+}
+
+function bool ValidMutator(string mutatorsString)
+{
+    local array<string> mutators;
+    local int i;
+    local int j;
+
+    Split(mutatorsString, ",", mutators);
+    for(i = 0; i < mutators.length; i++)
+    {
+        if (mutators[i] ~= "xGame.MutNoAdrenaline" || mutators[i] ~= "xWeapons.MutNoSuperWeapon")
+            continue;
+
+        for (j = 0; j < UTCompMutator.AlwaysUseThisMutator.length; j++)
+        {
+            if (UTCompMutator.AlwaysUseThisMutator[j] ~= mutators[i])
+                continue;
+        }
+
+        Log("UTComp_Vote: Invalid voted mutator:"@mutators[i]);
+
+        return false;
+    }
+
+}
+
+function bool ValidVotingOptions(string votingOptions)
+{
+    local array<string> options;
+    local array<string> keyValue;
+    local int i;
+
+    local string sVotingOptionsWithoutMapName;
+    local int sVotingOptionsStart;
+    local bool isValidOption;
+
+    sVotingOptionsStart = InStr(sVotingOptions, "?");
+
+    if (sVotingOptionsStart != -1)
+        sVotingOptionsWithoutMapName = Mid(sVotingOptions, sVotingOptionsStart + 1);
+
+    Split(sVotingOptionsWithoutMapName, "?", options);
+    for(i = 1; i < options.length; i++)
+    {
+        isValidOption = false;
+        Split(options[i], "=", keyValue);
+        if (keyValue.Length > 0)
+        {
+            switch (keyValue[0])
+            {
+                case "Game":
+                    isValidOption = true;
+                    break;
+            }
+
+            if (UTCompMutator.bEnableAdvancedVotingOptions)
+            {
+                switch (keyValue[0])
+                {
+                    case "DoubleDamage":
+                    case "GrenadesOnSpawn":
+                    case "TimedOverTimeLength":
+                    case "WeaponStay":
+                    case "GoalScore":
+                    case "TimeLimit":
+                        isValidOption = true;
+                        break;
+                    case "Mutator":
+                        if (ValidMutator(keyValue[1]))
+                            isValidOption = true;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if (!isValidOption)
+        {
+            Log("UTComp_Vote: Invalid voting parameter:"@keyValue[0]);
+            return false;
+        }
+    }
+
+    return true;
 }
 
 function bool MatchesGametypePrefix(string MapName, string S)

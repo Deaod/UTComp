@@ -2,7 +2,7 @@
 
 //-----------------------------------------------------------
 // Part of TeamOverlay by Adam 'Heywood' Booth - heywood@malevolence.com.au
-// altered/recoded by Aaron 'Lotus' Everitt for use in UTCompv18c
+// altered/recoded by Aaron 'Lotus' Everitt for use in UTComp
 //-----------------------------------------------------------
 class UTComp_Overlay extends Interaction;
 
@@ -39,12 +39,12 @@ class UTComp_Overlay extends Interaction;
 var gamereplicationinfo GRI;
 var font InfoFont, LocationFont;
 var float healthOffset, armorOffset, wepiconoffset;
-var int oldscreenwidth, oldfontsize;
-var float tmpX, tmpY, strlenX, strlenY, strlenX2, strlenY2, strlenX3, strlenY3,iconscale;
+var int oldscreenwidth, oldScreenHeight, oldfontsize;
+var float currentX, currentY, strlenX, strlenY, strLenLocationX, strLenLocationY, strlenX3, strlenY3, iconscale;
 var float OnJoinMessageDrawTime;
 var config float DesiredOnJoinMessageTime;
 
-var config bool OverlayEnabled, bDrawIcons;
+var config bool OverlayEnabled, PowerupOverlayEnabled, bDrawIcons;
 var bool BiggerFont;
 
 var vector savedLocation[8];
@@ -52,8 +52,25 @@ var string printLocation[8];
 
 var config float VertPosition, HorizPosition;
 
-var config Color BGColor, InfoTextColor, LocTextColor;
+var config Color BGColor, BGColorBlue, BGColorRed, InfoTextColor, LocTextColor;
 var config int theFontSize;
+
+var LevelInfo Level;
+
+var float PowerupIconOffset;
+var float PowerupCountdownOffset;
+
+var config bool bAlwaysShowPowerups;
+var BS_xPlayer PC;
+var UTComp_PRI uPRI;
+var PlayerReplicationInfo PRI;
+var int numPlayersRed;
+var int numPlayersBlue;
+var int numPowerups;
+
+var Texture MouseCursorTexture;
+var float MousePosX, MousePosY;
+
 
 event NotifyLevelChange()
 {
@@ -65,112 +82,447 @@ event Initialized()
     foreach ViewportOwner.Actor.DynamicActors(class'GameReplicationInfo', GRI)
         If (GRI != None)
             Break;
-    OnJoinMessageDrawTime=ViewPortOwner.Actor.Level.TimeSeconds+default.DesiredOnJoinMessageTime;
+
+    Level = ViewPortOwner.Actor.Level;
+    PC = BS_xPlayer(ViewportOwner.Actor);
+    uPRI = PC.UTCompPRI;
+    PRI = PC.PlayerReplicationInfo;
+
+    OnJoinMessageDrawTime=Level.TimeSeconds+default.DesiredOnJoinMessageTime;
+}
+
+function float GetWeaponIconWidth()
+{
+  return 40 * iconScale;
+}
+
+function float GetHeaderIconHeight()
+{
+  return 24.0*iconScale;
+}
+
+function float GetHeaderIconWidth()
+{
+  return 24.0*iconScale;
+}
+
+function float GetBoxWidth()
+{
+  return wepIconOffset + GetWeaponIconWidth();
+}
+
+function float GetBoxHeight(int numPlayers)
+{
+  local float height;
+  height = numPlayers * (strLenY+strLenLocationY);
+
+  if (default.bDrawIcons)
+    height += GetHeaderIconHeight();
+
+    return height;
+}
+
+/*  If we click on a player or powerup, spectates that player/powerup */
+function Click()
+{
+  local float boxPositionX, boxPositionY, boxWidth, boxHeight;
+  local float playerIndex;
+
+  boxPositionX = GetRedBoxPositionX();
+  boxPositionY = GetRedBoxPositionY();
+  boxWidth = GetBoxWidth();
+  boxHeight = GetBoxHeight(numPlayersRed);
+
+
+
+  if (boxPositionX <= MousePosX && MousePosX <= (boxPositionX+boxWidth) && boxPositionY <= MousePosY && MousePosY <= (boxPositionY+boxHeight))
+  {
+    if (bDrawIcons)
+      playerIndex = Int((MousePosY - boxPositionY - GetHeaderIconHeight()) /  (strLenY + strLenLocationY));
+    else
+      playerIndex = Int((MousePosY - boxPositionY) /  (strLenY + strLenLocationY));
+
+    if (playerIndex >= 0 && playerIndex < 8 && uPRI.OverlayInfoRed[playerIndex].PRI != None)
+    {
+      PC.ServerGoToTarget(uPRI.OverlayInfoRed[playerIndex].PRI);
+      return;
+    }
+  }
+
+  boxPositionX = GetBlueBoxPositionX();
+  boxPositionY = GetBlueBoxPositionY();
+  boxWidth = GetBoxWidth();
+  boxHeight = GetBoxHeight(numPlayersBlue);
+
+  if (boxPositionX <= MousePosX && MousePosX <= (boxPositionX+boxWidth) && boxPositionY <= MousePosY && MousePosY <= (boxPositionY+boxHeight))
+  {
+    if (bDrawIcons)
+      playerIndex = Int((MousePosY - boxPositionY - GetHeaderIconHeight()) /  (strLenY + strLenLocationY));
+    else
+      playerIndex = Int((MousePosY - boxPositionY) /  (strLenY + strLenLocationY));
+
+    if (playerIndex >= 0 && playerIndex < 8 && uPRI.OverlayInfoBlue[playerIndex].PRI != None)
+    {
+      PC.ServerGoToTarget(uPRI.OverlayInfoBlue[playerIndex].PRI);
+      return;
+    }
+  }
+
+  boxPositionX = GetPowerupBoxPositionX();
+  boxPositionY = GetPowerupBoxPositionY();
+  boxWidth = GetPowerupBoxWidth();
+  boxHeight = GetPowerupBoxHeight();
+
+  if (boxPositionX <= MousePosX && MousePosX <= (boxPositionX+boxWidth) && boxPositionY <= MousePosY && MousePosY <= (boxPositionY+boxHeight))
+  {
+    playerIndex = Int((MousePosY - boxPositionY) /  (strLenY + strLenLocationY));
+
+    if (playerIndex >= 0 && playerIndex < 8 && uPRI.PowerupInfo[playerIndex].Pickup != None)
+    {
+      PC.ServerGoToTarget(uPRI.PowerupInfo[playerIndex].Pickup);
+      return;
+    }
+  }
+
+
+}
+
+function DrawBackground(Canvas canvas, int numPlayers, int team)
+{
+  local float boxSizeX;
+  local float boxSizeY;
+  local float iconHeight;
+
+  Canvas.Style = 5;
+  Canvas.SetPos(currentX, currentY);
+  if (team == 0)
+    Canvas.DrawColor = BGColorRed;
+  else
+    Canvas.DrawColor = BGColorBlue;
+  boxSizeX = GetBoxWidth();
+  boxSizeY = GetBoxHeight(numPlayers);
+
+  Canvas.DrawTileStretched(material'Engine.WhiteTexture', boxSizeX, boxSizeY);
+
+  if (default.bDrawIcons)
+  {
+    iconHeight = GetHeaderIconHeight();
+
+    Canvas.SetDrawColor(255, 255, 255, 255);
+
+    // Health Icon
+    Canvas.SetPos(currentX+HealthOffset + ((ArmorOffset-HealthOffset-GetHeaderIconWidth()) / 2), currentY);
+    Canvas.DrawTile(material'HudContent.Generic.Hud',iconHeight,iconHeight,75,167,48,48);
+
+    // Armor Icon
+    Canvas.SetPos(currentX+ArmorOffset + ((wepIconOffset-ArmorOffset-GetHeaderIconWidth()) / 2), currentY);
+    Canvas.DrawTile(material'HudContent.Generic.Hud',iconHeight,iconHeight,1,248,66,66);
+
+    currentY += GetHeaderIconHeight();
+  }
+}
+
+function DrawWelcomeBanner(Canvas canvas)
+{
+  Canvas.SetPos(currentX, currentY);
+  Canvas.Style=5;
+  Canvas.DrawColor=BGColor;
+  Canvas.Font=GetFont(AutoPickFont(Canvas.SizeX, -3), 1);
+  Canvas.StrLen("This server is running", StrLenX3, StrLenY3);
+  if(GetNewNetEnabled())
+     Canvas.DrawTileStretched(material'Engine.WhiteTexture',StrLenX3+5.0, 8*(StrLenY3));
+  else
+     Canvas.DrawTileStretched(material'Engine.WhiteTexture',StrLenX3+5.0, 6*(StrLenY3));
+  Canvas.SetPos(currentX, currentY);
+  Canvas.DrawColor=InfoTextColor;
+  Canvas.DrawText("This server is running");
+  Canvas.StrLen("W", StrLenX3, StrLenY3);
+  Canvas.SetPos(currentX, currentY+1*(StrLenY3+2.0));
+  Canvas.DrawText("UTComp "$MakeColorCode(class'Hud'.Default.GoldColor)$class'MutUTComp'.default.FriendlyVersionNumber$MakeColorCode(InfoTextColor)$".");
+  Canvas.SetPos(currentX, currentY+3*(StrLenY3+2.0));
+  Canvas.DrawText("Press "$MakeColorCode(class'Hud'.Default.GoldColor)$class'GameInfo'.Static.GetKeyBindName("mymenu", PC)$MakeColorCode(InfoTextColor)$" to change");
+  Canvas.SetPos(currentX, currentY+4*(StrLenY3+2.0));
+  Canvas.DrawText("your settings");
+  if(GetNewNetEnabled())
+  {
+     Canvas.SetPos(currentX, currentY+5*(StrLenY3+2.0));
+     Canvas.DrawText("Enh. Net:"@MakeColorCode(class'Hud'.Default.GoldColor)$"Enabled"$MakeColorCode(InfoTextColor)$".");
+  }
+}
+
+function float GetRedBoxPositionX()
+{
+  return OldScreenWidth*default.HorizPosition;//0.003;
+}
+
+function float GetRedBoxPositionY()
+{
+  return OldScreenHeight*default.VertPosition;//0.07;
+}
+
+function float GetBlueBoxPositionX()
+{
+  return OldScreenWidth - OldScreenWidth*default.HorizPosition - GetBoxWidth();//0.003;
+}
+
+function float GetBlueBoxPositionY()
+{
+  return OldScreenHeight*default.VertPosition;//0.07;
 }
 
 function PostRender( canvas Canvas )
 {
    local int i, numplayers;
-   local UTComp_PRI uPRI;
 
-   if(ViewportOwner.Actor.IsA('BS_xPlayer'))
+   if (uPRI == None)
    {
-      if(BS_xPlayer(ViewportOwner.Actor).UTCompPRI!=None)
-          uPRI=BS_xPlayer(ViewportOwner.Actor).UTCompPRI;
+    // Tried to put that in event Initialized, but it didn't work. Maybe the replicationinfo are not created yet?
+    uPRI = PC.UTCompPRI;
+    PRI = PC.PlayerReplicationInfo;
    }
-   if(uPRI==None || ViewportOwner.Actor.myHUD.bShowScoreBoard || !default.OverlayEnabled)
+
+   if (uPRI==None || ViewportOwner.Actor.myHUD.bShowScoreBoard || ViewportOwner.Actor.myHUD.bShowLocalStats || !default.OverlayEnabled)
        return;
 
-   tmpX=Canvas.ClipX*default.HorizPosition;//0.003;
-   tmpY=Canvas.ClipY*default.VertPosition;//0.07;
   // iconScale=Canvas.ClipX/1280.0;
-   if((Canvas.SizeX != OldScreenWidth) || infoFont==None || locationFont==None || oldFontSize != default.theFontSize)
+   if((Canvas.SizeX != OldScreenWidth) || (Canvas.SizeY != OldScreenHeight) || infoFont==None || locationFont==None || oldFontSize != default.theFontSize)
    {
        GetFonts(Canvas);
        oldFontSize=default.TheFontSize;
        OldScreenWidth=Canvas.SizeX;
+       OldScreenHeight=Canvas.SizeY;
        Canvas.Font=infoFont;
        Canvas.StrLen("X", strlenx, strleny);
        Canvas.Font=LocationFont;
-       Canvas.StrLen("X", strlenx2, strleny2);
+       Canvas.StrLen("X", strLenLocationX, strLenLocationY);
        iconScale=strLenY/16.0;
        if(BiggerFont)
        {
            HealthOffset=10*strlenX;
            ArmorOffset=14*strlenX;
            wepiconOffset=18*strLenX;
+
+           PowerupIconOffset = strLenX;
+           PowerupCountdownOffset = 5*strLenX;
        }
        else
        {
            HealthOffset=15*strlenX;
            ArmorOffset=19*strlenX;
            wepiconOffset=23*strLenX;
+
+           PowerupIconOffset = strLenX;
+           PowerupCountdownOffset = 10*strLenX;
   /*     HealthOffset=Canvas.ClipX*0.16;
        armorOffset=Canvas.ClipX*0.20;
        wepiconOffset=Canvas.ClipX*0.24;  */
        }
    }
 
+   currentX = GetRedBoxPositionX();
+   currentY = GetRedBoxPositionY();
+
    if(ViewPortOwner.Actor.Level.TimeSeconds<OnJoinMessageDrawTime)
    {
-       Canvas.SetPos(TmpX, TmpY);
-       Canvas.Style=5;
-       Canvas.DrawColor=BGColor;
-       Canvas.Font=GetFont(AutoPickFont(Canvas.SizeX, -3), 1);
-       Canvas.StrLen("This server is running", StrLenX3, StrLenY3);
-       if(GetNewNetEnabled())
-           Canvas.DrawTileStretched(material'Engine.WhiteTexture',StrLenX3+5.0, 8*(StrLenY3));
-       else
-           Canvas.DrawTileStretched(material'Engine.WhiteTexture',StrLenX3+5.0, 6*(StrLenY3));
-       Canvas.SetPos(TmpX, TmpY);
-       Canvas.DrawColor=InfoTextColor;
-       Canvas.DrawText("This server is running");
-       Canvas.StrLen("W", StrLenX3, StrLenY3);
-       Canvas.SetPos(TmpX, TmpY+1*(StrLenY3+2.0));
-       Canvas.DrawText("UTComp "$MakeColorCode(class'Hud'.Default.GoldColor)$class'MutUTComp'.default.FriendlyVersionNumber$MakeColorCode(InfoTextColor)$".");
-       Canvas.SetPos(TmpX, TmpY+3*(StrLenY3+2.0));
-       Canvas.DrawText("Press "$MakeColorCode(class'Hud'.Default.GoldColor)$class'GameInfo'.Static.GetKeyBindName("mymenu", BS_xPlayer(ViewportOwner.Actor))$MakeColorCode(InfoTextColor)$" to change");
-       Canvas.SetPos(TmpX, TmpY+4*(StrLenY3+2.0));
-       Canvas.DrawText("your settings");
-       if(GetNewNetEnabled())
-       {
-           Canvas.SetPos(TmpX, TmpY+5*(StrLenY3+2.0));
-           Canvas.DrawText("Enh. Net:"@MakeColorCode(class'Hud'.Default.GoldColor)$"Enabled"$MakeColorCode(InfoTextColor)$".");
-       }
-       return;
+      DrawWelcomeBanner(Canvas);
+      return;
    }
 
-    // Draw BackGround
-     for(i=0; i<8; i++)
-        if(uPRI.OverlayInfo[i].PRI!=None)
+   if ((PRI.Team != None && PRI.Team.TeamIndex == 0) || (PRI.bOnlySpectator && (uPRI.CoachTeam == 255 || uPRI.CoachTeam == 0)))
+       {
+    for (i = 0; i < 8; i++)
+    {
+      if (uPRI.OverlayInfoRed[i].PRI != None)
+        numPlayers++;
+       }
+
+    numPlayersRed = numPlayers;
+
+    if (numPlayers > 0)
+    {
+      DrawBackground(Canvas, numPlayers, 0);
+      DrawPlayerNames(Canvas, uPRI, 0);
+      DrawHealth(Canvas, uPRI, 0);
+      DrawArmor(Canvas, uPRI, 0);
+      DrawIcons(Canvas, uPRI, 0);
+      DrawLocation(Canvas, uPRI, 0);
+    }
+
+    //Switch to the other side in case we have to draw the blue team, in spec mode.
+    currentX = GetBlueBoxPositionX();
+    currentY = GetBlueBoxPositionY();
+   }
+
+  if ((PRI.Team != None && PRI.Team.TeamIndex == 1) || (PRI.bOnlySpectator && (uPRI.CoachTeam == 255 || uPRI.CoachTeam == 1)))
+  {
+
+    numPlayers = 0;
+    for (i = 0; i < 8; i++)
+    {
+      if (uPRI.OverlayInfoBlue[i].PRI != None)
            numPlayers++;
-     if(numPlayers<=0)
-        return;
-     Canvas.Style=5;
-     Canvas.SetPos(tmpX, tmpY);
-    // Canvas.SetDrawColor(10,10,10,155);
-     Canvas.DrawColor=default.BGColor;
-     if(default.bDrawIcons)
+    }
+
+    numPlayersBlue = numPlayers;
+    if (numPlayers > 0)
      {
-         Canvas.DrawTileStretched(material'Engine.WhiteTexture',wepIconOffset+iconScale*40.0, numPlayers*(strLenY+strLenY2)+24.0*iconScale);
+      DrawBackground(Canvas, numPlayers, 1);
+      DrawPlayerNames(Canvas, uPRI, 1);
+      DrawHealth(Canvas, uPRI, 1);
+      DrawArmor(Canvas, uPRI, 1);
+      DrawIcons(Canvas, uPRI, 1);
+      DrawLocation(Canvas, uPRI, 1);
+    }
+  }
 
-     // Draw Health/Armor Icons
-     Canvas.SetPos((tmpX+HealthOffset + tmpX+armorOffSet-24.0*iconScale)/2, tmpY);
-     Canvas.SetDrawColor(255,255,255,255);
-     Canvas.DrawTile(material'HudContent.Generic.Hud',24*iconScale,24*iconScale,75,167,48,48);
+  DrawPowerups(Canvas, PRI);
 
-     Canvas.SetPos((tmpX+ArmorOffset + tmpX+WepIconOffSet-24.0*iconScale)/2, tmpY);
-     Canvas.DrawTile(material'HudContent.Generic.Hud',24*iconScale,25*iconScale,1,248,66,66);
-     tmpY+=24.0*iconScale;
-     }
-     else
-        Canvas.DrawTileStretched(material'Engine.WhiteTexture',wepIconOffset+iconScale*40.0, numPlayers*(strLenY+strLenY2));
-    DrawPlayerNames(uPRI, Canvas);
-    DrawHealth(uPRI, Canvas);
-    drawArmor(uPRI, Canvas);
-    drawIcons(uPRI, Canvas);
-    DrawLocation(uPRI, Canvas);
+  PC.LastHUDSizeX = Canvas.SizeX;
+  PC.LastHUDSizeY = Canvas.SizeY;
+
+  if (PC.IsInState('PlayerMousing'))
+     DrawMouseCursor(Canvas);
 }
+
+function string GetFriendlyPowerupName(Pickup pickup, int team)
+{
+  local string friendlyName;
+  if (team == 0)
+    friendlyName = "RED ";
+  else if (team == 1)
+    friendlyName = "BLUE ";
+  else
+    friendlyName = "MID ";
+
+//if (bickupBase.PowerUp == class'XPickups.SuperShieldPack' || bickupBase.PowerUp == class'XPickups.SuperHealthPack' || bickupBase.PowerUp == class'XPickups.UDamagePack')
+  if (pickup.IsA('UDamagePack'))
+    friendlyName = friendlyName$"Amp";
+  else if (pickup.IsA('SuperHealthPack'))
+    friendlyName = friendlyName$"Keg";
+  else if (pickup.IsA('SuperShieldPack'))
+    friendlyName = friendlyName$"100";
+
+  return friendlyName;
+}
+
+simulated function String FormatTime( int Seconds )
+{
+    local int Minutes, Hours;
+    local String Time;
+
+    if (Seconds <= 0)
+      return "UP!";
+
+    if( Seconds > 3600 )
+    {
+        Hours = Seconds / 3600;
+        Seconds -= Hours * 3600;
+
+        Time = Hours$":";
+     }
+  Minutes = Seconds / 60;
+    Seconds -= Minutes * 60;
+
+    if( Minutes >= 10 )
+        Time = Time $ Minutes $ ":";
+    else
+        Time = Time $ "0" $ Minutes $ ":";
+
+    if( Seconds >= 10 )
+        Time = Time $ Seconds;
+     else
+        Time = Time $ "0" $ Seconds;
+
+    return Time;
+}
+
+function float GetPowerupIconHeight()
+{
+  return 24.0*iconScale;
+}
+
+function float GetPowerupBoxWidth()
+{
+  return PowerupCountdownOffset + 9*strLenLocationX;
+}
+
+function float GetPowerupBoxHeight()
+{
+  return numPowerups * (strLenY+strLenLocationY);
+}
+
+function float GetPowerupBoxPositionY()
+{
+  return OldScreenHeight * 0.45;//0.07;
+}
+
+function float GetPowerupBoxPositionX()
+{
+  return OldScreenWidth * default.HorizPosition;//0.003;
+}
+
+function DrawPowerups(Canvas canvas, PlayerReplicationInfo PRI)
+{
+  local int i;
+  local float nextRespawn;
+  local float iconHeight;
+
+  if (PC.uWarmup.bInWarmup || !PRI.bOnlySpectator || PC.IsCoaching() || !default.PowerupOverlayEnabled)
+    return;
+
+  iconHeight = GetPowerupIconHeight();
+
+  numPowerups = 0;
+  for (i = 0; i < 8; i++)
+  {
+    if (uPRI.PowerupInfo[i].Pickup == None)
+      break;
+    numPowerups++;
+  }
+
+  Canvas.DrawColor = BGColor;
+  currentX = GetPowerupBoxPositionX();
+  currentY = GetPowerupBoxPositionY();
+
+  Canvas.SetPos(currentX, currentY);
+  Canvas.DrawTileStretched(material'Engine.WhiteTexture', GetPowerupBoxWidth(), GetPowerupBoxHeight());
+
+  Canvas.DrawColor = default.InfoTextColor;
+
+  for (i = 0; i < 8; i++)
+  {
+    if (uPRI.PowerupInfo[i].Pickup == None)
+      break;
+
+    nextRespawn = (uPRI.PowerupInfo[i].NextRespawnTime - Level.GRI.ElapsedTime) / Level.TimeDilation;
+
+    if (!bAlwaysShowPowerups && nextRespawn > 10)
+      break;
+
+    Canvas.Font = LocationFont;
+
+    // Icon
+    Canvas.SetPos(currentX + PowerupIconOffset, currentY);
+    if (uPRI.PowerupInfo[i].Pickup.IsA('UDamagePack'))
+      Canvas.DrawTile(material'HudContent.Generic.Hud',iconHeight,iconHeight,0,164,73,82);
+    else if (uPRI.PowerupInfo[i].Pickup.IsA('SuperShieldPack'))
+      Canvas.DrawTile(material'HudContent.Generic.Hud',iconHeight,iconHeight,1,248,66,66);
+    else if (uPRI.PowerupInfo[i].Pickup.IsA('SuperHealthPack'))
+      Canvas.DrawTile(material'HudContent.Generic.Hud',iconHeight,iconHeight,75,167,48,48);
+
+    // Name + location
+    Canvas.SetPos(currentX + PowerupCountdownOffset, currentY+strLenLocationY);
+    Canvas.DrawText(GetFriendlyPowerupName(uPRI.PowerupInfo[i].Pickup, uPRI.PowerupInfo[i].Team));
+
+    // Countdown
+    Canvas.Font = InfoFont;
+    Canvas.SetPos(currentX + PowerupCountdownOffset, currentY);
+    Canvas.DrawText(FormatTime(nextRespawn));
+
+    currentY += strLenLocationY + strLenY;
+  }
+}
+
 
 function bool GetNewNetEnabled()
 {
@@ -189,182 +541,278 @@ function string MakeColorCode(color aColor)
    return chr(0x1b)$chr(Max(aColor.R, 1))$chr(Max(aColor.G, 1))$chr(Max(aColor.B, 1));
 }
 
-function DrawPlayerNames(utcomp_PRI uPRI, Canvas Canvas)
+function GetPlayerNameInfo(UTComp_PRI uPRI, int index, int team, out PlayerReplicationInfo PRI, out byte hasFlag, out byte hasDD)
+{
+  hasFlag = 0;
+  hasDD = 0;
+
+  if (team == 0)
+  {
+    PRI = uPRI.OverlayInfoRed[index].PRI;
+    hasDD = uPRI.bHasDDRed[index];
+  }
+  else
+  {
+    PRI = uPRI.OverlayInfoBlue[index].PRI;
+    hasDD = uPRI.bHasDDBlue[index];
+  }
+
+  if (PRI != None)
+  {
+    if (PRI.HasFlag != None || (PRI.Team != None && (GRI != None && GRI.FlagHolder[PRI.Team.TeamIndex] == PRI)))
+      hasFlag = 1;
+  }
+}
+
+function DrawPlayerNames(Canvas Canvas, UTComp_PRI uPRI, int team)
 {
   local int i;
   local float oldClipX;
   local float lenX, lenY;
 
-  oldClipX=Canvas.ClipX;
-  Canvas.ClipX=tmpX+Healthoffset;
-    for(i=0; i<8; i++)
-    {
-      if(uPRI.OverlayInfo[i].PRI==None)
-         break;
-         if (uPRI.OverlayInfo[i].PRI.HasFlag!=None || (uPRI.OverlayInfo[i].PRI.Team!=None && (GRI!=None && GRI.FlagHolder[uPRI.OverlayInfo[i].PRI.Team.TeamIndex] == uPRI.OverlayInfo[i].PRI)))
-         {
-             Canvas.SetDrawColor(255,255,0);
-          }
-          else if(uPRI.bHasDD[i]==1)
+  local PlayerReplicationInfo oPRI;
+  local byte hasFlag;
+  local byte hasDD;
+
+  oldClipX = Canvas.ClipX;
+  Canvas.ClipX = currentX + Healthoffset;
+
+  Canvas.Font = infoFont;
+
+  for (i = 0; i < 8; i++)
+  {
+    GetPlayerNameInfo(uPRI, i, team, oPRI, hasFlag, hasDD);
+
+    if (oPRI==None)
+      break;
+
+    if (hasFlag == 1)
+      Canvas.SetDrawColor(255,255,0);
+    else if (hasDD == 1)
+      Canvas.SetDrawColor(255,0,255);
+    else
+      Canvas.DrawColor = default.InfoTextColor;
+
+    Canvas.StrLen(oPRI.PlayerName, lenX, lenY);
+
+    // Name too big!
+    if (lenX > HealthOffset)
+      Canvas.Font = LocationFont;
+    else
+      Canvas.Font = InfoFont;
+
+    Canvas.SetPos(currentX, currentY + (strLenY + strLenLocationY) * i);
+    Canvas.DrawTextClipped(oPRI.PlayerName);
+  }
+
+  Canvas.ClipX = oldClipX;
+}
+
+function GetHealthInfo(UTComp_PRI uPRI, int index, int team, out PlayerReplicationInfo PRI, out int health)
+{
+  if (team == 0)
           {
-               Canvas.SetDrawColor(255,0,255);
+    PRI = uPRI.OverlayInfoRed[index].PRI;
+    health = uPRI.OverlayInfoRed[index].Health;
           }
           else
-              Canvas.DrawColor=default.InfoTextColor;
-        Canvas.StrLen(uPRI.OverlayInfo[i].PRI.PlayerName, lenX, lenY);
-        if(LenX>HealthOffset-tmpX)
-            Canvas.Font=LocationFont;
-        else
-            Canvas.Font=InfoFont;
-        Canvas.SetPos(tmpX,tmpY+(strLenY+strLenY2)*i);
-        Canvas.DrawTextClipped(uPRI.OverlayInfo[i].PRI.PlayerName);
+  {
+    PRI = uPRI.OverlayInfoBlue[index].PRI;
+    health = uPRI.OverlayInfoBlue[index].Health;
     }
-    Canvas.ClipX=oldClipX;
 }
 
-function DrawHealth(utcomp_PRI uPRI, Canvas Canvas)
+function DrawHealth(Canvas Canvas, UTComp_PRI uPRI, int team)
 {
-    local int i;
-    Canvas.Font=InfoFont;
-    for(i=0; i<8; i++)
+  local int i;
+  local int health;
+  local PlayerReplicationInfo oPRI;
+
+  Canvas.Font = InfoFont;
+
+  for (i = 0; i < 8; i++)
+  {
+    GetHealthInfo(uPRI, i, team, oPRI, health);
+
+    if (oPRI == None)
+      return;
+    if (Health >= 100)
+      Canvas.SetDrawColor(0,255,0,255);
+    else if (Health >= 45 && Health < 100)
+      Canvas.SetDrawColor(255,255,0,255);
+    else if (Health < 45)
+      Canvas.SetDrawColor(255,0,0,255);
+    if (Health < 1000)
+      Canvas.DrawTextJustified(Health, 1, currentX+HealthOffset, currentY+(strLenY+strLenLocationY)*i, currentX+ArmorOffset, currentY+strLenY*(i+1)+strLenLocationY*i);
+    else
+      Canvas.DrawTextJustified(Left(String(Health), Len(Health)-3)$"K", 1, currentX+HealthOffset, currentY+(strLenY+strLenLocationY)*i, currentX+ArmorOffset, currentY+strLenY*(i+1)+strLenLocationY*i);
+  }
+}
+
+function GetArmorInfo(UTComp_PRI uPRI, int index, int team, out PlayerReplicationInfo PRI, out byte armor)
+{
+  if (team == 0)
     {
-        if(uPRI.OverlayInfo[i].PRI==None)
-            return;
-        if(uPRI.OverlayInfo[i].Health>=100)
-            Canvas.SetDrawColor(0,255,0,255);
-        else if(uPRI.OverlayInfo[i].Health>=45 && uPRI.OverlayInfo[i].Health<100)
-            Canvas.SetDrawColor(255,255,0,255);
-        else if(uPRI.OverlayInfo[i].Health<45)
-             Canvas.SetDrawColor(255,0,0,255);
-        if(uPRI.OverlayInfo[i].Health<1000)
-            Canvas.DrawTextJustified(uPRI.OverlayInfo[i].Health, 1, tmpX+HealthOffset, tmpY+(strLenY+strLenY2)*i, tmpX+ArmorOffset, tmpY+strLenY*(i+1)+strLenY2*i);
-        else
-            Canvas.DrawTextJustified(Left(String(uPRI.OverlayInfo[i].Health), Len(uPRI.OverlayInfo[i].Health)-3)$"K", 1, tmpX+HealthOffset, tmpY+(strLenY+strLenY2)*i, tmpX+ArmorOffset, tmpY+strLenY*(i+1)+strLenY2*i);
+    PRI = uPRI.OverlayInfoRed[index].PRI;
+    armor = uPRI.OverlayInfoRed[index].Armor;
+  }
+  else
+  {
+    PRI = uPRI.OverlayInfoBlue[index].PRI;
+    armor = uPRI.OverlayInfoBlue[index].Armor;
     }
 }
 
-function DrawArmor(utcomp_PRI uPRI, Canvas Canvas)
+function DrawArmor(Canvas Canvas, UTComp_PRI uPRI, int team)
 {
     local int i;
+  local byte armor;
+  local PlayerReplicationInfo oPRI;
     Canvas.SetDrawColor(255,255,255,255);
-    for(i=0; i<8; i++)
+  for (i = 0; i < 8; i++)
     {
-        if(uPRI.OverlayInfo[i].PRI==None)
-            return;
-        Canvas.DrawTextJustified(uPRI.OverlayInfo[i].Armor, 1, tmpX+armorOffset, tmpY+(strLenY+strLenY2)*i, tmpX+wepIconOffset, tmpY+strLenY*(i+1)+strLenY2*i);
+    GetArmorInfo(uPRI, i, team, oPRI, armor);
+    if (oPRI == None)
+      return;
+
+    Canvas.DrawTextJustified(armor, 1, currentX+armorOffset, currentY+(strLenY+strLenLocationY)*i, currentX+wepIconOffset, currentY+strLenY*(i+1)+strLenLocationY*i);
+  }
+}
+
+function Texture GetWeaponIcon(byte weapon)
+{
+    switch(weapon)
+    {
+        case 1:
+            return texture'shieldIcon'; break;
+        Case 2:
+            return texture'AssaultIcon'; break;
+        Case 3:
+            return texture'BioIcon';break;
+        Case 4:
+            return texture'ShockIcon'; break;
+        Case 5:
+            return texture'LinkIcon'; break;
+        Case 6:
+            return texture'MiniIcon';break;
+        Case 7:
+            return texture'FlakIcon';break;
+        Case 8:
+            return texture'RocketIcon'; break;
+        Case 9:
+            return texture'LightningIcon'; break;
+        Case 10:
+            return texture'SniperIcon'; break;
+        Case 11:
+            return texture'DualARIcon';break;
+        Case 12:
+            return texture'SpiderIcon';break;
+        Case 13:
+            return texture'GrenadeIcon';break;
+        Case 14:
+            return texture'AvrilIcon';break;
+        Case 15:
+            return texture'RedeemerIcon';break;
+        Case 16:
+            return texture'PainterIcon';break;
+        Case 17:
+            return texture'translocicon';break;
+        Case 21:
+            return texture'MantaIcon'; break;
+        Case 22:
+            return texture'GoliathIcon'; break;
+        Case 23:
+            return texture'ScorpionIcon'; break;
+        Case 24:
+            return texture'HellbenderIcon'; break;
+        Case 25:
+            return texture'LeviathanIcon'; break;
+        Case 26:
+            return texture'RaptorIcon'; break;
+        case 27:
+            return texture'CicadaIcon'; break;
+        case 28:
+            return texture'PaladinIcon'; break;
+        case 29:
+            return texture'SPMAIcon'; break;
+        default:
+            return None;
     }
 }
 
-
-function DrawIcons(utcomp_PRI uPRI, Canvas Canvas)
+function GetWeaponInfo(UTComp_PRI uPRI, int index, int team, out PlayerReplicationInfo PRI, out byte weapon)
 {
-    local int i;
-    local texture wepIcon;
-
-    Canvas.SetDrawColor(255,255,255,255);
-
-    for(i=0; i<8; i++)
-    {
-        if(uPRI.OverlayInfo[i].PRI==None)
-            break;
-          switch(uPRI.OverlayInfo[i].Weapon)
-          {
-          case 1:
-              wepicon=texture'shieldIcon'; break;
-          Case 2:
-              wepicon=texture'AssaultIcon'; break;
-          Case 3:
-              wepicon=texture'BioIcon';break;
-          Case 4:
-              wepicon=texture'ShockIcon'; break;
-          Case 5:
-              wepicon=texture'LinkIcon'; break;
-          Case 6:
-              wepicon=texture'MiniIcon';break;
-          Case 7:
-              wepicon=texture'FlakIcon';break;
-          Case 8:
-              wepicon=texture'RocketIcon'; break;
-          Case 9:
-              wepicon=texture'LightningIcon'; break;
-          Case 10:
-              wepicon=texture'SniperIcon'; break;
-          Case 11:
-              wepicon=texture'DualARIcon';break;
-          Case 12:
-              wepicon=texture'SpiderIcon';break;
-          Case 13:
-              wepicon=texture'GrenadeIcon';break;
-          Case 14:
-              wepicon=texture'AvrilIcon';break;
-          Case 15:
-              wepicon=texture'RedeemerIcon';break;
-          Case 16:
-              wepicon=texture'PainterIcon';break;
-          Case 17:
-              wepicon=texture'translocicon';break;
-          Case 21:
-              wepicon=texture'MantaIcon'; break;
-          Case 22:
-              wepicon=texture'GoliathIcon'; break;
-          Case 23:
-              wepicon=texture'ScorpionIcon'; break;
-          Case 24:
-              wepicon=texture'HellbenderIcon'; break;
-          Case 25:
-              wepicon=texture'LeviathanIcon'; break;
-          Case 26:
-              wepicon=texture'RaptorIcon'; break;
-          case 27:
-              wepicon=texture'CicadaIcon'; break;
-          case 28:
-              wepicon=texture'PaladinIcon'; break;
-          case 29:
-              wepicon=texture'SPMAIcon'; break;
-          default:
-              wepicon=None;
-          }
-
-        if(wepicon!=None)
+  if (team == 0)
         {
-            Canvas.SetPos(tmpX+wepiconOffset, tmpY+(strLenY+strLenY2)*i);
-            Canvas.DrawIcon(wepIcon, iconScale);
+    PRI = uPRI.OverlayInfoRed[index].PRI;
+    weapon = uPRI.OverlayInfoRed[index].Weapon;
         }
+  else
+  {
+    PRI = uPRI.OverlayInfoBlue[index].PRI;
+    weapon = uPRI.OverlayInfoBlue[index].Weapon;
     }
-/*    for(i=0; i<8; i++)
-    {
-      if(uPRI.OverlayInfo[i].PRI==None)
-         break;
-      if (uPRI.OverlayInfo[i].PRI.HasFlag!=None || GRI.FlagHolder[uPRI.OverlayInfo[i].PRI.Team.TeamIndex] == uPRI.OverlayInfo[i].PRI)
-      {
-         Canvas.SetPos(TMPX+WepIconOffset+40.0*iconScale, tmpY+((strLenY2+strLenY)*i));
-         Canvas.DrawTile(Texture'S_FlagIcon',46.0*IconScale,32.0*IconScale,0.0,0.0,90.0,64.0);
-      }
-      else if(uPRI.HasDD==i+1 && uPRI.HasDD<9)
-      {
-        Canvas.SetPos(TMPX+WepIconOffset+40.0*iconScale, tmpY+((strLenY2+strLenY)*i));
-        Canvas.DrawTile(Texture'HUD',32.0*IconScale,32.0*IconScale,0.0,164.0,78.0,78.0);
-      }
-    }    */
 }
 
-function DrawLocation(utcomp_PRI uPRI, Canvas Canvas)
+
+function DrawIcons(Canvas Canvas, UTComp_PRI uPRI, int team)
+{
+  local int i;
+  local texture wepIcon;
+  local PlayerReplicationInfo oPRI;
+  local byte weapon;
+
+  Canvas.SetDrawColor(255, 255, 255, 255);
+
+  for (i = 0; i < 8; i++)
+    {
+    GetWeaponInfo(uPRI, i, team, oPRI, weapon);
+    if (oPRI == None)
+         break;
+
+    wepIcon = GetWeaponIcon(weapon);
+
+    if (wepicon!=None)
+      {
+      Canvas.SetPos(currentX+wepiconOffset, currentY+(strLenY+strLenLocationY)*i);
+      Canvas.DrawIcon(wepIcon, iconScale);
+      }
+  }
+}
+
+function GetLocationInfo(UTComp_PRI uPRI, int index, int team, out PlayerReplicationInfo PRI)
+{
+  if (team == 0)
+  {
+    PRI = uPRI.OverlayInfoRed[index].PRI;
+  }
+  else
+      {
+    PRI = uPRI.OverlayInfoBlue[index].PRI;
+      }
+}
+
+function DrawLocation(Canvas Canvas, UTComp_PRI uPRI, int team)
 {
     local int i;
     local float oldClipX;
-    //Canvas.SetDrawColor(255,150,0,255);
+    local PlayerReplicationInfo oPRI;
+
     Canvas.DrawColor=default.LocTextColor;
     Canvas.Font=LocationFont;
     OldClipX=Canvas.ClipX;
-    Canvas.ClipX=tmpX+wepiconOffset+40.0*iconScale;
-    for(i=0; i<8; i++)
+    Canvas.ClipX=currentX+wepiconOffset+40.0*iconScale;
+    for (i = 0; i < 8; i++)
     {
-        if(uPRI.OverlayInfo[i].PRI==None)
+      GetLocationInfo(uPRI, i, team, oPRI);
+      if(oPRI == None)
             break;
-        Canvas.SetPos(tmpX,tmpY+strLenY*(i+1)+strLenY2*i);
-        Canvas.DrawTextClipped(uPRI.OverlayInfo[i].PRI.GetLocationName());
+
+      Canvas.SetPos(currentX,currentY+strLenY*(i+1)+strLenLocationY*i);
+      Canvas.DrawTextClipped(oPRI.GetLocationName());
     }
-    Canvas.ClipX=OldClipX;
+
+    Canvas.ClipX = OldClipX;
 }
 
 function GetFonts(Canvas Canvas)
@@ -471,16 +919,58 @@ function string GetDebugLoc(vector tempLoc)
   return "";
 }
 
+
+function DrawMouseCursor(Canvas C)
+{
+   C.SetDrawColor(255, 255, 255);
+   C.Style = 5;
+
+   // find position of cursor, and clamp it to screen
+   MousePosX = PC.PlayerMouse.X + C.SizeX / 2.0;
+   if (MousePosX < 0)
+   {
+      PC.PlayerMouse.X -= MousePosX;
+      MousePosX = 0;
+   }
+   else if (MousePosX >= C.SizeX)
+   {
+      PC.PlayerMouse.X -= (MousePosX - C.SizeX);
+      MousePosX = C.SizeX - 1;
+   }
+   MousePosY = PC.PlayerMouse.Y + C.SizeY / 2.0;
+   if (MousePosY < 0)
+   {
+      PC.PlayerMouse.Y -= MousePosY;
+      MousePosY = 0;
+   }
+   else if (MousePosY >= C.SizeY)
+   {
+      PC.PlayerMouse.Y -= (MousePosY - C.SizeY);
+      MousePosY = C.SizeY - 1;
+   }
+
+   // render mouse cursor
+   C.SetPos(MousePosX, MousePosY);
+   C.DrawIcon(MouseCursorTexture, 1.0);
+
+   return;
+}
+
 defaultproperties
 {
      DesiredOnJoinMessageTime=6.000000
      OverlayEnabled=True
+     PowerupOverlayEnabled=True
      bDrawIcons=True
      VertPosition=0.070000
      HorizPosition=0.003000
      BGColor=(B=10,G=10,R=10,A=155)
+     BGColorRed=(B=0,G=0,R=50,A=155)
+     BGColorBlue=(B=50,G=0,R=0,A=155)
      InfoTextColor=(B=255,G=255,R=255,A=255)
      LocTextColor=(B=155,G=155,R=155,A=255)
+     MouseCursorTexture=Texture'2K4Menus.Cursors.Pointer'
      theFontSize=-5
      bVisible=True
+     bAlwaysShowPowerups=True
 }

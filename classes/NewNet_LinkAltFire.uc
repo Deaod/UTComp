@@ -27,7 +27,7 @@ function Projectile SpawnProjectile(Vector Start, Rotator Dir)
     local UTComp_PRI uPRI;
     local float f,g;
 
-    if(Level.NetMode == NM_Client && class'BS_xPlayer'.static.UseNewNet())
+    if(Level.NetMode == NM_Client && BS_xPlayer(Level.GetLocalPlayerController()).UseNewNet())
         return SpawnFakeProjectile(Start,Dir);
     if(!bUseEnhancedNetCode)
     {
@@ -203,7 +203,7 @@ function PlayFiring()
 {
    super.PlayFiring();
 
-   if(Level.NetMode != NM_Client || !class'BS_xPlayer'.static.UseNewNet())
+   if(Level.NetMode != NM_Client || !BS_xPlayer(Level.GetLocalPlayerController()).UseNewNet())
        return;
    CheckFireEffect();
 }

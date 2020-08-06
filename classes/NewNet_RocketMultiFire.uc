@@ -19,7 +19,7 @@ var bool bUseEnhancedNetCode;
 function PlayFiring()
 {
     super.PlayFiring();
-    if(!class'BS_xPlayer'.static.UseNewNet())
+    if(!BS_xPlayer(Level.GetLocalPlayerController()).UseNewNet())
         return;
     CheckFireEffect();
 }

@@ -2,13 +2,29 @@
 
 class UTComp_HudCDoubleDomination extends HudCDoubleDomination;
 
+var UTComp_HUDSettings HUDSettings;
+
+simulated event PostBeginPlay() {
+    Super.PostBeginPlay();
+
+    foreach AllObjects(class'UTComp_HUDSettings', HUDSettings)
+        break;
+    if (HUDSettings == none)
+        Warn(self@"HUDSettings object not found!");
+}
+
+simulated function DrawSpectatingHud (Canvas C)
+{
+	Super.DrawSpectatingHud(c);
+	DrawTimer(C);
+}
 
 simulated function UpdatePrecacheMaterials()
 {
 	local int i;
 
-    for (i=0; i<class'UTComp_HudSettings'.default.UTCompCrosshairs.Length && class'UTComp_HudSettings'.default.bEnableUTCompCrosshairs; i++ )
-		Level.AddPrecacheMaterial(class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossTex);
+    for (i=0; i<HUDSettings.UTCompCrosshairs.Length && HUDSettings.bEnableUTCompCrosshairs; i++ )
+		Level.AddPrecacheMaterial(HUDSettings.UTCompCrosshairs[i].CrossTex);
 
     super.UpdatePrecacheMaterials();
 }
@@ -41,24 +57,24 @@ simulated function DrawUTCompCrosshair (Canvas C)
 	if (!bCrosshairShow)
         return;
 
-    for(i=0; i<class'UTComp_HudSettings'.default.UTCompCrosshairs.Length; i++)
+    for(i=0; i<HUDSettings.UTCompCrosshairs.Length; i++)
     {
         CHTexture.Length=i+1;
-        CHTexture[i].WidgetTexture=class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossTex;
+        CHTexture[i].WidgetTexture=HUDSettings.UTCompCrosshairs[i].CrossTex;
         CHTexture[i].RenderStyle=STY_Alpha;
         CHTexture[i].TextureCoords.X2=64;
         CHTexture[i].TextureCoords.Y2=64;
-        CHTexture[i].TextureScale=class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossScale*0.50;
+        CHTexture[i].TextureScale=HUDSettings.UTCompCrosshairs[i].CrossScale*0.50;
         CHTexture[i].DrawPivot=DP_MiddleMiddle;
-        CHTexture[i].PosX=class'UTComp_HudSettings'.default.UTCompCrosshairs[i].OffsetX;
-        CHTexture[i].PosY=class'UTComp_HudSettings'.default.UTCompCrosshairs[i].OffsetY;
+        CHTexture[i].PosX=HUDSettings.UTCompCrosshairs[i].OffsetX;
+        CHTexture[i].PosY=HUDSettings.UTCompCrosshairs[i].OffsetY;
         CHTexture[i].ScaleMode = SM_None;
         CHTexture[i].Scale=1.00;
-        CHTexture[i].Tints[0]=class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossColor;
-        CHTexture[i].Tints[1]=class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossColor;
+        CHTexture[i].Tints[0]=HUDSettings.UTCompCrosshairs[i].CrossColor;
+        CHTexture[i].Tints[1]=HUDSettings.UTCompCrosshairs[i].CrossColor;
     }
 
-    if ( class'UTComp_HudSettings'.default.bEnableCrosshairSizing && LastPickupTime > Level.TimeSeconds - 0.4 )
+    if ( HUDSettings.bEnableCrosshairSizing && LastPickupTime > Level.TimeSeconds - 0.4 )
 	{
 		if ( LastPickupTime > Level.TimeSeconds - 0.2 )
 			for(i=0; i<CHTexture.Length; i++)
@@ -81,7 +97,7 @@ simulated function DrawUTCompCrosshair (Canvas C)
 
 simulated function DrawCrosshair (Canvas C)
 {
-    if(class'UTComp_HudSettings'.default.bEnableUTCompCrosshairs && class'UTComp_HudSettings'.default.UTCompCrosshairs.Length>0)
+    if(HUDSettings.bEnableUTCompCrosshairs && HUDSettings.UTCompCrosshairs.Length>0)
         DrawUTCompCrosshair(C);
     else
         OldDrawCrosshair(C);
@@ -150,7 +166,7 @@ simulated function OldDrawCrosshair(Canvas C)
     for( i = 0; i < ArrayCount(CHTexture.Tints); i++ )
         CHTexture.Tints[i] = CurrentCrossHairColor;
 
-	if (  class'UTComp_HudSettings'.default.bEnableCrosshairSizing && LastPickupTime > Level.TimeSeconds - 0.4 )
+	if (  HUDSettings.bEnableCrosshairSizing && LastPickupTime > Level.TimeSeconds - 0.4 )
 	{
 		if ( LastPickupTime > Level.TimeSeconds - 0.2 )
 			CHTexture.TextureScale *= (1 + 5 * (Level.TimeSeconds - LastPickupTime));

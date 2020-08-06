@@ -84,32 +84,32 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     lb_Crosshairs.List.bDropSource=True;
 	lb_Crosshairs.List.bDropTarget=True;
 	lb_Crosshairs.List.bMultiSelect=False;
-    for(i=0; i<class'UTComp_HudSettings'.default.UTCompCrosshairs.Length; i++)
-        lb_Crosshairs.List.Add(FindDescriptionFor(class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossTex), class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossTex);
+    for(i=0; i<HUDSettings.UTCompCrosshairs.Length; i++)
+        lb_Crosshairs.List.Add(FindDescriptionFor(HUDSettings.UTCompCrosshairs[i].CrossTex), HUDSettings.UTCompCrosshairs[i].CrossTex);
 
-    ch_UseFactory.Checked(class'UTComp_HudSettings'.default.bEnableUTCompCrosshairs);
-    ch_SizeIncrease.Checked(class'UTComp_HudSettings'.default.bEnableCrosshairSizing);
+    ch_UseFactory.Checked(HUDSettings.bEnableUTCompCrosshairs);
+    ch_SizeIncrease.Checked(HUDSettings.bEnableCrosshairSizing);
 
-    if(class'UTComp_HudSettings'.default.UTCompCrosshairs.Length>0)
+    if(HUDSettings.UTCompCrosshairs.Length>0)
     {
-        sl_SizeHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[0].CrossScale);
-        sl_OpacityHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[0].CrossColor.A);
-        sl_HorizHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[0].OffsetX);
-        sl_VertHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[0].OffsetY);
-        sl_RedHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[0].CrossColor.R);
-        sl_GreenHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[0].CrossColor.G);
-        sl_BlueHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[0].CrossColor.B);
+        sl_SizeHair.SetValue(HUDSettings.UTCompCrosshairs[0].CrossScale);
+        sl_OpacityHair.SetValue(HUDSettings.UTCompCrosshairs[0].CrossColor.A);
+        sl_HorizHair.SetValue(HUDSettings.UTCompCrosshairs[0].OffsetX);
+        sl_VertHair.SetValue(HUDSettings.UTCompCrosshairs[0].OffsetY);
+        sl_RedHair.SetValue(HUDSettings.UTCompCrosshairs[0].CrossColor.R);
+        sl_GreenHair.SetValue(HUDSettings.UTCompCrosshairs[0].CrossColor.G);
+        sl_BlueHair.SetValue(HUDSettings.UTCompCrosshairs[0].CrossColor.B);
     }
 
-    i_CurrentHair.WinWidth=(0.10*class'UTComp_HudSettings'.default.UTCompCrosshairs[0].CrossScale);
-    i_CurrentHair.WinHeight=(0.10*class'UTComp_HudSettings'.default.UTCompCrosshairs[0].CrossScale);
+    i_CurrentHair.WinWidth=(0.10*HUDSettings.UTCompCrosshairs[0].CrossScale);
+    i_CurrentHair.WinHeight=(0.10*HUDSettings.UTCompCrosshairs[0].CrossScale);
     i_CurrentHair.WinTop=0.480+(sl_VertHair.Value-0.50);
     i_CurrentHair.WinLeft=0.784+(sl_HorizHair.Value-0.50);
 
-    if(class'UTComp_HudSettings'.default.UTCompCrosshairs.Length>0)
+    if(HUDSettings.UTCompCrosshairs.Length>0)
     {
-        i_CurrentHair.Image=class'UTComp_HudSettings'.default.UTCompCrosshairs[0].CrossTex;
-        i_CurrentHair.ImageColor=class'UTComp_HudSettings'.default.UTCompCrosshairs[0].CrossColor;
+        i_CurrentHair.Image=HUDSettings.UTCompCrosshairs[0].CrossTex;
+        i_CurrentHair.ImageColor=HUDSettings.UTCompCrosshairs[0].CrossColor;
     }
 
     RefreshFullCrossHair();
@@ -120,16 +120,16 @@ function RefreshFullCrossHair()
 {
     local int i;
 
-    for(i=0; i<class'UTComp_HudSettings'.default.UTCompCrosshairs.Length && i<12; i++)
+    for(i=0; i<HUDSettings.UTCompCrosshairs.Length && i<12; i++)
     {
-        i_totalhair[i].WinWidth=(0.10*class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossScale);
-        i_totalhair[i].WinHeight=(0.10*class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossScale);
-        i_totalhair[i].WinTop=0.680+(class'UTComp_HudSettings'.default.UTCompCrosshairs[i].OffsetY-0.50);
-        i_totalhair[i].WinLeft=0.784+(class'UTComp_HudSettings'.default.UTCompCrosshairs[i].OffsetX-0.50);
-        i_totalhair[i].Image=class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossTex;
-        i_totalhair[i].ImageColor=class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossColor;
+        i_totalhair[i].WinWidth=(0.10*HUDSettings.UTCompCrosshairs[i].CrossScale);
+        i_totalhair[i].WinHeight=(0.10*HUDSettings.UTCompCrosshairs[i].CrossScale);
+        i_totalhair[i].WinTop=0.680+(HUDSettings.UTCompCrosshairs[i].OffsetY-0.50);
+        i_totalhair[i].WinLeft=0.784+(HUDSettings.UTCompCrosshairs[i].OffsetX-0.50);
+        i_totalhair[i].Image=HUDSettings.UTCompCrosshairs[i].CrossTex;
+        i_totalhair[i].ImageColor=HUDSettings.UTCompCrosshairs[i].CrossColor;
     }
-    for(i=class'UTComp_HudSettings'.default.UTCompCrosshairs.Length; i<12; i++)
+    for(i=HUDSettings.UTCompCrosshairs.Length; i<12; i++)
         i_totalhair[i].Image=None;
 }
 
@@ -153,23 +153,23 @@ function InternalOnChange( GUIComponent C )
 {
     Switch(C)
     {
-    case ch_UseFactory: class'UTComp_HudSettings'.default.bEnableUTCompCrosshairs=ch_UseFactory.IsChecked();  break;
-    case ch_SizeIncrease: class'UTComp_HudSettings'.default.bEnableCrosshairSizing=ch_SizeIncrease.IsChecked(); break;
+    case ch_UseFactory: HUDSettings.bEnableUTCompCrosshairs=ch_UseFactory.IsChecked();  break;
+    case ch_SizeIncrease: HUDSettings.bEnableCrosshairSizing=ch_SizeIncrease.IsChecked(); break;
 
         case sl_SizeHair: if(lb_CrossHairs.List.Index>=0)
-                          class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossScale=sl_SizeHair.Value; break;
+                          HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossScale=sl_SizeHair.Value; break;
         case sl_OpacityHair: if(lb_CrossHairs.List.Index>=0)
-                             class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.A=sl_OpacityHair.Value; break;
+                             HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.A=sl_OpacityHair.Value; break;
         case sl_HorizHair: if(lb_CrossHairs.List.Index>=0)
-                           class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].OffsetX=sl_HorizHair.Value; break;
+                           HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].OffsetX=sl_HorizHair.Value; break;
         case sl_VertHair: if(lb_CrossHairs.List.Index>=0)
-                          class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].OffsetY=sl_VertHair.Value; break;
+                          HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].OffsetY=sl_VertHair.Value; break;
         case sl_RedHair: if(lb_CrossHairs.List.Index>=0)
-                         class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.R=sl_RedHair.Value; break;
+                         HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.R=sl_RedHair.Value; break;
         case sl_GreenHair: if(lb_CrossHairs.List.Index>=0)
-                           class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.G=sl_GreenHair.Value; break;
+                           HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.G=sl_GreenHair.Value; break;
         case sl_BlueHair: if(lb_CrossHairs.List.Index>=0)
-                          class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.B=sl_BlueHair.Value; break;
+                          HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.B=sl_BlueHair.Value; break;
 
     case lb_CrossHairs:  UpdateSliders();
                          co_UTCompCrosshairs.SetIndex(co_UTCompCrosshairs.FindIndex(FindDescriptionFor(Texture(lb_CrossHairs.List.GetObject()))));
@@ -177,13 +177,13 @@ function InternalOnChange( GUIComponent C )
 
     case co_UTCompCrosshairs:   if(lb_CrossHairs.List.Index>=0)
                           {
-                              class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossTex=texture(co_UTCompCrosshairs.GetObject());
+                              HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossTex=texture(co_UTCompCrosshairs.GetObject());
                               lb_CrossHairs.List.SetObjectAtIndex(lb_CrossHairs.List.Index,co_UTCompCrosshairs.GetObject());
                               lb_CrossHairs.List.SetItemAtIndex(lb_CrossHairs.List.Index,FindDescriptionFor(Texture(co_UTCompCrosshairs.GetObject())));
                               break;
                           }
     }
-    class'UTComp_HudSettings'.static.StaticSaveConfig();
+    SaveHUDSettings();
     UpdateImages();
     RefreshFullCrossHair();
     DisableStuff();
@@ -225,7 +225,7 @@ function DisableStuff()
          bu_AddHair.DisableMe();
          bu_DeleteHair.DisableMe();
     }
-    if(class'UTComp_HudSettings'.default.UTCompCrosshairs.Length==0)
+    if(HUDSettings.UTCompCrosshairs.Length==0)
     {
          sl_SizeHair.DisableMe();
          sl_OpacityHair.DisableMe();
@@ -247,13 +247,13 @@ function UpdateSliders()
 {
     if(lb_CrossHairs.List.Index<0)
          return;
-    sl_SizeHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossScale);
-    sl_OpacityHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.A);
-    sl_HorizHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].OffsetX);
-    sl_VertHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].OffsetY);
-    sl_RedHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.R);
-    sl_GreenHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.G);
-    sl_BlueHair.SetValue(class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.B);
+    sl_SizeHair.SetValue(HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossScale);
+    sl_OpacityHair.SetValue(HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.A);
+    sl_HorizHair.SetValue(HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].OffsetX);
+    sl_VertHair.SetValue(HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].OffsetY);
+    sl_RedHair.SetValue(HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.R);
+    sl_GreenHair.SetValue(HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.G);
+    sl_BlueHair.SetValue(HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index].CrossColor.B);
 
 }
 
@@ -261,28 +261,28 @@ function UpdateImages()
 {
     if(lb_Crosshairs.List.Index>=0)
     {
-        i_CurrentHair.WinWidth=(0.10*class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_Crosshairs.List.Index].CrossScale);
-        i_CurrentHair.WinHeight=(0.10*class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_Crosshairs.List.Index].CrossScale);
-        i_CurrentHair.WinTop=0.480+(class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_Crosshairs.List.Index].OffsetY-0.50);
-        i_CurrentHair.WinLeft=0.784+(class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_Crosshairs.List.Index].OffsetX-0.50);
+        i_CurrentHair.WinWidth=(0.10*HUDSettings.UTCompCrosshairs[lb_Crosshairs.List.Index].CrossScale);
+        i_CurrentHair.WinHeight=(0.10*HUDSettings.UTCompCrosshairs[lb_Crosshairs.List.Index].CrossScale);
+        i_CurrentHair.WinTop=0.480+(HUDSettings.UTCompCrosshairs[lb_Crosshairs.List.Index].OffsetY-0.50);
+        i_CurrentHair.WinLeft=0.784+(HUDSettings.UTCompCrosshairs[lb_Crosshairs.List.Index].OffsetX-0.50);
 
-        if(class'UTComp_HudSettings'.default.UTCompCrosshairs.Length>0)
+        if(HUDSettings.UTCompCrosshairs.Length>0)
         {
-            i_CurrentHair.Image=class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_Crosshairs.List.Index].CrossTex;
-            i_CurrentHair.ImageColor=class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_Crosshairs.List.Index].CrossColor;
+            i_CurrentHair.Image=HUDSettings.UTCompCrosshairs[lb_Crosshairs.List.Index].CrossTex;
+            i_CurrentHair.ImageColor=HUDSettings.UTCompCrosshairs[lb_Crosshairs.List.Index].CrossColor;
         }
     }
 }
 
 function SetupNewHair(int i)
 {
-    class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossScale=1.0;
-    class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossColor.A=255;
-    class'UTComp_HudSettings'.default.UTCompCrosshairs[i].OffsetX=0.50;
-    class'UTComp_HudSettings'.default.UTCompCrosshairs[i].OffsetY=0.50;
-    class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossColor.R=255;
-    class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossColor.G=255;
-    class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossColor.B=255;
+    HUDSettings.UTCompCrosshairs[i].CrossScale=1.0;
+    HUDSettings.UTCompCrosshairs[i].CrossColor.A=255;
+    HUDSettings.UTCompCrosshairs[i].OffsetX=0.50;
+    HUDSettings.UTCompCrosshairs[i].OffsetY=0.50;
+    HUDSettings.UTCompCrosshairs[i].CrossColor.R=255;
+    HUDSettings.UTCompCrosshairs[i].CrossColor.G=255;
+    HUDSettings.UTCompCrosshairs[i].CrossColor.B=255;
 }
 
 function bool InternalOnClick( GUIComponent Sender )
@@ -291,37 +291,37 @@ function bool InternalOnClick( GUIComponent Sender )
 
     switch (Sender)
     {
-        case bu_AddHair:   i=class'UTComp_HudSettings'.default.UTCompCrosshairs.Length;
-                       class'UTComp_HudSettings'.default.UTCompCrosshairs.Length=i+1;
-                       class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossTex=Texture(lb_Crosshairs.List.GetObject());
+        case bu_AddHair:   i=HUDSettings.UTCompCrosshairs.Length;
+                       HUDSettings.UTCompCrosshairs.Length=i+1;
+                       HUDSettings.UTCompCrosshairs[i].CrossTex=Texture(lb_Crosshairs.List.GetObject());
                        SetupNewHair(i);
                        UpdateSliders();
                        lb_Crosshairs.List.Add("New", None);
                        break;
         case bu_DeleteHair: i=lb_Crosshairs.List.Index;
-                        if(i<class'UTComp_HudSettings'.default.UTCompCrosshairs.Length && i>=0)
+                        if(i<HUDSettings.UTCompCrosshairs.Length && i>=0)
                         {
-                            class'UTComp_HudSettings'.default.UTCompCrosshairs.Remove(i,1);
+                            HUDSettings.UTCompCrosshairs.Remove(i,1);
                             lb_Crosshairs.List.Clear();
-                            for(i=0; i<class'UTComp_HudSettings'.default.UTCompCrosshairs.Length; i++)
-                               lb_Crosshairs.List.Add(FindDescriptionFor(class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossTex), class'UTComp_HudSettings'.default.UTCompCrosshairs[i].CrossTex);
+                            for(i=0; i<HUDSettings.UTCompCrosshairs.Length; i++)
+                               lb_Crosshairs.List.Add(FindDescriptionFor(HUDSettings.UTCompCrosshairs[i].CrossTex), HUDSettings.UTCompCrosshairs[i].CrossTex);
                         }
                         DisableStuff();
                         break;
         case bu_MoveUp:  if(lb_CrossHairs.List.Index>0)
                          {
                              lb_CrossHairs.List.Swap(lb_CrossHairs.List.Index,lb_CrossHairs.List.Index-1);
-                             class'UTComp_HudSettings'.default.TempXHair=class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index];
-                             class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index]=class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index-1];
-                             class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index-1]=class'UTComp_HudSettings'.default.TempXHair;
+                             HUDSettings.TempXHair=HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index];
+                             HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index]=HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index-1];
+                             HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index-1]=HUDSettings.TempXHair;
                          }
                          break;
-        case bu_MoveDown: if(class'UTComp_HudSettings'.default.UTCompCrosshairs.Length>lb_CrossHairs.List.Index+1 && lb_CrossHairs.List.Index>=0)
+        case bu_MoveDown: if(HUDSettings.UTCompCrosshairs.Length>lb_CrossHairs.List.Index+1 && lb_CrossHairs.List.Index>=0)
                           {
                              lb_CrossHairs.List.Swap(lb_CrossHairs.List.Index,lb_CrossHairs.List.Index+1);
-                             class'UTComp_HudSettings'.default.TempXHair=class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index];
-                             class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index]=class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index+1];
-                             class'UTComp_HudSettings'.default.UTCompCrosshairs[lb_CrossHairs.List.Index+1]=class'UTComp_HudSettings'.default.TempXHair;
+                             HUDSettings.TempXHair=HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index];
+                             HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index]=HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index+1];
+                             HUDSettings.UTCompCrosshairs[lb_CrossHairs.List.Index+1]=HUDSettings.TempXHair;
                           }
                           break;
     }

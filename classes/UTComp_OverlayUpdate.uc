@@ -4,6 +4,7 @@ class UTComp_OverlayUpdate extends Info;
 
 var MutUTComp UTCompMutator;
 var bool bVariablesCleared;
+var bool bPowerupsVariableCleared;
 
 CONST fUPDATETIME = 1.0;
 CONST iMAXPLAYERS = 8;
@@ -17,12 +18,35 @@ function InitializeOverlay()
 function Timer()
 {
     if(UTCompMutator.bEnableTeamOverlay)
-        UpdateVariables();
+      UpdateTeamOverlayInfo();
     else if(!bVariablesCleared)
-        ClearVariables();
+      ClearTeamOverlayInfo();
+    
+    if (UTCompMutator.bEnablePowerupsOverlay)
+      UpdatePowerupsInfo();
+    else if (!bPowerupsVariableCleared)
+      ClearPowerupsVariables();
 }
 
-function ClearVariables()
+function ClearPowerupsVariables()
+{
+    local UTComp_PRI uPRI;
+    local int i;
+
+    foreach DynamicActors(class'UTComp_PRI', uPRI)
+    {
+        for(i=0; i<8; i++)
+        {
+            uPRI.PowerupInfo[i].Pickup = None;
+            uPRI.PowerupInfo[i].NextRespawnTime = 0;
+            uPRI.PowerupInfo[i].LastTaker = None;
+            uPRI.PowerupInfo[i].Team = 0;
+       }
+    }
+    bPowerupsVariableCleared = true;
+}
+
+function ClearTeamOverlayInfo()
 {
     local UTComp_PRI uPRI;
     local int i;
@@ -30,21 +54,80 @@ function ClearVariables()
     {
         for(i=0; i<iMAXPLAYERS; i++)
         {
-            uPRI.OverlayInfo[i].PRI=None;
-            uPRI.OverlayInfo[i].Weapon=0;
-            uPRI.OverlayInfo[i].Health=0;
-            uPRI.OverlayInfo[i].Armor=0;
-            uPRI.bHasDD[i]=0;
+            uPRI.OverlayInfoRed[i].PRI=None;
+            uPRI.OverlayInfoRed[i].Weapon=0;
+            uPRI.OverlayInfoRed[i].Health=0;
+            uPRI.OverlayInfoRed[i].Armor=0;
+            uPRI.bHasDDRed[i]=0;
+
+            uPRI.OverlayInfoBlue[i].PRI=None;
+            uPRI.OverlayInfoBlue[i].Weapon=0;
+            uPRI.OverlayInfoBlue[i].Health=0;
+            uPRI.OverlayInfoBlue[i].Armor=0;
+            uPRI.bHasDDBlue[i]=0;
        }
     }
     bVariablesCleared=True;
 }
 
-function UpdateVariables()
+function UpdateTeamOverlayInfo()
 {
     FindInfoForTeam(0);
     FindInfoForTeam(1);
-    bVariablesCleared=False;
+
+    bVariablesCleared = false;
+}
+
+/* 
+  Send the powerups information to spectators.
+*/
+function UpdatePowerupsInfo()
+{
+  local Controller c;
+  local UTComp_PRI uPRI;
+  local BS_xPlayer uC;
+  local int i;
+
+  for (c = Level.ControllerList; c != None; c = c.NextController)
+  {
+    uPRI = class'UTComp_Util'.static.GetUTCompPRI(C.PlayerReplicationInfo);
+    uC = BS_xPlayer(c);
+    
+    if (uPRI == None || uC == None)
+      continue;
+
+    // Only send to spectators that are NOT coaching
+    if (!C.PlayerReplicationInfo.bOnlySpectator || uC.IsCoaching())
+      continue;
+
+    for (i = 0; i < 8; i++)
+    {
+      if (UTCompMutator.PowerupInfo[i].PickupBase == None)
+        break;
+
+      uPRI.PowerupInfo[i].Pickup = UTCompMutator.PowerupInfo[i].PickupBase.myPickup;
+      uPRI.PowerupInfo[i].Team = UTCompMutator.PowerupInfo[i].Team;
+      uPRI.PowerupInfo[i].NextRespawnTime = UTCompMutator.PowerupInfo[i].NextRespawnTime;
+      uPRI.PowerupInfo[i].LastTaker = UTCompMutator.PowerupInfo[i].LastTaker;
+    }
+  }
+
+  bPowerupsVariableCleared = false;
+}
+
+function bool IsRelevant(UTComp_PRI uPRI, PlayerReplicationInfo PRI, PlayerReplicationInfo PRIOverlay)
+{
+  if (!Level.Game.bTeamGame)
+    return false;
+
+  if (uPRI.bShowSelf && PRI == PRIOverlay)
+    return true;
+
+  if (PRI.bOnlySpectator)
+    return true;
+
+  if (PRI.Team != None && PRIOverlay.Team != None && (PRI.Team == PRIOverlay.Team || uPRI.CoachTeam == PRIOverlay.Team.TeamIndex))
+    return true;
 }
 
 function FindInfoForTeam(byte iTeam)
@@ -69,34 +152,63 @@ function FindInfoForTeam(byte iTeam)
                j++;
         }
     }
-    for(C=Level.ControllerList; C!=None; C=C.NextController)
+    for (C = Level.ControllerList; C != None; C = C.NextController)
     {
-       if(iTeam!=255 && C.PlayerReplicationInfo!=None && PlayerController(C)!=None)
+       if (iTeam !=255 && C.PlayerReplicationInfo != None && PlayerController(C) != None)
            uPRI=Class'UTComp_Util'.Static.GetUTCompPRI(C.PlayerReplicationInfo);
-       if(uPRI!=None && (C.GetTeamNum() == iTeam || iTeam==uPRI.CoachTeam))
+
+       if (uPRI != None && (C.GetTeamNum() == iTeam || iTeam == uPRI.CoachTeam || (uPRI.CoachTeam == 255 && C.PlayerReplicationInfo.bOnlySpectator)))
        {
-           k=0;
-           for(i=0; i<iMAXPLAYERS; i++)
+           k = 0;
+           for (i = 0; i < iMAXPLAYERS; i++)
            {
-               if(uPRI.bShowSelf || C.PlayerReplicationInfo!=PRI[i])
+               if(uPRI.bShowSelf || C.PlayerReplicationInfo != PRI[i])
                {
-                   uPRI.OverlayInfo[k].Weapon=Weapon[i];
-                   uPRI.OverlayInfo[k].Health=Health[i];
-                   uPRI.OverlayInfo[k].Armor=Armor[i];
-                   uPRI.OverlayInfo[k].PRI=PRI[i];
-                   uPRI.bHasDD[k]=bHasDD[i];
+                  if (iTeam == 0)
+                  {
+                   uPRI.OverlayInfoRed[k].Weapon = Weapon[i];
+                   uPRI.OverlayInfoRed[k].Health = Health[i];
+                   uPRI.OverlayInfoRed[k].Armor = Armor[i];
+                   uPRI.OverlayInfoRed[k].PRI = PRI[i];
+                   uPRI.bHasDDRed[k] = bHasDD[i];
+                   k++;
+                 }
+                 else
+                 {
+                   uPRI.OverlayInfoBlue[k].Weapon = Weapon[i];
+                   uPRI.OverlayInfoBlue[k].Health = Health[i];
+                   uPRI.OverlayInfoBlue[k].Armor = Armor[i];
+                   uPRI.OverlayInfoBlue[k].PRI = PRI[i];
+                   uPRI.bHasDDBlue[k] = bHasDD[i];
                    k++;
                }
            }
        }
-       else if(uPRI!=None && uPRI.CoachTeam==255 && C.PlayerReplicationInfo!=None && C.PlayerReplicationInfo.bOnlySpectator)
+
+          //Clear the PRIs that don't exist anymore
+          for (k = k; k < iMAXPLAYERS; k++)
        {
-           for(i=0; i<iMAXPLAYERS; i++)
+            if (iTeam == 0)
            {
-               uPRI.OverlayInfo[i].PRI=none;
+              uPRI.OverlayInfoRed[k].PRI = None;
+            }
+            else
+            {
+              uPRI.OverlayInfoBlue[k].PRI = None;
+            }
+          }
+       }
+       else if(uPRI!=None && uPRI.CoachTeam != 255 && uPRI.CoachTeam != iTeam)
+       {
+           for(i = 0; i < iMAXPLAYERS; i++)
+           {
+              if (iTeam == 0)
+               uPRI.OverlayInfoRed[i].PRI=none;
+              else
+                uPRI.OverlayInfoBlue[i].PRI=none;
            }
        }
-       uPRI=None;
+       uPRI = None;
     }
 }
 
