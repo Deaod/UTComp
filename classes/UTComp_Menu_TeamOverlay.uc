@@ -191,7 +191,7 @@ defaultproperties
          WinWidth=0.300000
          OnChange=UTComp_Menu_TeamOverlay.InternalOnChange
      End Object
-     ch_Enable=moCheckBox'UTCompv18c.UTComp_Menu_TeamOverlay.CheckEnable'
+     ch_Enable=moCheckBox'UTComp_Menu_TeamOverlay.CheckEnable'
 
      Begin Object Class=moCheckBox Name=CheckShowSelf
          Caption="Show Self"
@@ -201,7 +201,7 @@ defaultproperties
          WinWidth=0.300000
          OnChange=UTComp_Menu_TeamOverlay.InternalOnChange
      End Object
-     ch_ShowSelf=moCheckBox'UTCompv18c.UTComp_Menu_TeamOverlay.CheckShowSelf'
+     ch_ShowSelf=moCheckBox'UTComp_Menu_TeamOverlay.CheckShowSelf'
 
      Begin Object Class=moCheckBox Name=CheckIcons
          Caption="Enable Icons"
@@ -211,7 +211,7 @@ defaultproperties
          WinWidth=0.300000
          OnChange=UTComp_Menu_TeamOverlay.InternalOnChange
      End Object
-     ch_Icons=moCheckBox'UTCompv18c.UTComp_Menu_TeamOverlay.CheckIcons'
+     ch_Icons=moCheckBox'UTComp_Menu_TeamOverlay.CheckIcons'
 
      Begin Object Class=GUISlider Name=RedBGSlider
          MaxValue=255.000000
@@ -226,7 +226,7 @@ defaultproperties
          OnKeyEvent=RedBGSlider.InternalOnKeyEvent
          OnCapturedMouseMove=RedBGSlider.InternalCapturedMouseMove
      End Object
-     sl_redBG=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.RedBGSlider'
+     sl_redBG=GUISlider'UTComp_Menu_TeamOverlay.RedBGSlider'
 
      Begin Object Class=GUISlider Name=BlueBGSlider
          MaxValue=255.000000
@@ -241,7 +241,7 @@ defaultproperties
          OnKeyEvent=BlueBGSlider.InternalOnKeyEvent
          OnCapturedMouseMove=BlueBGSlider.InternalCapturedMouseMove
      End Object
-     sl_blueBG=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.BlueBGSlider'
+     sl_blueBG=GUISlider'UTComp_Menu_TeamOverlay.BlueBGSlider'
 
      Begin Object Class=GUISlider Name=GreenBGSlider
          MaxValue=255.000000
@@ -256,7 +256,7 @@ defaultproperties
          OnKeyEvent=GreenBGSlider.InternalOnKeyEvent
          OnCapturedMouseMove=GreenBGSlider.InternalCapturedMouseMove
      End Object
-     sl_greenBG=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.GreenBGSlider'
+     sl_greenBG=GUISlider'UTComp_Menu_TeamOverlay.GreenBGSlider'
 
      Begin Object Class=GUISlider Name=RedNameSlider
          MaxValue=255.000000
@@ -271,7 +271,7 @@ defaultproperties
          OnKeyEvent=RedNameSlider.InternalOnKeyEvent
          OnCapturedMouseMove=RedNameSlider.InternalCapturedMouseMove
      End Object
-     sl_redName=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.RedNameSlider'
+     sl_redName=GUISlider'UTComp_Menu_TeamOverlay.RedNameSlider'
 
      Begin Object Class=GUISlider Name=BlueNameSlider
          MaxValue=255.000000
@@ -286,7 +286,7 @@ defaultproperties
          OnKeyEvent=BlueNameSlider.InternalOnKeyEvent
          OnCapturedMouseMove=BlueNameSlider.InternalCapturedMouseMove
      End Object
-     sl_blueName=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.BlueNameSlider'
+     sl_blueName=GUISlider'UTComp_Menu_TeamOverlay.BlueNameSlider'
 
      Begin Object Class=GUISlider Name=GreenNameSlider
          MaxValue=255.000000
@@ -301,7 +301,7 @@ defaultproperties
          OnKeyEvent=GreenNameSlider.InternalOnKeyEvent
          OnCapturedMouseMove=GreenNameSlider.InternalCapturedMouseMove
      End Object
-     sl_greenName=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.GreenNameSlider'
+     sl_greenName=GUISlider'UTComp_Menu_TeamOverlay.GreenNameSlider'
 
      Begin Object Class=GUISlider Name=RedLocSlider
          MaxValue=255.000000
@@ -316,7 +316,7 @@ defaultproperties
          OnKeyEvent=RedLocSlider.InternalOnKeyEvent
          OnCapturedMouseMove=RedLocSlider.InternalCapturedMouseMove
      End Object
-     sl_redLoc=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.RedLocSlider'
+     sl_redLoc=GUISlider'UTComp_Menu_TeamOverlay.RedLocSlider'
 
      Begin Object Class=GUISlider Name=BlueLocSlider
          MaxValue=255.000000
@@ -331,7 +331,7 @@ defaultproperties
          OnKeyEvent=BlueLocSlider.InternalOnKeyEvent
          OnCapturedMouseMove=BlueLocSlider.InternalCapturedMouseMove
      End Object
-     sl_blueLoc=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.BlueLocSlider'
+     sl_blueLoc=GUISlider'UTComp_Menu_TeamOverlay.BlueLocSlider'
 
      Begin Object Class=GUISlider Name=GreenLocSlider
          MaxValue=255.000000
@@ -346,7 +346,7 @@ defaultproperties
          OnKeyEvent=GreenLocSlider.InternalOnKeyEvent
          OnCapturedMouseMove=GreenLocSlider.InternalCapturedMouseMove
      End Object
-     sl_greenLoc=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.GreenLocSlider'
+     sl_greenLoc=GUISlider'UTComp_Menu_TeamOverlay.GreenLocSlider'
 
      Begin Object Class=GUILabel Name=RedBGLabel
          Caption="Red"
@@ -354,7 +354,7 @@ defaultproperties
          WinTop=0.500000
          WinLeft=0.120000
      End Object
-     l_redBG=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.RedBGLabel'
+     l_redBG=GUILabel'UTComp_Menu_TeamOverlay.RedBGLabel'
 
      Begin Object Class=GUILabel Name=BlueBGLabel
          Caption="Blue"
@@ -362,7 +362,7 @@ defaultproperties
          WinTop=0.580000
          WinLeft=0.120000
      End Object
-     l_blueBG=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.BlueBGLabel'
+     l_blueBG=GUILabel'UTComp_Menu_TeamOverlay.BlueBGLabel'
 
      Begin Object Class=GUILabel Name=GreenBGLabel
          Caption="Green"
@@ -370,7 +370,7 @@ defaultproperties
          WinTop=0.540000
          WinLeft=0.120000
      End Object
-     l_greenBG=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.GreenBGLabel'
+     l_greenBG=GUILabel'UTComp_Menu_TeamOverlay.GreenBGLabel'
 
      Begin Object Class=GUILabel Name=RedNameLabel
          Caption="Red"
@@ -378,7 +378,7 @@ defaultproperties
          WinTop=0.650000
          WinLeft=0.520000
      End Object
-     l_redName=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.RedNameLabel'
+     l_redName=GUILabel'UTComp_Menu_TeamOverlay.RedNameLabel'
 
      Begin Object Class=GUILabel Name=BlueNameLabel
          Caption="Blue"
@@ -386,7 +386,7 @@ defaultproperties
          WinTop=0.730000
          WinLeft=0.520000
      End Object
-     l_blueName=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.BlueNameLabel'
+     l_blueName=GUILabel'UTComp_Menu_TeamOverlay.BlueNameLabel'
 
      Begin Object Class=GUILabel Name=GreenNameLabel
          Caption="Green"
@@ -394,7 +394,7 @@ defaultproperties
          WinTop=0.690000
          WinLeft=0.520000
      End Object
-     l_greenName=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.GreenNameLabel'
+     l_greenName=GUILabel'UTComp_Menu_TeamOverlay.GreenNameLabel'
 
      Begin Object Class=GUILabel Name=RedLocLabel
          Caption="Red"
@@ -402,7 +402,7 @@ defaultproperties
          WinTop=0.650000
          WinLeft=0.120000
      End Object
-     l_redLoc=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.RedLocLabel'
+     l_redLoc=GUILabel'UTComp_Menu_TeamOverlay.RedLocLabel'
 
      Begin Object Class=GUILabel Name=BlueLocLabel
          Caption="Blue"
@@ -410,7 +410,7 @@ defaultproperties
          WinTop=0.730000
          WinLeft=0.120000
      End Object
-     l_blueLoc=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.BlueLocLabel'
+     l_blueLoc=GUILabel'UTComp_Menu_TeamOverlay.BlueLocLabel'
 
      Begin Object Class=GUILabel Name=GreenLocLabel
          Caption="Green"
@@ -418,7 +418,7 @@ defaultproperties
          WinTop=0.690000
          WinLeft=0.120000
      End Object
-     l_greenLoc=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.GreenLocLabel'
+     l_greenLoc=GUILabel'UTComp_Menu_TeamOverlay.GreenLocLabel'
 
      Begin Object Class=GUILabel Name=BGColorLabel
          Caption="Background Color"
@@ -426,7 +426,7 @@ defaultproperties
          WinTop=0.475000
          WinLeft=0.120000
      End Object
-     l_BGColor=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.BGColorLabel'
+     l_BGColor=GUILabel'UTComp_Menu_TeamOverlay.BGColorLabel'
 
      Begin Object Class=GUILabel Name=NameColorLabel
          Caption="Name color"
@@ -434,7 +434,7 @@ defaultproperties
          WinTop=0.615000
          WinLeft=0.520000
      End Object
-     l_NameColor=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.NameColorLabel'
+     l_NameColor=GUILabel'UTComp_Menu_TeamOverlay.NameColorLabel'
 
      Begin Object Class=GUILabel Name=LocColorLabel
          Caption="Location color"
@@ -442,7 +442,7 @@ defaultproperties
          WinTop=0.615000
          WinLeft=0.120000
      End Object
-     l_LocColor=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.LocColorLabel'
+     l_LocColor=GUILabel'UTComp_Menu_TeamOverlay.LocColorLabel'
 
      Begin Object Class=GUILabel Name=HorizLabel
          Caption="Size:"
@@ -450,7 +450,7 @@ defaultproperties
          WinTop=0.425000
          WinLeft=0.550000
      End Object
-     l_Horiz=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.HorizLabel'
+     l_Horiz=GUILabel'UTComp_Menu_TeamOverlay.HorizLabel'
 
      Begin Object Class=GUILabel Name=VertLabel
          Caption="Vertical Location:"
@@ -458,7 +458,7 @@ defaultproperties
          WinTop=0.365000
          WinLeft=0.550000
      End Object
-     l_Vert=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.VertLabel'
+     l_Vert=GUILabel'UTComp_Menu_TeamOverlay.VertLabel'
 
      Begin Object Class=GUILabel Name=SizeLabel
          Caption="Horizontal Location:"
@@ -466,7 +466,7 @@ defaultproperties
          WinTop=0.310000
          WinLeft=0.550000
      End Object
-     l_Size=GUILabel'UTCompv18c.UTComp_Menu_TeamOverlay.SizeLabel'
+     l_Size=GUILabel'UTComp_Menu_TeamOverlay.SizeLabel'
 
      Begin Object Class=GUISlider Name=SliderHoriz
          MaxValue=0.750000
@@ -480,7 +480,7 @@ defaultproperties
          OnKeyEvent=SliderHoriz.InternalOnKeyEvent
          OnCapturedMouseMove=SliderHoriz.InternalCapturedMouseMove
      End Object
-     sl_Horiz=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.SliderHoriz'
+     sl_Horiz=GUISlider'UTComp_Menu_TeamOverlay.SliderHoriz'
 
      Begin Object Class=GUISlider Name=SliderVert
          MaxValue=1.000000
@@ -494,7 +494,7 @@ defaultproperties
          OnKeyEvent=SliderVert.InternalOnKeyEvent
          OnCapturedMouseMove=SliderVert.InternalCapturedMouseMove
      End Object
-     sl_Vert=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.SliderVert'
+     sl_Vert=GUISlider'UTComp_Menu_TeamOverlay.SliderVert'
 
      Begin Object Class=GUISlider Name=SliderSize
          MinValue=-7.000000
@@ -510,6 +510,6 @@ defaultproperties
          OnKeyEvent=SliderSize.InternalOnKeyEvent
          OnCapturedMouseMove=SliderSize.InternalCapturedMouseMove
      End Object
-     sl_Size=GUISlider'UTCompv18c.UTComp_Menu_TeamOverlay.SliderSize'
+     sl_Size=GUISlider'UTComp_Menu_TeamOverlay.SliderSize'
 
 }

@@ -125,7 +125,7 @@ defaultproperties
          WinHeight=0.030000
          OnKeyEvent=SkinsComboBox.InternalOnKeyEvent
      End Object
-     co_Skins=GUIComboBox'UTCompv18c.UTComp_Menu_Voting_Settings.SkinsComboBox'
+     co_Skins=GUIComboBox'UTComp_Menu_Voting_Settings.SkinsComboBox'
 
      Begin Object Class=GUIComboBox Name=HitsoundsComboBox
          WinTop=0.450000
@@ -134,7 +134,7 @@ defaultproperties
          WinHeight=0.030000
          OnKeyEvent=HitsoundsComboBox.InternalOnKeyEvent
      End Object
-     co_Hitsounds=GUIComboBox'UTCompv18c.UTComp_Menu_Voting_Settings.HitsoundsComboBox'
+     co_Hitsounds=GUIComboBox'UTComp_Menu_Voting_Settings.HitsoundsComboBox'
 
      Begin Object Class=GUIComboBox Name=TeamOverlayComboBox
          WinTop=0.500000
@@ -143,7 +143,7 @@ defaultproperties
          WinHeight=0.030000
          OnKeyEvent=TeamOverlayComboBox.InternalOnKeyEvent
      End Object
-     co_TeamOverlay=GUIComboBox'UTCompv18c.UTComp_Menu_Voting_Settings.TeamOverlayComboBox'
+     co_TeamOverlay=GUIComboBox'UTComp_Menu_Voting_Settings.TeamOverlayComboBox'
 
      Begin Object Class=GUIComboBox Name=WarmupComboBox
 		WinWidth=0.250000
@@ -152,7 +152,7 @@ defaultproperties
 		WinTop=0.622918
          OnKeyEvent=WarmupComboBox.InternalOnKeyEvent
      End Object
-     co_Warmup=GUIComboBox'UTCompv18c.UTComp_Menu_Voting_Settings.WarmupComboBox'
+     co_Warmup=GUIComboBox'UTComp_Menu_Voting_Settings.WarmupComboBox'
 
      Begin Object Class=GUIComboBox Name=NewNetComboBox
 		WinWidth=0.250000
@@ -161,7 +161,7 @@ defaultproperties
 		WinTop=0.672918
          OnKeyEvent=NewNetComboBox.InternalOnKeyEvent
      End Object
-     co_NewNet=GUIComboBox'UTCompv18c.UTComp_Menu_Voting_Settings.NewNetComboBox'
+     co_NewNet=GUIComboBox'UTComp_Menu_Voting_Settings.NewNetComboBox'
 
      Begin Object Class=GUIComboBox Name=ForwardComboBox
 		WinWidth=0.250000
@@ -170,7 +170,7 @@ defaultproperties
 		WinTop=0.722918
          OnKeyEvent=NewNetComboBox.InternalOnKeyEvent
      End Object
-     co_Forward=GUIComboBox'UTCompv18c.UTComp_Menu_Voting_Settings.ForwardComboBox'
+     co_Forward=GUIComboBox'UTComp_Menu_Voting_Settings.ForwardComboBox'
 
      Begin Object Class=GUIButton Name=SkinsButton
          Caption="Call Vote"
@@ -181,7 +181,7 @@ defaultproperties
          OnClick=UTComp_Menu_Voting_Settings.InternalOnClick
          OnKeyEvent=SkinsButton.InternalOnKeyEvent
      End Object
-     bu_Skins=GUIButton'UTCompv18c.UTComp_Menu_Voting_Settings.SkinsButton'
+     bu_Skins=GUIButton'UTComp_Menu_Voting_Settings.SkinsButton'
 
      Begin Object Class=GUIButton Name=HitsoundsButton
          Caption="Call Vote"
@@ -192,7 +192,7 @@ defaultproperties
          OnClick=UTComp_Menu_Voting_Settings.InternalOnClick
          OnKeyEvent=HitsoundsButton.InternalOnKeyEvent
      End Object
-     bu_Hitsounds=GUIButton'UTCompv18c.UTComp_Menu_Voting_Settings.HitsoundsButton'
+     bu_Hitsounds=GUIButton'UTComp_Menu_Voting_Settings.HitsoundsButton'
 
      Begin Object Class=GUIButton Name=TeamOverlayButton
          Caption="Call Vote"
@@ -203,7 +203,7 @@ defaultproperties
          OnClick=UTComp_Menu_Voting_Settings.InternalOnClick
          OnKeyEvent=TeamOverlayButton.InternalOnKeyEvent
      End Object
-     bu_TeamOverlay=GUIButton'UTCompv18c.UTComp_Menu_Voting_Settings.TeamOverlayButton'
+     bu_TeamOverlay=GUIButton'UTComp_Menu_Voting_Settings.TeamOverlayButton'
 
      Begin Object Class=GUIButton Name=WarmupButton
          Caption="Call Vote"
@@ -214,7 +214,7 @@ defaultproperties
          OnClick=UTComp_Menu_Voting_Settings.InternalOnClick
          OnKeyEvent=WarmupButton.InternalOnKeyEvent
      End Object
-     bu_Warmup=GUIButton'UTCompv18c.UTComp_Menu_Voting_Settings.WarmupButton'
+     bu_Warmup=GUIButton'UTComp_Menu_Voting_Settings.WarmupButton'
 
      Begin Object Class=GUIButton Name=NewNetButton
          Caption="Call Vote"
@@ -225,7 +225,7 @@ defaultproperties
          OnClick=UTComp_Menu_Voting_Settings.InternalOnClick
          OnKeyEvent=NewNetButton.InternalOnKeyEvent
      End Object
-     bu_NewNet=GUIButton'UTCompv18c.UTComp_Menu_Voting_Settings.NewNetButton'
+     bu_NewNet=GUIButton'UTComp_Menu_Voting_Settings.NewNetButton'
 
      Begin Object Class=GUIButton Name=ForwardButton
          Caption="Call Vote"
@@ -236,7 +236,7 @@ defaultproperties
          OnClick=UTComp_Menu_Voting_Settings.InternalOnClick
          OnKeyEvent=NewNetButton.InternalOnKeyEvent
      End Object
-     bu_Forward=GUIButton'UTCompv18c.UTComp_Menu_Voting_Settings.ForwardButton'
+     bu_Forward=GUIButton'UTComp_Menu_Voting_Settings.ForwardButton'
 
      Begin Object Class=GUILabel Name=SkinsLabel
          Caption="Skins"
@@ -244,7 +244,7 @@ defaultproperties
          WinTop=0.395000
          WinLeft=0.162000
      End Object
-     l_Skins=GUILabel'UTCompv18c.UTComp_Menu_Voting_Settings.SkinsLabel'
+     l_Skins=GUILabel'UTComp_Menu_Voting_Settings.SkinsLabel'
 
      Begin Object Class=GUILabel Name=HitsoundsLabel
          Caption="Hitsounds"
@@ -252,7 +252,7 @@ defaultproperties
          WinTop=0.445000
          WinLeft=0.162000
      End Object
-     l_HitSounds=GUILabel'UTCompv18c.UTComp_Menu_Voting_Settings.HitsoundsLabel'
+     l_HitSounds=GUILabel'UTComp_Menu_Voting_Settings.HitsoundsLabel'
 
      Begin Object Class=GUILabel Name=TeamOverlayLabel
          Caption="Team Overlay"
@@ -262,7 +262,7 @@ defaultproperties
 		WinLeft=0.162
 		WinTop=0.495000
      End Object
-     l_TeamOverlay=GUILabel'UTCompv18c.UTComp_Menu_Voting_Settings.TeamOverlayLabel'
+     l_TeamOverlay=GUILabel'UTComp_Menu_Voting_Settings.TeamOverlayLabel'
 
      Begin Object Class=GUILabel Name=WarmupLabel
          Caption="Warmup"
@@ -272,7 +272,7 @@ defaultproperties
 		WinLeft=0.160125
 		WinTop=0.611668
      End Object
-     l_Warmup=GUILabel'UTCompv18c.UTComp_Menu_Voting_Settings.WarmupLabel'
+     l_Warmup=GUILabel'UTComp_Menu_Voting_Settings.WarmupLabel'
 
       Begin Object Class=GUILabel Name=NewNetLabel
          Caption="Enhanced Netcode"
@@ -282,7 +282,7 @@ defaultproperties
 		WinLeft=0.160125
 		WinTop=0.661667
      End Object
-     l_NewNet=GUILabel'UTCompv18c.UTComp_Menu_Voting_Settings.newNetLabel'
+     l_NewNet=GUILabel'UTComp_Menu_Voting_Settings.newNetLabel'
 
      Begin Object Class=GUILabel Name=ForwardLabel
          Caption="Forward Mode"
@@ -292,7 +292,7 @@ defaultproperties
 		WinLeft=0.160125
 		WinTop=0.711667
      End Object
-     l_Forward=GUILabel'UTCompv18c.UTComp_Menu_Voting_Settings.ForwardLabel'
+     l_Forward=GUILabel'UTComp_Menu_Voting_Settings.ForwardLabel'
 
           Begin Object class=GUILabel Name=DemnoHeadingLabel
         Caption="--- These settings require a map reload to take effect ---"

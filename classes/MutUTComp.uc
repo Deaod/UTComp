@@ -381,18 +381,18 @@ function SetupFlags()
     ForEach DynamicActors(class 'CTFBase', FlagBase)
     {
         if (FlagBase.DefenderTeamIndex == 0)
-            FlagBase.FlagType = class'UTCompv18c.UTComp_xRedFlag';
+            FlagBase.FlagType = class'UTComp_xRedFlag';
         else
-            FlagBase.FlagType = class'UTCompv18c.UTComp_xBlueFlag';
+            FlagBase.FlagType = class'UTComp_xBlueFlag';
     }
 }
 
 function SetupColoredDeathMessages()
 {
     if(Level.Game.DeathMessageClass==class'xGame.xDeathMessage')
-        Level.Game.DeathMessageClass=class'UTCompv18c.UTComp_xDeathMessage';
+        Level.Game.DeathMessageClass=class'UTComp_xDeathMessage';
     else if(Level.Game.DeathMessageClass==Class'SkaarjPack.InvasionDeathMessage')
-        Level.Game.DeathMessageClass=class'UTCompv18c.UTComp_InvasionDeathMessage';
+        Level.Game.DeathMessageClass=class'UTComp_InvasionDeathMessage';
 }
 
 function ModifyPlayer(Pawn Other)
@@ -561,38 +561,38 @@ function SetupStats()
     if(bEnableEnhancedNetcode)
         class'xWeapons.ShieldFire'.default.AutoFireTestFreq=0.05;
 
-    class'xWeapons.AssaultRifle'.default.FireModeClass[0] = Class'UTCompv18c.UTComp_AssaultFire';
-    class'xWeapons.AssaultRifle'.default.FireModeClass[1] = Class'UTCompv18c.UTComp_AssaultGrenade';
+    class'xWeapons.AssaultRifle'.default.FireModeClass[0] = Class'UTComp_AssaultFire';
+    class'xWeapons.AssaultRifle'.default.FireModeClass[1] = Class'UTComp_AssaultGrenade';
 
-    class'xWeapons.BioRifle'.default.FireModeClass[0] = Class'UTCompv18c.UTComp_BioFire';
-    class'xWeapons.BioRifle'.default.FireModeClass[1] = Class'UTCompv18c.UTComp_BioChargedFire';
+    class'xWeapons.BioRifle'.default.FireModeClass[0] = Class'UTComp_BioFire';
+    class'xWeapons.BioRifle'.default.FireModeClass[1] = Class'UTComp_BioChargedFire';
 
-    class'xWeapons.ShockRifle'.default.FireModeClass[0] = Class'UTCompv18c.UTComp_ShockBeamFire';
-    class'xWeapons.ShockRifle'.default.FireModeClass[1] = Class'UTCompv18c.UTComp_ShockProjFire';
+    class'xWeapons.ShockRifle'.default.FireModeClass[0] = Class'UTComp_ShockBeamFire';
+    class'xWeapons.ShockRifle'.default.FireModeClass[1] = Class'UTComp_ShockProjFire';
 
-    class'xWeapons.LinkGun'.default.FireModeClass[0] = Class'UTCompv18c.UTComp_LinkAltFire';
-    class'xWeapons.LinkGun'.default.FireModeClass[1] = Class'UTCompv18c.UTComp_LinkFire';
+    class'xWeapons.LinkGun'.default.FireModeClass[0] = Class'UTComp_LinkAltFire';
+    class'xWeapons.LinkGun'.default.FireModeClass[1] = Class'UTComp_LinkFire';
 
-    class'xWeapons.MiniGun'.default.FireModeClass[0] = Class'UTCompv18c.UTComp_MinigunFire';
-    class'xWeapons.MiniGun'.default.FireModeClass[1] = Class'UTCompv18c.UTComp_MinigunAltFire';
+    class'xWeapons.MiniGun'.default.FireModeClass[0] = Class'UTComp_MinigunFire';
+    class'xWeapons.MiniGun'.default.FireModeClass[1] = Class'UTComp_MinigunAltFire';
 
-    class'xWeapons.FlakCannon'.default.FireModeClass[0] = Class'UTCompv18c.UTComp_FlakFire';
-    class'xWeapons.FlakCannon'.default.FireModeClass[1] = Class'UTCompv18c.UTComp_FlakAltFire';
+    class'xWeapons.FlakCannon'.default.FireModeClass[0] = Class'UTComp_FlakFire';
+    class'xWeapons.FlakCannon'.default.FireModeClass[1] = Class'UTComp_FlakAltFire';
 
-    class'xWeapons.RocketLauncher'.default.FireModeClass[0] = Class'UTCompv18c.UTComp_RocketFire';
-    class'xWeapons.RocketLauncher'.default.FireModeClass[1] = Class'UTCompv18c.UTComp_RocketMultiFire';
+    class'xWeapons.RocketLauncher'.default.FireModeClass[0] = Class'UTComp_RocketFire';
+    class'xWeapons.RocketLauncher'.default.FireModeClass[1] = Class'UTComp_RocketMultiFire';
 
-    class'xWeapons.SniperRifle'.default.FireModeClass[0]= Class'UTCompv18c.UTComp_SniperFire';
-    class'UTClassic.ClassicSniperRifle'.default.FireModeClass[0]= Class'UTCompv18c.UTComp_ClassicSniperFire';
+    class'xWeapons.SniperRifle'.default.FireModeClass[0]= Class'UTComp_SniperFire';
+    class'UTClassic.ClassicSniperRifle'.default.FireModeClass[0]= Class'UTComp_ClassicSniperFire';
 
-    class'Onslaught.ONSMineLayer'.default.FireModeClass[0] = Class'UTCompv18c.UTComp_ONSMineThrowFire';
+    class'Onslaught.ONSMineLayer'.default.FireModeClass[0] = Class'UTComp_ONSMineThrowFire';
 
-    class'Onslaught.ONSGrenadeLauncher'.default.FireModeClass[0] =Class'UTCompv18c.UTComp_ONSGrenadeFire';
+    class'Onslaught.ONSGrenadeLauncher'.default.FireModeClass[0] =Class'UTComp_ONSGrenadeFire';
 
-    class'OnsLaught.ONSAvril'.default.FireModeClass[0] =Class'UTCompv18c.UTComp_ONSAvrilFire';
+    class'OnsLaught.ONSAvril'.default.FireModeClass[0] =Class'UTComp_ONSAvrilFire';
 
-    class'xWeapons.SuperShockRifle'.default.FireModeClass[0]=class'UTCompv18c.UTComp_SuperShockBeamFire';
-    class'xWeapons.SuperShockRifle'.default.FireModeClass[1]=class'UTCompv18c.UTComp_SuperShockBeamFire';
+    class'xWeapons.SuperShockRifle'.default.FireModeClass[0]=class'UTComp_SuperShockBeamFire';
+    class'xWeapons.SuperShockRifle'.default.FireModeClass[1]=class'UTComp_SuperShockBeamFire';
 
  }
 
@@ -682,7 +682,7 @@ function ReplacePawnAndPC()
     if(Level.Game.DefaultPlayerClassName~="xGame.xPawn")
         Level.Game.DefaultPlayerClassName="UTCompv18c.UTComp_xPawn";
     if(class'xPawn'.default.ControllerClass==class'XGame.XBot') //bots don't skin otherwise
-        class'xPawn'.default.ControllerClass=class'UTCompv18c.UTComp_xBot';
+        class'xPawn'.default.ControllerClass=class'UTComp_xBot';
 
     Level.Game.PlayerControllerClassName="UTCompv18c.BS_xPlayer";
 }
@@ -1039,7 +1039,7 @@ function ServerTraveling(string URL, bool bItems)
 
     class'Onslaught.ONSMineLayer'.default.FireModeClass[0] = Class'Onslaught.ONSMineThrowFire';
 
-    class'Onslaught.ONSGrenadeLauncher'.default.FireModeClass[0] =Class'UTCompv18c.UTComp_ONSGrenadeFire';
+    class'Onslaught.ONSGrenadeLauncher'.default.FireModeClass[0] =Class'UTComp_ONSGrenadeFire';
 
     class'OnsLaught.ONSAvril'.default.FireModeClass[0] =Class'Onslaught.ONSAvrilFire';
 
@@ -1159,7 +1159,7 @@ function ParseURL(string Url)
 
 function AutoDemoRecord()
 {
-    if(class'UTCompv18c.MutUTComp'.default.bEnableAutoDemorec)
+    if(class'MutUTComp'.default.bEnableAutoDemorec)
     {
         ConsoleCommand("Demorec"@CreateAutoDemoRecName());
     }
@@ -1169,7 +1169,7 @@ function AutoDemoRecord()
 function string CreateAutoDemoRecName()
 {
     local string S;
-    S=class'UTCompv18c.MutUTComp'.default.AutoDemoRecMask;
+    S=class'MutUTComp'.default.AutoDemoRecMask;
     S=Repl(S, "%p", CreatePlayerString());
     S=Repl(S, "%t", CreateTimeString());
     S=StripIllegalWindowsCharacters(S);
@@ -1449,19 +1449,19 @@ defaultproperties
      bEnableEnhancedNetCode=false
      bEnableEnhancedNetCodeVoting=true
 
-     WeaponClasses(0)=Class'UTCompv18c.NewNet_ShockRifle'
-     WeaponClasses(1)=Class'UTCompv18c.NewNet_LinkGun'
-     WeaponClasses(2)=Class'UTCompv18c.NewNet_MiniGun'
-     WeaponClasses(3)=Class'UTCompv18c.NewNet_FlakCannon'
-     WeaponClasses(4)=Class'UTCompv18c.NewNet_RocketLauncher'
-     WeaponClasses(5)=Class'UTCompv18c.NewNet_SniperRifle'
-     WeaponClasses(6)=Class'UTCompv18c.NewNet_BioRifle'
-     WeaponClasses(7)=Class'UTCompv18c.NewNet_AssaultRifle'
-     WeaponClasses(8)=Class'UTCompv18c.NewNet_ClassicSniperRifle'
-     WeaponClasses(9)=Class'UTCompv18c.NewNet_ONSAVRiL'
-     WeaponClasses(10)=Class'UTCompv18c.NewNet_ONSMineLayer'
-     WeaponClasses(11)=Class'UTCompv18c.NewNet_ONSGrenadeLauncher'
-     WeaponClasses(12)=Class'UTCompv18c.NewNet_SuperShockRifle'
+     WeaponClasses(0)=Class'NewNet_ShockRifle'
+     WeaponClasses(1)=Class'NewNet_LinkGun'
+     WeaponClasses(2)=Class'NewNet_MiniGun'
+     WeaponClasses(3)=Class'NewNet_FlakCannon'
+     WeaponClasses(4)=Class'NewNet_RocketLauncher'
+     WeaponClasses(5)=Class'NewNet_SniperRifle'
+     WeaponClasses(6)=Class'NewNet_BioRifle'
+     WeaponClasses(7)=Class'NewNet_AssaultRifle'
+     WeaponClasses(8)=Class'NewNet_ClassicSniperRifle'
+     WeaponClasses(9)=Class'NewNet_ONSAVRiL'
+     WeaponClasses(10)=Class'NewNet_ONSMineLayer'
+     WeaponClasses(11)=Class'NewNet_ONSGrenadeLauncher'
+     WeaponClasses(12)=Class'NewNet_SuperShockRifle'
      WeaponClassNames(0)="xWeapons.ShockRifle"
      WeaponClassNames(1)="xWeapons.LinkGun"
      WeaponClassNames(2)="xWeapons.MiniGun"
@@ -1500,18 +1500,18 @@ defaultproperties
      ReplacedWeaponPickupClasses(9)=Class'Onslaught.ONSAVRiLPickup'
      ReplacedWeaponPickupClasses(10)=Class'Onslaught.ONSMineLayerPickup'
      ReplacedWeaponPickupClasses(11)=Class'Onslaught.ONSGrenadePickup'
-     WeaponPickupClasses(0)=Class'UTCompv18c.NewNet_ShockRiflePickup'
-     WeaponPickupClasses(1)=Class'UTCompv18c.NewNet_LinkGunPickup'
-     WeaponPickupClasses(2)=Class'UTCompv18c.NewNet_MiniGunPickup'
-     WeaponPickupClasses(3)=Class'UTCompv18c.NewNet_FlakCannonPickup'
-     WeaponPickupClasses(4)=Class'UTCompv18c.NewNet_RocketLauncherPickup'
-     WeaponPickupClasses(5)=Class'UTCompv18c.NewNet_SniperRiflePickup'
-     WeaponPickupClasses(6)=Class'UTCompv18c.NewNet_BioRiflePickup'
-     WeaponPickupClasses(7)=Class'UTCompv18c.NewNet_AssaultRiflePickup'
-     WeaponPickupClasses(8)=Class'UTCompv18c.NewNet_ClassicSniperRiflePickup'
-     WeaponPickupClasses(9)=Class'UTCompv18c.NewNet_ONSAVRiLPickup'
-     WeaponPickupClasses(10)=Class'UTCompv18c.NewNet_ONSMineLayerPickup'
-     WeaponPickupClasses(11)=Class'UTCompv18c.NewNet_ONSGrenadePickup'
+     WeaponPickupClasses(0)=Class'NewNet_ShockRiflePickup'
+     WeaponPickupClasses(1)=Class'NewNet_LinkGunPickup'
+     WeaponPickupClasses(2)=Class'NewNet_MiniGunPickup'
+     WeaponPickupClasses(3)=Class'NewNet_FlakCannonPickup'
+     WeaponPickupClasses(4)=Class'NewNet_RocketLauncherPickup'
+     WeaponPickupClasses(5)=Class'NewNet_SniperRiflePickup'
+     WeaponPickupClasses(6)=Class'NewNet_BioRiflePickup'
+     WeaponPickupClasses(7)=Class'NewNet_AssaultRiflePickup'
+     WeaponPickupClasses(8)=Class'NewNet_ClassicSniperRiflePickup'
+     WeaponPickupClasses(9)=Class'NewNet_ONSAVRiLPickup'
+     WeaponPickupClasses(10)=Class'NewNet_ONSMineLayerPickup'
+     WeaponPickupClasses(11)=Class'NewNet_ONSGrenadePickup'
      WeaponPickupClassNames(0)="UTCompv18c.NewNet_ShockRiflePickup"
      WeaponPickupClassNames(1)="UTCompv18c.NewNet_LinkGunPickup"
      WeaponPickupClassNames(2)="UTCompv18c.NewNet_MiniGunPickup"

@@ -7,6 +7,6 @@ CacheExempt;
 
 defaultproperties
 {
-    FireModeClass[0] = Class'UTCompv18c.UTComp_BioFire'
-    FireModeClass[1] = Class'UTCompv18c.UTComp_BioChargedFire'
+    FireModeClass[0] = Class'UTComp_BioFire'
+    FireModeClass[1] = Class'UTComp_BioChargedFire'
 }

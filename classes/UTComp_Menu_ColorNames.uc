@@ -191,83 +191,83 @@ defaultproperties
 {
      Begin Object Class=GUILabel Name=Label0
      End Object
-     l_ColorNameLetters(0)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label0'
+     l_ColorNameLetters(0)=GUILabel'UTComp_Menu_ColorNames.Label0'
 
      Begin Object Class=GUILabel Name=Label1
      End Object
-     l_ColorNameLetters(1)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label1'
+     l_ColorNameLetters(1)=GUILabel'UTComp_Menu_ColorNames.Label1'
 
      Begin Object Class=GUILabel Name=Label2
      End Object
-     l_ColorNameLetters(2)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label2'
+     l_ColorNameLetters(2)=GUILabel'UTComp_Menu_ColorNames.Label2'
 
      Begin Object Class=GUILabel Name=Label3
      End Object
-     l_ColorNameLetters(3)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label3'
+     l_ColorNameLetters(3)=GUILabel'UTComp_Menu_ColorNames.Label3'
 
      Begin Object Class=GUILabel Name=Label4
      End Object
-     l_ColorNameLetters(4)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label4'
+     l_ColorNameLetters(4)=GUILabel'UTComp_Menu_ColorNames.Label4'
 
      Begin Object Class=GUILabel Name=Label5
      End Object
-     l_ColorNameLetters(5)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label5'
+     l_ColorNameLetters(5)=GUILabel'UTComp_Menu_ColorNames.Label5'
 
      Begin Object Class=GUILabel Name=Label6
      End Object
-     l_ColorNameLetters(6)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label6'
+     l_ColorNameLetters(6)=GUILabel'UTComp_Menu_ColorNames.Label6'
 
      Begin Object Class=GUILabel Name=Label7
      End Object
-     l_ColorNameLetters(7)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label7'
+     l_ColorNameLetters(7)=GUILabel'UTComp_Menu_ColorNames.Label7'
 
      Begin Object Class=GUILabel Name=Label8
      End Object
-     l_ColorNameLetters(8)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label8'
+     l_ColorNameLetters(8)=GUILabel'UTComp_Menu_ColorNames.Label8'
 
      Begin Object Class=GUILabel Name=Label9
      End Object
-     l_ColorNameLetters(9)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label9'
+     l_ColorNameLetters(9)=GUILabel'UTComp_Menu_ColorNames.Label9'
 
      Begin Object Class=GUILabel Name=Label10
      End Object
-     l_ColorNameLetters(10)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label10'
+     l_ColorNameLetters(10)=GUILabel'UTComp_Menu_ColorNames.Label10'
 
      Begin Object Class=GUILabel Name=Label11
      End Object
-     l_ColorNameLetters(11)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label11'
+     l_ColorNameLetters(11)=GUILabel'UTComp_Menu_ColorNames.Label11'
 
      Begin Object Class=GUILabel Name=Label12
      End Object
-     l_ColorNameLetters(12)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label12'
+     l_ColorNameLetters(12)=GUILabel'UTComp_Menu_ColorNames.Label12'
 
      Begin Object Class=GUILabel Name=Label13
      End Object
-     l_ColorNameLetters(13)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label13'
+     l_ColorNameLetters(13)=GUILabel'UTComp_Menu_ColorNames.Label13'
 
      Begin Object Class=GUILabel Name=Label14
      End Object
-     l_ColorNameLetters(14)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label14'
+     l_ColorNameLetters(14)=GUILabel'UTComp_Menu_ColorNames.Label14'
 
      Begin Object Class=GUILabel Name=Label15
      End Object
-     l_ColorNameLetters(15)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label15'
+     l_ColorNameLetters(15)=GUILabel'UTComp_Menu_ColorNames.Label15'
 
      Begin Object Class=GUILabel Name=Label16
      End Object
-     l_ColorNameLetters(16)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label16'
+     l_ColorNameLetters(16)=GUILabel'UTComp_Menu_ColorNames.Label16'
 
      Begin Object Class=GUILabel Name=Label17
      End Object
-     l_ColorNameLetters(17)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label17'
+     l_ColorNameLetters(17)=GUILabel'UTComp_Menu_ColorNames.Label17'
 
      Begin Object Class=GUILabel Name=Label18
      End Object
-     l_ColorNameLetters(18)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label18'
+     l_ColorNameLetters(18)=GUILabel'UTComp_Menu_ColorNames.Label18'
 
      Begin Object Class=GUILabel Name=Label19
      End Object
-     l_ColorNameLetters(19)=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.Label19'
+     l_ColorNameLetters(19)=GUILabel'UTComp_Menu_ColorNames.Label19'
 
      Begin Object Class=moCheckBox Name=ColorChatCheck
          Caption="Show colored names in chat messages"
@@ -277,7 +277,7 @@ defaultproperties
          WinWidth=0.600000
          OnChange=UTComp_Menu_ColorNames.InternalOnChange
      End Object
-     ch_ColorChat=moCheckBox'UTCompv18c.UTComp_Menu_ColorNames.ColorChatCheck'
+     ch_ColorChat=moCheckBox'UTComp_Menu_ColorNames.ColorChatCheck'
 
      Begin Object Class=moCheckBox Name=ColorScoreboardCheck
          Caption="Show colored names on scoreboard"
@@ -287,7 +287,7 @@ defaultproperties
          WinWidth=0.600000
          OnChange=UTComp_Menu_ColorNames.InternalOnChange
      End Object
-     ch_ColorScoreboard=moCheckBox'UTCompv18c.UTComp_Menu_ColorNames.ColorScoreboardCheck'
+     ch_ColorScoreboard=moCheckBox'UTComp_Menu_ColorNames.ColorScoreboardCheck'
 
      Begin Object Class=moCheckBox Name=Colorq3Check
         Caption="Show colored text in chat messages(Q3 Style)"
@@ -298,7 +298,7 @@ defaultproperties
 		WinTop=0.433814
         OnChange=UTComp_Menu_ColorNames.InternalOnChange
      End Object
-     ch_ColorQ3=moCheckBox'UTCompv18c.UTComp_Menu_ColorNames.Colorq3Check'
+     ch_ColorQ3=moCheckBox'UTComp_Menu_ColorNames.Colorq3Check'
 
      Begin Object Class=moCheckBox Name=EnemyNamesCheck
          Caption="Show colored enemy names on targeting"
@@ -308,7 +308,7 @@ defaultproperties
          WinWidth=0.600000
          OnChange=UTComp_Menu_ColorNames.InternalOnChange
      End Object
-     ch_EnemyNames=moCheckBox'UTCompv18c.UTComp_Menu_ColorNames.EnemyNamesCheck'
+     ch_EnemyNames=moCheckBox'UTComp_Menu_ColorNames.EnemyNamesCheck'
 
      Begin Object Class=GUIComboBox Name=ComboSaved
          WinTop=0.612320
@@ -318,7 +318,7 @@ defaultproperties
          OnChange=UTComp_Menu_ColorNames.InternalOnChange
          OnKeyEvent=ComboSaved.InternalOnKeyEvent
      End Object
-     co_SavedNames=GUIComboBox'UTCompv18c.UTComp_Menu_ColorNames.ComboSaved'
+     co_SavedNames=GUIComboBox'UTComp_Menu_ColorNames.ComboSaved'
 
      Begin Object Class=GUIButton Name=ButtonSave
          Caption="Save"
@@ -329,7 +329,7 @@ defaultproperties
          OnClick=UTComp_Menu_ColorNames.InternalOnClick
          OnKeyEvent=ButtonSave.InternalOnKeyEvent
      End Object
-     bu_SaveName=GUIButton'UTCompv18c.UTComp_Menu_ColorNames.ButtonSave'
+     bu_SaveName=GUIButton'UTComp_Menu_ColorNames.ButtonSave'
 
      Begin Object Class=GUIButton Name=ButtonDelete
          Caption="Delete"
@@ -340,7 +340,7 @@ defaultproperties
          OnClick=UTComp_Menu_ColorNames.InternalOnClick
          OnKeyEvent=ButtonDelete.InternalOnKeyEvent
      End Object
-     bu_DeleteName=GUIButton'UTCompv18c.UTComp_Menu_ColorNames.ButtonDelete'
+     bu_DeleteName=GUIButton'UTComp_Menu_ColorNames.ButtonDelete'
 
      Begin Object Class=GUIButton Name=ButtonWhite
          Caption="Reset entire name to white"
@@ -351,7 +351,7 @@ defaultproperties
          OnClick=UTComp_Menu_ColorNames.InternalOnClick
          OnKeyEvent=ButtonWhite.InternalOnKeyEvent
      End Object
-     bu_ResetWhite=GUIButton'UTCompv18c.UTComp_Menu_ColorNames.ButtonWhite'
+     bu_ResetWhite=GUIButton'UTComp_Menu_ColorNames.ButtonWhite'
 
      Begin Object Class=GUIButton Name=ButtonApply
          Caption="Use This Name"
@@ -362,7 +362,7 @@ defaultproperties
          OnClick=UTComp_Menu_ColorNames.InternalOnClick
          OnKeyEvent=ButtonApply.InternalOnKeyEvent
      End Object
-     bu_Apply=GUIButton'UTCompv18c.UTComp_Menu_ColorNames.ButtonApply'
+     bu_Apply=GUIButton'UTComp_Menu_ColorNames.ButtonApply'
 
      Begin Object Class=GUISlider Name=RedSlider
          MaxValue=255.000000
@@ -377,7 +377,7 @@ defaultproperties
          OnKeyEvent=RedSlider.InternalOnKeyEvent
          OnCapturedMouseMove=RedSlider.InternalCapturedMouseMove
      End Object
-     sl_RedColor=GUISlider'UTCompv18c.UTComp_Menu_ColorNames.RedSlider'
+     sl_RedColor=GUISlider'UTComp_Menu_ColorNames.RedSlider'
 
      Begin Object Class=GUISlider Name=BlueSlider
          MaxValue=255.000000
@@ -392,7 +392,7 @@ defaultproperties
          OnKeyEvent=BlueSlider.InternalOnKeyEvent
          OnCapturedMouseMove=BlueSlider.InternalCapturedMouseMove
      End Object
-     sl_BlueColor=GUISlider'UTCompv18c.UTComp_Menu_ColorNames.BlueSlider'
+     sl_BlueColor=GUISlider'UTComp_Menu_ColorNames.BlueSlider'
 
      Begin Object Class=GUISlider Name=GreenSlider
          MaxValue=255.000000
@@ -407,7 +407,7 @@ defaultproperties
          OnKeyEvent=GreenSlider.InternalOnKeyEvent
          OnCapturedMouseMove=GreenSlider.InternalCapturedMouseMove
      End Object
-     sl_GreenColor=GUISlider'UTCompv18c.UTComp_Menu_ColorNames.GreenSlider'
+     sl_GreenColor=GUISlider'UTComp_Menu_ColorNames.GreenSlider'
 
      Begin Object Class=GUILabel Name=RedLabel
          Caption="Red"
@@ -415,7 +415,7 @@ defaultproperties
          WinTop=0.587500
          WinLeft=0.528125
      End Object
-     l_RedLabel=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.RedLabel'
+     l_RedLabel=GUILabel'UTComp_Menu_ColorNames.RedLabel'
 
      Begin Object Class=GUILabel Name=BlueLabel
          Caption="Blue"
@@ -423,7 +423,7 @@ defaultproperties
          WinTop=0.685414
          WinLeft=0.528125
      End Object
-     l_BlueLabel=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.BlueLabel'
+     l_BlueLabel=GUILabel'UTComp_Menu_ColorNames.BlueLabel'
 
      Begin Object Class=GUILabel Name=GreenLabel
          Caption="Green"
@@ -431,7 +431,7 @@ defaultproperties
          WinTop=0.635417
          WinLeft=0.528125
      End Object
-     l_GreenLabel=GUILabel'UTCompv18c.UTComp_Menu_ColorNames.GreenLabel'
+     l_GreenLabel=GUILabel'UTComp_Menu_ColorNames.GreenLabel'
 
      Begin Object Class=GUISlider Name=LetterSlider
          Value=1.000000
@@ -444,7 +444,7 @@ defaultproperties
          OnKeyEvent=LetterSlider.InternalOnKeyEvent
          OnCapturedMouseMove=LetterSlider.InternalCapturedMouseMove
      End Object
-     sl_LetterSelect=GUISlider'UTCompv18c.UTComp_Menu_ColorNames.LetterSlider'
+     sl_LetterSelect=GUISlider'UTComp_Menu_ColorNames.LetterSlider'
 
      Begin Object Class=moComboBox Name=ColorDeathCombo
          Caption="Death Message Color:"
@@ -455,6 +455,6 @@ defaultproperties
 		WinTop=0.467990
          OnChange=UTComp_Menu_ColorNames.InternalOnChange
      End Object
-     co_DeathSelect=moComboBox'UTCompv18c.UTComp_Menu_ColorNames.ColorDeathCombo'
+     co_DeathSelect=moComboBox'UTComp_Menu_ColorNames.ColorDeathCombo'
 
 }

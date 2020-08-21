@@ -77,7 +77,7 @@ defaultproperties
 		WinTop=0.412083
          OnChange=UTComp_Menu_AutoDemoSS.InternalOnChange
      End Object
-     ch_AutoDemo=moCheckBox'UTCompv18c.UTComp_Menu_AutoDemoSS.AutoDemoCheck'
+     ch_AutoDemo=moCheckBox'UTComp_Menu_AutoDemoSS.AutoDemoCheck'
 
      Begin Object Class=moCheckBox Name=AutoSSCheck
          Caption="Automatically take a screenshot at the end of each match."
@@ -88,7 +88,7 @@ defaultproperties
 		WinTop=0.589168
          OnChange=UTComp_Menu_AutoDemoSS.InternalOnChange
      End Object
-     ch_AutoSS=moCheckBox'UTCompv18c.UTComp_Menu_AutoDemoSS.AutoSSCheck'
+     ch_AutoSS=moCheckBox'UTComp_Menu_AutoDemoSS.AutoSSCheck'
 
      Begin Object Class=GUIComboBox Name=AutoDemoInput
 		WinWidth=0.320000
@@ -98,7 +98,7 @@ defaultproperties
          OnChange=UTComp_Menu_AutoDemoSS.InternalOnChange
          OnKeyEvent=UTComp_Menu_AutoDemoSS.InternalOnKeyEvent
      End Object
-     co_DemoMask=GUIComboBox'UTCompv18c.UTComp_Menu_AutoDemoSS.AutoDemoInput'
+     co_DemoMask=GUIComboBox'UTComp_Menu_AutoDemoSS.AutoDemoInput'
 
      Begin Object Class=GUIComboBox Name=AutoSSInput
 		WinWidth=0.320000
@@ -108,7 +108,7 @@ defaultproperties
          OnChange=UTComp_Menu_AutoDemoSS.InternalOnChange
          OnKeyEvent=UTComp_Menu_AutoDemoSS.InternalOnKeyEvent
      End Object
-     co_SSMask=GUIComboBox'UTCompv18c.UTComp_Menu_AutoDemoSS.AutoSSInput'
+     co_SSMask=GUIComboBox'UTComp_Menu_AutoDemoSS.AutoSSInput'
 
      Begin Object Class=GUILabel Name=DemoMaskLabel
          Caption="Demo Mask:"
@@ -118,7 +118,7 @@ defaultproperties
 		WinLeft=0.225000
 		WinTop=0.450000
      End Object
-     l_AutoDemoMask=GUILabel'UTCompv18c.UTComp_Menu_AutoDemoSS.DemoMaskLabel'
+     l_AutoDemoMask=GUILabel'UTComp_Menu_AutoDemoSS.DemoMaskLabel'
 
      Begin Object Class=GUILabel Name=SSMaskLabel
          Caption="Screenshot Mask:"
@@ -128,7 +128,7 @@ defaultproperties
 		WinLeft=0.225000
 		WinTop=0.632918
      End Object
-     l_AutoSSMask=GUILabel'UTCompv18c.UTComp_Menu_AutoDemoSS.SSMaskLabel'
+     l_AutoSSMask=GUILabel'UTComp_Menu_AutoDemoSS.SSMaskLabel'
 
      Begin Object Class=GUILabel Name=SSHeadingLabel
         Caption="--- Auto Screenshot ---"
@@ -138,7 +138,7 @@ defaultproperties
 		WinLeft=0.342188
 		WinTop=0.514167
      End Object
-     l_SSHeading=GUILabel'UTCompv18c.UTComp_Menu_AutoDemoSS.SSHeadingLabel'
+     l_SSHeading=GUILabel'UTComp_Menu_AutoDemoSS.SSHeadingLabel'
 
      Begin Object class=GUILabel Name=DemnoHeadingLabel
         Caption="--- Auto Demo Recording---"

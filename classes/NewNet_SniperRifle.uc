@@ -263,5 +263,5 @@ simulated function bool StartFire(int Mode)
 defaultproperties
 {
     FireModeClass(0) = class'NewNet_SniperFire'
-    PickupClass=Class'UTCompv18c.NewNet_SniperRiflePickup'
+    PickupClass=Class'NewNet_SniperRiflePickup'
 }

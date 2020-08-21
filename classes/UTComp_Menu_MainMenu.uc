@@ -162,7 +162,7 @@ defaultproperties
          bAcceptsInput=True
          OnActivate=LoginMenuTC.InternalOnActivate
      End Object
-     c_Main=GUITabControl'UTCompv18c.UTComp_Menu_MainMenu.LoginMenuTC'
+     c_Main=GUITabControl'UTComp_Menu_MainMenu.LoginMenuTC'
 
 
      Begin Object Class=FloatingImage Name=FloatingFrameBackground
@@ -179,7 +179,7 @@ defaultproperties
          DropShadowX=0
          DropShadowY=0
      End Object
-     i_FrameBG=FloatingImage'UTCompv18c.UTComp_Menu_MainMenu.FloatingFrameBackground'
+     i_FrameBG=FloatingImage'UTComp_Menu_MainMenu.FloatingFrameBackground'
 
      Begin Object Class=FloatingImage Name=FloatingFrameBackground2
          Image=Texture'2K4Menus.NewControls.Display95'
@@ -195,7 +195,7 @@ defaultproperties
          DropShadowX=0
          DropShadowY=0
      End Object
-     i_FrameBG2=FloatingImage'UTCompv18c.UTComp_Menu_MainMenu.FloatingFrameBackground2'
+     i_FrameBG2=FloatingImage'UTComp_Menu_MainMenu.FloatingFrameBackground2'
 
 
   /*   bResizeWidthAllowed=False

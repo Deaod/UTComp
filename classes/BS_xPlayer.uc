@@ -341,9 +341,9 @@ simulated function InitializeScoreboard()
         if(Settings.bUseDefaultScoreboard)
         {
             if(GameReplicationInfo.bTeamGame)
-                NewScoreboardClass=class'UTCompv18c.UTComp_ScoreBoardTDM';
+                NewScoreboardClass=class'UTComp_ScoreBoardTDM';
             else
-                NewScoreboardClass=class'UTCompv18c.UTComp_ScoreBoardDM';
+                NewScoreboardClass=class'UTComp_ScoreBoardDM';
             clientChangedScoreboard=True;
         }
     }
@@ -351,9 +351,9 @@ simulated function InitializeScoreboard()
     {
         //TODO: SCOREBOARD
         //if (Level.Game.IsA('xCTFGame'))
-        //    NewScoreboardClass = class'UTCompv18c.UTComp_ScoreBoardCTF';
+        //    NewScoreboardClass = class'UTComp_ScoreBoardCTF';
         //else
-            NewScoreboardClass = class'UTCompv18c.UTComp_ScoreBoard';
+            NewScoreboardClass = class'UTComp_ScoreBoard';
     }
     if(myHUD!=None && NewScoreBoardClass!=None)
         myHUD.SetScoreBoardClass( NewScoreboardClass);

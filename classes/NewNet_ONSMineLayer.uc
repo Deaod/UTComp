@@ -5,5 +5,5 @@ class NewNet_ONSMineLayer extends ONSMineLayer
 
 DefaultProperties
 {
-    PickupClass=Class'UTCompv18c.NewNet_ONSMineLayerPickup'
+    PickupClass=Class'NewNet_ONSMineLayerPickup'
 }

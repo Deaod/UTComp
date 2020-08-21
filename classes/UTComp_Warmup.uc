@@ -59,7 +59,7 @@ function InitializeWarmup()
 function SoftRestart()
 {
     bSoftRestart=true;
-    if(class'UTCompv18c.MutUTComp'.default.bEnableWarmup || Level.Game.IsA('UTComp_ClanArena'))
+    if(class'MutUTComp'.default.bEnableWarmup || Level.Game.IsA('UTComp_ClanArena'))
     {
         bGivePlayerWeaponHack=True;
         KillAllPlayers();
@@ -311,7 +311,7 @@ function EndArenaWarmup(bool bIsRestart)
 
 function AutoDemoRecord()
 {
-    if(class'UTCompv18c.MutUTComp'.default.bEnableAutoDemorec)
+    if(class'MutUTComp'.default.bEnableAutoDemorec)
     {
         ConsoleCommand("Demorec"@CreateAutoDemoRecName());
         bAutoDemoStarted=True;
@@ -321,7 +321,7 @@ function AutoDemoRecord()
 function string CreateAutoDemoRecName()
 {
     local string S;
-    S=class'UTCompv18c.MutUTComp'.default.AutoDemoRecMask;
+    S=class'MutUTComp'.default.AutoDemoRecMask;
     S=Repl(S, "%p", CreatePlayerString());
     S=Repl(S, "%t", CreateTimeString());
     S=StripIllegalWindowsCharacters(S);

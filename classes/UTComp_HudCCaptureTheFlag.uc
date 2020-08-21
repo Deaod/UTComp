@@ -186,7 +186,7 @@ simulated function OldDrawCrosshair(Canvas C)
 
 function GetLocalStatsScreen()
 {
-	LocalStatsScreen = Spawn(class'UTCompv18c.UTComp_CTFStatsScreen', Owner);
+	LocalStatsScreen = Spawn(class'UTComp_CTFStatsScreen', Owner);
 }
 
 simulated function DrawTimer(Canvas C)

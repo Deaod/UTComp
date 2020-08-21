@@ -7,6 +7,6 @@ CacheExempt;
 
 DefaultProperties
 {
-    FireModeClass[0] = Class'UTCompv18c.UTComp_AssaultFire'
-    FireModeClass[1] = Class'UTCompv18c.UTComp_AssaultGrenade'
+    FireModeClass[0] = Class'UTComp_AssaultFire'
+    FireModeClass[1] = Class'UTComp_AssaultGrenade'
 }

@@ -11,7 +11,7 @@ CacheExempt;
 static function StaticPrecache(LevelInfo L)
 {
     super.StaticPrecache( L );
-    L.AddPrecacheStaticMesh(  StaticMesh'UTCompv18c.MiniSuperHealth');
+    L.AddPrecacheStaticMesh(  StaticMesh'MiniSuperHealth');
 }
 
 auto state Pickup
@@ -39,7 +39,7 @@ auto state Pickup
 defaultproperties
 {
     HealingAmount=65
-    StaticMesh = StaticMesh'UTCompv18c.MiniSuperHealth'
+    StaticMesh = StaticMesh'MiniSuperHealth'
     DrawScale=0.45
      bSuperHeal=True
      MaxDesireability=2.000000
