@@ -72,8 +72,6 @@ function InternalOnChange( GUIComponent C )
         case ch_EnableHitSounds: Settings.bEnableHitSounds=ch_enableHitSounds.IsChecked(); break;
         case sl_Volume:  Settings.HitSoundVolume=sl_Volume.Value; break;
         case sl_Pitch:  Settings.CPMAPitchModifier=sl_Pitch.Value; break;
-    //    case co_EnemySound:  Settings.EnemySound=Sound(DynamicLoadObject(co_EnemySound.GetText(), class'Sound', True)); break;
-   //    case co_FriendlySound:  Settings.FriendlySound=Sound(DynamicLoadObject(co_FriendlySound.GetText(), class'Sound', True)); break;
         case co_EnemySound:  Settings.EnemySound=co_EnemySound.GetText(); break;
         case co_FriendlySound:  Settings.FriendlySound=co_FriendlySound.GetText(); break;
         case ch_CPMAStyle:   Settings.bCPMAStyleHitSounds=ch_CPMAStyle.IsChecked(); break;
@@ -87,8 +85,6 @@ function bool InternalOnKeyEvent(out byte Key, out byte State, float delta)
 {
     if (Key == 0x1B)
         return false;
-  //  Settings.EnemySound=Sound(DynamicLoadObject(co_EnemySound.GetText(), class'Sound', True));
- //   Settings.FriendlySound=Sound(DynamicLoadObject(co_FriendlySound.GetText(), class'Sound', True));
     Settings.EnemySound=co_EnemySound.GetText();
     Settings.FriendlySound=co_FriendlySound.GetText();
     BS_xPlayer(PlayerOwner()).LoadedFriendlySound = None;

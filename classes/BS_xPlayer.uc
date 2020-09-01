@@ -1044,16 +1044,20 @@ simulated function ServerRegisterTeammateHit(class<DamageType> DamageType, int D
 simulated function PlayEnemyHitSound(int Damage)
 {
     local float HitSoundPitch;
-    if(!Settings.bEnableHitSounds || LastHitSoundTime>Level.TimeSeconds)
+
+    if (!Settings.bEnableHitSounds || LastHitSoundTime>Level.TimeSeconds)
         return;
-    LastHitSoundTime=Level.TimeSeconds+HITSOUNDTWEENTIME;
-    HitSoundPitch=1.0;
-    if(Settings.bCPMAStyleHitSounds)
-        HitSoundPitch=Settings.CPMAPitchModifier*30.0/Damage;
-    if(LoadedEnemySound == none)
+
+    LastHitSoundTime = Level.TimeSeconds + HITSOUNDTWEENTIME;
+
+    HitSoundPitch = 1.0;
+    if (Settings.bCPMAStyleHitSounds)
+        HitSoundPitch = Settings.CPMAPitchModifier * 30.0 / Damage;
+
+    if (LoadedEnemySound == none)
         LoadedEnemySound = Sound(DynamicLoadObject(Settings.EnemySound, class'Sound', True));
 
-    if(ViewTarget!=None)
+    if (ViewTarget != None)
         ViewTarget.PlaySound(LoadedEnemySound,,Settings.HitSoundVolume,,,HitSoundPitch);
 }
 
@@ -1061,17 +1065,19 @@ simulated function PlayTeammateHitSound(int Damage)
 {
     local float HitSoundPitch;
 
-    if(!Settings.bEnableHitSounds || LastHitSoundTime>Level.TimeSeconds)
+    if (!Settings.bEnableHitSounds || LastHitSoundTime>Level.TimeSeconds)
         return;
-    LastHitSoundTime=Level.TimeSeconds+HITSOUNDTWEENTIME;
-    HitSoundPitch=1.0;
-    if(Settings.bCPMAStyleHitSounds)
-        HitSoundPitch=Settings.CPMAPitchModifier*30.0/Damage;
 
-    if(LoadedFriendlySound == none)
+    LastHitSoundTime = Level.TimeSeconds + HITSOUNDTWEENTIME;
+
+    HitSoundPitch = 1.0;
+    if (Settings.bCPMAStyleHitSounds)
+        HitSoundPitch = Settings.CPMAPitchModifier * 30.0 / Damage;
+
+    if (LoadedFriendlySound == none)
         LoadedFriendlySound = Sound(DynamicLoadObject(Settings.FriendlySound, class'Sound', True));
 
-    if(ViewTarget!=None)
+    if (ViewTarget != None)
         ViewTarget.PlaySound(LoadedFriendlySound,,Settings.HitSoundVolume,,,HitSoundPitch);
 }
 

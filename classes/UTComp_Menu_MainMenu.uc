@@ -62,7 +62,6 @@ function OnClose(optional bool bCancelled)
       BS_xPlayer(PlayerOwner()).ReSkinAll();
       BS_xPlayer(PlayerOwner()).InitializeScoreboard();
       BS_xPlayer(PlayerOwner()).MatchHudColor();
-     // Forward_xPlayer(PlayerOwner()).static.FixVars();
    }
    super.OnClose(bCancelled);
 }
