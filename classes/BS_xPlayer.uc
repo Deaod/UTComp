@@ -200,8 +200,10 @@ simulated function PostBeginPlay()
     foreach AllObjects(class'UTComp_Settings', Settings)
         break;
 
-    if (Settings == none)
+    if (Settings == none) {
         Settings = new(none, "ClientSettings") class'UTComp_Settings';
+        Settings.CheckSettings();
+    }
 
     foreach AllObjects(class'UTComp_HUDSettings', HUDSettings)
         break;

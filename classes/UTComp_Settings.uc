@@ -73,7 +73,19 @@ var config array<string> DisallowedEnemyNames;
 var config bool bEnemyBasedModels;
 var config bool bUseNewEyeHeightAlgorithm;
 
+function CheckSettings() {
+    local string PackageName;
 
+    PackageName = string(self.Class);
+    PackageName = Left(PackageName, InStr(PackageName, "."));
+
+    if (Left(FriendlySound, 6) ~= "UTComp")
+        FriendlySound = PackageName$Mid(FriendlySound, InStr(FriendlySound, "."));
+    if (Left(EnemySound, 6) ~= "UTComp")
+        EnemySound = PackageName$Mid(EnemySound, InStr(EnemySound, "."));
+
+    SaveConfig();
+}
 
 defaultproperties
 {
