@@ -972,8 +972,8 @@ function ModifyLogin(out string Portal, out string Options)
         Level.Game.HudType=string(class'UTComp_HudCDoubleDomination');
     else if(level.game.hudtype~="Onslaught.ONSHUDOnslaught")
         Level.Game.HudType=string(class'UTComp_ONSHUDOnslaught');
-    else if(level.game.hudtype~="SkaarjPack.HudInvasion")
-        Level.Game.HudType=string(class'UTComp_HudInvasion');
+    // else if(level.game.hudtype~="SkaarjPack.HudInvasion")
+    //     Level.Game.HudType=string(class'UTComp_HudInvasion');
     else if(level.game.hudtype~="BonusPack.HudLMS")
         Level.Game.HudType=string(class'UTComp_HudLMS');
     else if(level.game.hudtype~="BonusPack.HudMutant")
