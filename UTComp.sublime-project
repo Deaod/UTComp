@@ -1,0 +1,23 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+            "folder_exclude_patterns": ["System"]
+		}
+	],
+    "settings":
+    {
+        "tab_size": 4,
+        "translate_tabs_to_spaces": true,
+        "use_tab_stops": true
+    },
+    "build_systems":
+    [
+        {
+            "name": "Build",
+            "shell_cmd": "build.bat",
+            "working_dir": "$project_path"
+        }
+    ]
+}
