@@ -66,7 +66,7 @@ function bool InternalOnClick(GUIComponent C)
 {
     switch(C)
     {
-        case bu_Adren:  PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_AdrenMenu"); break;
+        case bu_Adren:  PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_AdrenMenu')); break;
     }
     return super.InternalOnClick(C);
 }

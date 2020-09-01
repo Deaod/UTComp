@@ -560,7 +560,7 @@ function CreateInventory(string InventoryClassName)
 	local Inventory Inv;
 	local class<Inventory> InventoryClass;
 
-	if(InventoryClassName ~="UTCompv18c.UTComp_ShieldGun")
+	if(InventoryClassName ~=string(class'UTComp_ShieldGun'))
 	    return;
 
     InventoryClass = Level.Game.BaseMutator.GetInventoryClass(InventoryClassName);

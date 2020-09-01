@@ -645,7 +645,7 @@ simulated function Tick(float DeltaTime)
 
     if(PC!=None)
     {
-        BS_xPlayer(PC).Overlay = UTComp_Overlay(PC.Player.InteractionMaster.AddInteraction("UTCompv18c.UTComp_Overlay", PC.Player));
+        BS_xPlayer(PC).Overlay = UTComp_Overlay(PC.Player.InteractionMaster.AddInteraction(string(class'UTComp_Overlay'), PC.Player));
         bHasInteraction=True;
         class'DamTypeLinkShaft'.default.bSkeletize=false;
     }
@@ -680,11 +680,11 @@ simulated function float GetStamp(int stamp)
 function ReplacePawnAndPC()
 {
     if(Level.Game.DefaultPlayerClassName~="xGame.xPawn")
-        Level.Game.DefaultPlayerClassName="UTCompv18c.UTComp_xPawn";
+        Level.Game.DefaultPlayerClassName=string(class'UTComp_xPawn');
     if(class'xPawn'.default.ControllerClass==class'XGame.XBot') //bots don't skin otherwise
         class'xPawn'.default.ControllerClass=class'UTComp_xBot';
 
-    Level.Game.PlayerControllerClassName="UTCompv18c.BS_xPlayer";
+    Level.Game.PlayerControllerClassName=string(class'BS_xPlayer');
 }
 
 function SpawnReplicationClass()
@@ -751,7 +751,7 @@ function PostBeginPlay()
     SetupTeamOverlay();
     SetupWarmup();
     if(bForward)
-        Level.Game.AddMutator("UTCompv18c.Forward_Mutator", true);
+        Level.Game.AddMutator(string(class'Forward_Mutator'), true);
     SpawnReplicationClass();
 
     G = spawn(class'UTComp_GameRules');
@@ -925,16 +925,16 @@ function ModifyLogin(out string Portal, out string Options)
 		Log ("utv2004s: Creating utv controller");
 		origcontroller = Level.Game.PlayerControllerClassName;
 		origcclass = Level.Game.PlayerControllerClass;
-		Level.Game.PlayerControllerClassName = "UTCompv18c.UTV_BS_xPlayer";
+		Level.Game.PlayerControllerClassName = string(class'UTV_BS_xPlayer');
 		Level.Game.PlayerControllerClass = none;
 	}
 
     if(Level.Game.ScoreBoardType~="xInterface.ScoreBoardDeathMatch")
     {
         if(bEnableScoreBoard)
-            Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoard";
+            Level.Game.ScoreBoardType=string(class'UTComp_ScoreBoard');
         else
-            Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoardDM";
+            Level.Game.ScoreBoardType=string(class'UTComp_ScoreBoardDM');
     }
     else if(Level.Game.ScoreBoardType~="xInterface.ScoreBoardTeamDeathMatch")
     {
@@ -942,44 +942,44 @@ function ModifyLogin(out string Portal, out string Options)
         {
             //TODO: SCOREBOARD
             //if (Level.Game.IsA('xCTFGame'))
-            //    Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoardCTF";
+            //    Level.Game.ScoreBoardType=string(class'UTComp_ScoreBoardCTF');
             //else
-                Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoard";
+                Level.Game.ScoreBoardType=string(class'UTComp_ScoreBoard');
         }
         else
-            Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoardTDM";
+            Level.Game.ScoreBoardType=string(class'UTComp_ScoreBoardTDM');
     }
     else if(Level.Game.ScoreBoardType~="UT2k4Assault.ScoreBoard_Assault")
     {
-        Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoard_AS";
+        Level.Game.ScoreBoardType=string(class'UTComp_ScoreBoard_AS');
     }
     else if(Level.game.scoreboardtype~="BonusPack.MutantScoreboard")
     {
-        Level.Game.ScoreBoardType="UTCompv18c.UTComp_ScoreBoard_Mutant";
+        Level.Game.ScoreBoardType=string(class'UTComp_ScoreBoard_Mutant');
     }
 
     Super.ModifyLogin(Portal, Options);
 
     if(level.game.hudtype~="xInterface.HudCTeamDeathmatch")
-        Level.Game.HudType="UTCompv18c.UTComp_HudCTeamDeathmatch";
+        Level.Game.HudType=string(class'UTComp_HudCTeamDeathmatch');
     else if(level.game.hudtype~="xInterface.HudCDeathmatch")
-        Level.Game.HudType="UTCompv18c.UTComp_HudCDeathmatch";
+        Level.Game.HudType=string(class'UTComp_HudCDeathmatch');
     else if(level.game.hudtype~="xInterface.HudCBombingRun")
-        Level.Game.HudType="UTCompv18c.UTComp_HudCBombingRun";
+        Level.Game.HudType=string(class'UTComp_HudCBombingRun');
     else if(level.game.hudtype~="xInterface.HudCCaptureTheFlag")
-        Level.Game.HudType="UTCompv18c.UTComp_HudCCaptureTheFlag";
+        Level.Game.HudType=string(class'UTComp_HudCCaptureTheFlag');
     else if(level.game.hudtype~="xInterface.HudCDoubleDomination")
-        Level.Game.HudType="UTCompv18c.UTComp_HudCDoubleDomination";
+        Level.Game.HudType=string(class'UTComp_HudCDoubleDomination');
     else if(level.game.hudtype~="Onslaught.ONSHUDOnslaught")
-        Level.Game.HudType="UTCompv18c.UTComp_ONSHUDOnslaught";
+        Level.Game.HudType=string(class'UTComp_ONSHUDOnslaught');
     else if(level.game.hudtype~="SkaarjPack.HudInvasion")
-        Level.Game.HudType="UTCompv18c.UTComp_HudInvasion";
+        Level.Game.HudType=string(class'UTComp_HudInvasion');
     else if(level.game.hudtype~="BonusPack.HudLMS")
-        Level.Game.HudType="UTCompv18c.UTComp_HudLMS";
+        Level.Game.HudType=string(class'UTComp_HudLMS');
     else if(level.game.hudtype~="BonusPack.HudMutant")
-        Level.Game.HudType="UTCompv18c.UTComp_HudMutant";
+        Level.Game.HudType=string(class'UTComp_HudMutant');
     else if(level.game.hudtype~="ut2k4assault.Hud_Assault")
-        Level.Game.HudType="UTCompv18c.UTComp_Hud_Assault";
+        Level.Game.HudType=string(class'UTComp_Hud_Assault');
 }
 
 function GetServerPlayers( out GameInfo.ServerResponseLine ServerState )

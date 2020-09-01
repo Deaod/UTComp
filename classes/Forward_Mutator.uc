@@ -180,8 +180,8 @@ function PostBeginPlay()
 	else
 		Level.Game.GameRulesModifiers.AddGameRules(G);
 
-    Level.Game.DefaultPlayerClassName="UTCompv18c.Forward_Pawn";
-    Level.Game.PlayerControllerClassName="UTCompv18c.Forward_xPlayer";
+    Level.Game.DefaultPlayerClassName=string(class'Forward_Pawn');
+    Level.Game.PlayerControllerClassName=string(class'Forward_xPlayer');
 }
 
 function ModifyPlayer(Pawn Other)
@@ -387,27 +387,27 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
     }
     else if(Other.IsA('MiniHealthPack') && Other.Class == class'MiniHealthPack')
     {
-        ReplaceWith(Other,"UTCompv18c.Forward_MiniHealthPack");
+        ReplaceWith(Other,string(class'Forward_MiniHealthPack'));
         return false;
     }
     else if(Other.IsA('HealthPack') && Other.Class == class'HealthPack')
     {
-        ReplaceWith(Other,"UTCompv18c.Forward_HealthPack");
+        ReplaceWith(Other,string(class'Forward_HealthPack'));
         return false;
     }
     else if(Other.IsA('SuperHealthPack') && Other.Class == class'SuperHealthPack')
     {
-        ReplaceWith(Other,"UTCompv18c.Forward_SuperHealthPack");
+        ReplaceWith(Other,string(class'Forward_SuperHealthPack'));
         return false;
     }
     else if(Other.IsA('ShieldPack') && Other.Class == class'ShieldPack')
     {
-        ReplaceWith(Other,"UTCompv18c.Forward_ShieldPack");
+        ReplaceWith(Other,string(class'Forward_ShieldPack'));
         return false;
     }
     else if(Other.IsA('SuperShieldPack') && Other.Class == class'SuperShieldPack')
     {
-        ReplaceWith(Other,"UTCompv18c.Forward_SuperShieldPack");
+        ReplaceWith(Other,string(class'Forward_SuperShieldPack'));
         return false;
     }
     else if ( GameReplicationInfo(Other) != None )

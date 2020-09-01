@@ -29,28 +29,28 @@ function InitComponent(GUIController MyController, GUIComponent MyComponent)
 function bool InternalOnClick(GUIComponent C)
 {
     if(C==UTCompMenuButtons[0])
-        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_BrightSkins");
+        PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_BrightSkins'));
 
     else if(C==UTCompMenuButtons[1])
-        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_ColorNames");
+        PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_ColorNames'));
 
     else if(C==UTCompMenuButtons[2])
-        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_TeamOverlay");
+        PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_TeamOverlay'));
 
     else if(C==UTCompMenuButtons[3])
-        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Crosshairs");
+        PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_Crosshairs'));
 
     else if(C==UTCompMenuButtons[4])
-        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Hitsounds");
+        PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_Hitsounds'));
 
     else if(C==UTCompMenuButtons[5])
-        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Voting");
+        PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_Voting'));
 
     else if(C==UTCompMenuButtons[6])
-        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_AutoDemoSS");
+        PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_AutoDemoSS'));
 
     else if(C==UTCompMenuButtons[7])
-        PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Miscellaneous");
+        PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_Miscellaneous'));
 
     return false;
 }

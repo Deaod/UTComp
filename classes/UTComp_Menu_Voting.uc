@@ -10,9 +10,9 @@ function bool InternalOnClick(GUIComponent C)
 {
     switch(C)
     {
-        case bu_GameTypeMenu:  PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Voting_GameType"); break;
-        case bu_MapChangeMenu:  PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Voting_Map");  break;
-        case bu_UTComp_SettingsMenu:  PlayerOwner().ClientReplaceMenu("UTCompv18c.UTComp_Menu_Voting_Settings");    break;
+        case bu_GameTypeMenu:  PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_Voting_GameType')); break;
+        case bu_MapChangeMenu:  PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_Voting_Map'));  break;
+        case bu_UTComp_SettingsMenu:  PlayerOwner().ClientReplaceMenu(string(class'UTComp_Menu_Voting_Settings'));    break;
     }
     Blehz();
     return super.InternalOnClick(C);
