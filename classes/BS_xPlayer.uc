@@ -108,6 +108,7 @@ var bool bUseNewEyeHeightAlgorithm;
 var transient float PitchFraction, YawFraction;
 
 var transient PlayerInput PlayerInput2;
+var float TimeBetweenUpdates;
 
 var UTComp_Settings Settings;
 var UTComp_HUDSettings HUDSettings;
@@ -117,9 +118,9 @@ replication
     unreliable if(Role==Role_Authority)
         ReceiveHit, ReceiveStats, ReceiveHitSound;
     reliable if (Role==Role_Authority)
-        StartDemo, NotifyEndWarmup, SetClockTime, NotifyRestartMap, SetClockTimeOnly, SetEndTimeOnly;
+        StartDemo, NotifyEndWarmup, SetClockTime, NotifyRestartMap, SetClockTimeOnly, SetEndTimeOnly, TimeBetweenUpdates;
     reliable if(Role<Role_Authority)
-        SetbStats, TurnOffNetCode, ServerSetEyeHeightAlgorithm;
+        SetbStats, TurnOffNetCode, ServerSetEyeHeightAlgorithm, ServerSetNetUpdateRate;
     unreliable if(Role<Role_Authority)
         ServerNextPlayer, ServerGoToPlayer, ServerFindNextNode,
         serverfindprevnode, servergotonode, ServerGoToWepBase, speclockRed, speclockBlue, ServerGoToTarget, CallVote;
@@ -192,6 +193,22 @@ exec function SetRedSkinColor(string S)
 exec function SetStats(int i)
 {
 
+}
+
+function ServerSetNetUpdateRate(float Rate) {
+    local float MaxRate;
+    local float MinRate;
+
+    MaxRate = FMin(class'MutUTComp'.default.MaxNetUpdateRate, Player.CurrentNetspeed/100.0);
+    MinRate = class'MutUTComp'.default.MinNetUpdateRate;
+
+    TimeBetweenUpdates = 1.0 / FClamp(Rate, MinRate, MaxRate);
+}
+
+exec function SetNetUpdateRate(float Rate) {
+    Settings.DesiredNetUpdateRate = Rate;
+    SaveSettings();
+    ServerSetNetUpdateRate(Rate);
 }
 
 simulated function PostBeginPlay()
@@ -314,11 +331,11 @@ simulated function InitializeStuff()
     SetShowSelf(Settings.bShowSelfInTeamOverlay);
     SetBStats(class'UTComp_Scoreboard'.default.bDrawStats || class'UTComp_ScoreBoard'.default.bOverrideDisplayStats);
     SetEyeHeightAlgorithm(Settings.bUseNewEyeHeightAlgorithm);
+    ServerSetNetUpdateRate(Settings.DesiredNetUpdateRate);
     if(Settings.bFirstRun)
     {
         Settings.bFirstRun=False;
         ConsoleCommand("Set Input f5 MyMenu");
-        Settings.bFirstRun=False;
         if(!class'DeathMatch'.default.bForceDefaultCharacter)
         {
            Settings.bRedTeammateModelsForced=False;
@@ -3060,7 +3077,7 @@ function UTComp_ReplicateMove(
 ) {
     local SavedMove NewMove, OldMove, AlmostLastMove, LastMove;
     local byte ClientRoll;
-    local float OldTimeDelta, NetMoveDelta;
+    local float OldTimeDelta;
     local int OldAccel;
     local vector BuildAccel, AccelNorm, MoveLoc, CompareAccel;
     local bool bPendingJumpStatus;
@@ -3118,24 +3135,28 @@ function UTComp_ReplicateMove(
     if ( NewMove == None )
         return;
     NewMove.SetMoveFor(self, DeltaTime, NewAccel, DoubleClickMove);
+    NewMove.RemoteRole = ROLE_None;
 
     // Simulate the movement locally.
     bDoubleJump = false;
     ProcessMove(NewMove.Delta, NewMove.Acceleration, NewMove.DoubleClickMove, DeltaRot);
 
     // see if the two moves could be combined
-    if ((PendingMove != None) && (Pawn != None) && (Pawn.Physics == PHYS_Walking)
-        && (NewMove.Delta + PendingMove.Delta < MaxResponseTime)
-        && (NewAccel != vect(0,0,0))
-        && (PendingMove.SavedPhysics == PHYS_Walking)
-        && !PendingMove.bPressedJump && !NewMove.bPressedJump
-        && (PendingMove.bRun == NewMove.bRun)
-        && (PendingMove.bDuck == NewMove.bDuck)
-        && (PendingMove.bDoubleJump == NewMove.bDoubleJump)
-        && (PendingMove.DoubleClickMove == DCLICK_None)
-        && (NewMove.DoubleClickMove == DCLICK_None)
-        && ((Normal(PendingMove.Acceleration) Dot Normal(NewAccel)) > 0.99)
-        && (Level.TimeDilation >= 0.9)
+    if ((PendingMove != None) &&
+        (Pawn != None) &&
+        (Pawn.Physics == PHYS_Walking) &&
+        (NewMove.Delta + PendingMove.Delta < MaxResponseTime) &&
+        (NewAccel != vect(0,0,0)) &&
+        (PendingMove.SavedPhysics == PHYS_Walking) &&
+        !PendingMove.bPressedJump &&
+        !NewMove.bPressedJump &&
+        (PendingMove.bRun == NewMove.bRun) &&
+        (PendingMove.bDuck == NewMove.bDuck) &&
+        (PendingMove.bDoubleJump == NewMove.bDoubleJump) &&
+        (PendingMove.DoubleClickMove == DCLICK_None) &&
+        (NewMove.DoubleClickMove == DCLICK_None) &&
+        ((Normal(PendingMove.Acceleration) Dot Normal(NewAccel)) > 0.99) &&
+        (Level.TimeDilation >= 0.9)
     ) {
         Pawn.SetLocation(PendingMove.GetStartLocation());
         Pawn.Velocity = PendingMove.StartVelocity;
@@ -3177,12 +3198,7 @@ function UTComp_ReplicateMove(
 
     if (PendingMove == None) {
         // Decide whether to hold off on move
-        if ((Player.CurrentNetSpeed > 10000) && (GameReplicationInfo != None) && (GameReplicationInfo.PRIArray.Length <= 10))
-            NetMoveDelta = 0.011;
-        else
-            NetMoveDelta = FMax(0.0222,2 * Level.MoveRepSize/Player.CurrentNetSpeed);
-
-        if ((Level.TimeSeconds - ClientUpdateTime) * Level.TimeDilation * 0.91 < NetMoveDelta) {
+        if ((Level.TimeSeconds - ClientUpdateTime) * Level.TimeDilation * 0.91 < TimeBetweenUpdates) {
             PendingMove = NewMove;
             return;
         }
@@ -3692,4 +3708,6 @@ defaultproperties
      CustomWepTypes(10)=(WepName="Cicada",damtype[0]="OnslaughtBP.DamTypeONSCicadaRocket",DamType[1]="OnslaughtBP.DamTypeONSCicadaLaser")
      CustomWepTypes(11)=(WepName="SPMA",damtype[0]="OnslaughtBP.DamTypeArtilleryShell")
      CustomWepTypes(12)=(WepName="XxxX ESR",damtype[0]="XxxXESRInstaGib",damtype[1]="XxxXESRHeadshot")
+
+     TimeBetweenUpdates=0.0111111;
 }

@@ -159,6 +159,8 @@ var bool bEnhancedNetCodeEnabledAtStartOfMap;
 
 var config bool bEnableEnhancedNetCode;
 var config bool bEnableEnhancedNetCodeVoting;
+var config float MinNetUpdateRate;
+var config float MaxNetUpdateRate;
 
 var FakeProjectileManager FPM;
 
@@ -1303,6 +1305,8 @@ static function FillPlayInfo (PlayInfo PlayInfo)
     PlayInfo.AddSetting("UTComp Settings", "bEnableMapVoting", "Allow players to vote for map changes", 1, 1,"Check");
     PlayInfo.AddSetting("UTComp Settings", "WarmupTime", "Warmup Time",1, 1, "Text","0;0:1800",,True,True);
     PlayInfo.AddSetting("UTComp Settings", "SuicideInterval", "Minimum time between two suicides", 1, 1, "Text", "0;0:1800",, True, True);
+    PlayInfo.AddSetting("UTComp Settings", "MinNetUpdateRate", "Minimum rate of client updates", 1, 1, "Text", "3;0:999",, True, True);
+    PlayInfo.AddSetting("UTComp Settings", "MaxNetUpdateRate", "Maximum rate of client updates", 1, 1, "Text", "3;0:999",, True, True);
 
 
     PlayInfo.PopClass();
@@ -1337,6 +1341,8 @@ static event string GetDescriptionText(string PropName)
         case "MinNetSpeed": return "Minimum NetSpeed for clients on this server";
         case "MaxNetSpeed": return "Maximum NetSpeed for clients on this server";
         case "SuicideInterval": return "Minimum time between two suicides";
+        case "MinNetUpdateRate": return "Minimum Rate at which clients are expected to send updates to the server";
+        case "MaxNetUpdateRate": return "Maximum Rate at which clients can send updates to the server";
     }
 	return Super.GetDescriptionText(PropName);
 }
@@ -1450,6 +1456,8 @@ defaultproperties
      NumGrenadesOnSpawn=4
      bEnableEnhancedNetCode=false
      bEnableEnhancedNetCodeVoting=true
+     MinNetUpdateRate=60
+     MaxNetUpdateRate=250
 
      WeaponClasses(0)=Class'NewNet_ShockRifle'
      WeaponClasses(1)=Class'NewNet_LinkGun'

@@ -72,6 +72,7 @@ var config array<ClanSkinTripple> ClanSkins;
 var config array<string> DisallowedEnemyNames;
 var config bool bEnemyBasedModels;
 var config bool bUseNewEyeHeightAlgorithm;
+var config float DesiredNetUpdateRate;
 
 function CheckSettings() {
     local string PackageName;
@@ -137,4 +138,5 @@ defaultproperties
     BlueEnemyModelName="Arclite"
     RedTeammateModelName="Arclite"
     bEnableDarkSkinning=True
+    DesiredNetUpdateRate=90
 }
