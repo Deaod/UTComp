@@ -22,9 +22,11 @@ var EDoubleClickDir OldDodgeDir;
 var int MultiDodgesRemaining;
 
 // UpdateEyeHeight related
-var float OldBaseEyeHeight;
-var float EyeHeightOffset;
+var EPhysics OldPhysics2;
 var vector OldLocation;
+var float OldBaseEyeHeight;
+var int IgnoreZChangeTicks;
+var float EyeHeightOffset;
 
 var UTComp_Settings Settings;
 var UTComp_HUDSettings HUDSettings;
@@ -988,6 +990,19 @@ simulated function bool ShouldUseModel(string S)
     return true;
 }
 
+simulated function ClientRestart()
+{
+    super.ClientRestart();
+    IgnoreZChangeTicks = 1;
+}
+
+simulated function Touch(Actor Other) {
+    super.Touch(Other);
+
+    if (Other.IsA('Teleporter'))
+        IgnoreZChangeTicks = 2;
+}
+
 event UpdateEyeHeight( float DeltaTime )
 {
     local vector Delta;
@@ -1016,21 +1031,25 @@ event UpdateEyeHeight( float DeltaTime )
 
     if (Controller.WantsSmoothedView()) {
         Delta = Location - OldLocation;
+
         // remove lifts from the equation.
         if (Base != none)
             Delta -= DeltaTime * Base.Velocity;
 
         // Step detection heuristic
-        if (Abs(Delta.Z) > DeltaTime * GroundSpeed)
+        if (IgnoreZChangeTicks == 0 && Abs(Delta.Z) > DeltaTime * GroundSpeed)
             EyeHeightOffset += FClamp(Delta.Z, -MAXSTEPHEIGHT, MAXSTEPHEIGHT);
     }
+
     OldLocation = Location;
+    OldPhysics2 = Physics;
+    if (IgnoreZChangeTicks > 0) IgnoreZChangeTicks--;
 
     if (Controller.WantsSmoothedView())
         EyeHeightOffset += BaseEyeHeight - OldBaseEyeHeight;
     OldBaseEyeHeight = BaseEyeHeight;
 
-    EyeHeightOffset *= Exp(-10.0 * DeltaTime);
+    EyeHeightOffset *= Exp(-9.0 * DeltaTime);
     EyeHeight = BaseEyeHeight - EyeHeightOffset;
 
     Controller.AdjustView(DeltaTime);

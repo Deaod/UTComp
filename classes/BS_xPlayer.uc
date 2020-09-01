@@ -2941,6 +2941,24 @@ function UpdateRotation(float DeltaTime, float maxPitch)
     }
 }
 
+function bool WantsSmoothedView()
+{
+    if (Pawn == none) return false;
+
+    return
+        (((Pawn.Physics == PHYS_Walking) || (Pawn.Physics == PHYS_Spider)) && Pawn.bJustLanded == false) ||
+        (Pawn.Physics == PHYS_Falling && UTComp_xPawn(Pawn).OldPhysics2 == PHYS_Walking);
+}
+
+state PlayerSwimming {
+ignores SeePlayer, HearNoise, Bump;
+
+    function bool WantsSmoothedView()
+    {
+        return ( !Pawn.bJustLanded );
+    }
+}
+
 
 defaultproperties
 {
