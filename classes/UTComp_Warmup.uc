@@ -37,6 +37,8 @@ struct SavedPRI
 };
 var Array<SavedPRI> SavedPRIList;
 
+var array<UTComp_PSVisDummy> PSVisDummies;
+
 const iCOUNTDOWNSECONDS = 10;
 
 
@@ -54,6 +56,33 @@ function InitializeWarmup()
         bTimeUnlimitedWarmup=True;
     else
         iWarmupTimeRemaining=iWarmupTime;
+
+    InitSpawnVisualization();
+}
+
+function InitSpawnVisualization() {
+    local PlayerStart PS;
+    local UTComp_PSVisDummy PSD;
+    local int i;
+
+    if (class'MutUTComp'.default.bShowSpawnsDuringWarmup) {
+        i = 0;
+        foreach AllActors(class'PlayerStart', PS) {
+            PSD = Spawn(class'UTComp_PSVisDummy',,, PS.Location, PS.Rotation);
+            PSD.InitDummy(PS);
+            PSVisDummies[i] = PSD;
+            i++;
+        }
+    }
+}
+
+function RemoveSpawnVisualization() {
+    local int i;
+
+    for (i = 0; i < PSVisDummies.Length; i++)
+        PSVisDummies[i].Destroy();
+
+    PSVisDummies.Remove(0, PSVisDummies.Length);
 }
 
 function SoftRestart()
@@ -297,6 +326,7 @@ function EndWarmup(bool bIsRestart)
         NotifyPlayers();
     ResetStats();
     ResetKills();
+    RemoveSpawnVisualization();
     AutoDemoRecord();
 }
 

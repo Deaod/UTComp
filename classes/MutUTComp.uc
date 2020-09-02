@@ -25,6 +25,7 @@ var config byte EnableHitSoundsMode;
 var config bool bEnableScoreboard;
 var config bool bEnableWarmup;
 var config float WarmupReadyPercentRequired;
+var config bool bShowSpawnsDuringWarmup;
 var config bool bEnableWeaponStats;
 var config bool bEnablePowerupStats;
 var config bool bShowTeamScoresInServerBrowser;
@@ -1307,7 +1308,7 @@ static function FillPlayInfo (PlayInfo PlayInfo)
     PlayInfo.AddSetting("UTComp Settings", "SuicideInterval", "Minimum time between two suicides", 1, 1, "Text", "0;0:1800",, True, True);
     PlayInfo.AddSetting("UTComp Settings", "MinNetUpdateRate", "Minimum rate of client updates", 1, 1, "Text", "0;0:999",, True, True);
     PlayInfo.AddSetting("UTComp Settings", "MaxNetUpdateRate", "Maximum rate of client updates", 1, 1, "Text", "0;0:999",, True, True);
-
+    PlayInfo.AddSetting("UTComp Settings", "bShowSpawnsDuringWarmup", "Show Spawns during Warmup", 1, 1,"Check");
 
     PlayInfo.PopClass();
     super.FillPlayInfo(PlayInfo);
@@ -1343,6 +1344,7 @@ static event string GetDescriptionText(string PropName)
         case "SuicideInterval": return "Minimum time between two suicides";
         case "MinNetUpdateRate": return "Minimum Rate at which clients are expected to send updates to the server";
         case "MaxNetUpdateRate": return "Maximum Rate at which clients can send updates to the server";
+        case "bShowSpawnsDuringWarmup": return "Show spawn points during warmup by spawning dummies on every one of them";
     }
 	return Super.GetDescriptionText(PropName);
 }
