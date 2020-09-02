@@ -196,6 +196,8 @@ simulated function DrawTimer(Canvas C)
     local UTComp_Warmup uWarmup;
 
 	GRI = PlayerOwner.GameReplicationInfo;
+    if (GRI == none) return;
+
     if(BS_xPlayer(PlayerOwner)!=None)
     {
         if(BS_xPlayer(PlayerOwner).uWarmup!=None)
