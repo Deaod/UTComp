@@ -195,11 +195,14 @@ exec function SetStats(int i)
 
 }
 
-function ServerSetNetUpdateRate(float Rate) {
+function ServerSetNetUpdateRate(float Rate, int NetSpeed) {
     local float MaxRate;
     local float MinRate;
 
-    MaxRate = FMin(class'MutUTComp'.default.MaxNetUpdateRate, Player.CurrentNetspeed/100.0);
+    MaxRate = class'MutUTComp'.default.MaxNetUpdateRate;
+    if (NetSpeed != 0)
+        MaxRate = FMin(MaxRate, NetSpeed/100.0);
+
     MinRate = class'MutUTComp'.default.MinNetUpdateRate;
 
     TimeBetweenUpdates = 1.0 / FClamp(Rate, MinRate, MaxRate);
@@ -208,7 +211,7 @@ function ServerSetNetUpdateRate(float Rate) {
 exec function SetNetUpdateRate(float Rate) {
     Settings.DesiredNetUpdateRate = Rate;
     SaveSettings();
-    ServerSetNetUpdateRate(Rate);
+    ServerSetNetUpdateRate(Rate, Player.CurrentNetSpeed);
 }
 
 simulated function PostBeginPlay()
@@ -331,7 +334,7 @@ simulated function InitializeStuff()
     SetShowSelf(Settings.bShowSelfInTeamOverlay);
     SetBStats(class'UTComp_Scoreboard'.default.bDrawStats || class'UTComp_ScoreBoard'.default.bOverrideDisplayStats);
     SetEyeHeightAlgorithm(Settings.bUseNewEyeHeightAlgorithm);
-    ServerSetNetUpdateRate(Settings.DesiredNetUpdateRate);
+    ServerSetNetUpdateRate(Settings.DesiredNetUpdateRate, Player.CurrentNetSpeed);
     if(Settings.bFirstRun)
     {
         Settings.bFirstRun=False;
