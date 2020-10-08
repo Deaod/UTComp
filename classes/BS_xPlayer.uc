@@ -242,10 +242,16 @@ event InitInputSystem()
     // this actually creates the PlayerInput object
     super.InitInputSystem();
 
+    FindPlayerInput();
+}
+
+function FindPlayerInput() {
+    local PlayerInput PIn;
+
     // so that we can now capture it
-    foreach AllObjects(class'Engine.PlayerInput', PlayerInput2)
-        if (PlayerInput2.Outer == self)
-            break;
+    foreach AllObjects(class'PlayerInput', PIn)
+        if (PIn.Outer == self && InStr(PIn, ".PlayerInput") < 0)
+            PlayerInput2 = PIn;
 }
 
 simulated function ChangeDeathMessageOrder()
