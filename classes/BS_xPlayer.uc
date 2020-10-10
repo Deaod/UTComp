@@ -247,11 +247,18 @@ event InitInputSystem()
 
 function FindPlayerInput() {
     local PlayerInput PIn;
+    local PlayerInput PInAlt;
 
     // so that we can now capture it
     foreach AllObjects(class'PlayerInput', PIn)
-        if (PIn.Outer == self && InStr(PIn, ".PlayerInput") < 0)
-            PlayerInput2 = PIn;
+        if (PIn.Outer == self) {
+            PInAlt = PIn;
+            if (InStr(PIn, ".PlayerInput") < 0)
+                PlayerInput2 = PIn;
+        }
+
+    if (PlayerInput2 == none)
+        PlayerInput2 = PInAlt;
 }
 
 simulated function ChangeDeathMessageOrder()
@@ -2916,6 +2923,11 @@ function bool ComboDisabled(class<Combo> ComboClass)
         return true;
 
     return false;
+}
+
+event ClientTravel( string URL, ETravelType TravelType, bool bItems ) {
+    super.ClientTravel(URL, TravelType, bItems);
+    PlayerInput2 = none;
 }
 
 //--------------------------
