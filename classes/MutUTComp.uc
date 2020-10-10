@@ -861,13 +861,12 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 
 function bool GetForward()
 {
-   local mutator mut;
-   for ( mut=Level.Game.BaseMutator; mut!=None; mut=mut.NextMutator )
-	if ( mut.IsA('Forward_Mutator') )
-	{
+    local mutator mut;
+    for ( mut=Level.Game.BaseMutator; mut!=None; mut=mut.NextMutator )
+        if ( mut.IsA('Forward_Mutator') )
             return true;
-	}
-  return false;
+
+    return false;
 }
 
 function bool SniperCheckReplacement( Actor Other, out byte bSuperRelevant )
