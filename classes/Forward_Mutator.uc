@@ -26,14 +26,14 @@ simulated function PreBeginPlay()
 
 function bool IsRelevant(Actor Other, out byte bSuperRelevant)
 {
-	if ( Other.IsA('AdrenalinePickup') )
-	{
-    	bSuperRelevant = 0;
-		return false;
+    if ( Other.IsA('AdrenalinePickup') )
+    {
+        bSuperRelevant = 0;
+        return false;
     }
     if ( Controller(Other) != None )
-		Controller(Other).bAdrenalineEnabled = false;
-	return Super.IsRelevant(Other, bSuperRelevant);
+        Controller(Other).bAdrenalineEnabled = false;
+    return Super.IsRelevant(Other, bSuperRelevant);
 }
 
 function SetupWeaponTweaks()
@@ -174,11 +174,11 @@ function PostBeginPlay()
 
     super.PostBeginPlay();
 
-	G = spawn(class'Forward_GameRules');
+    G = spawn(class'Forward_GameRules');
     if ( Level.Game.GameRulesModifiers == None )
-		Level.Game.GameRulesModifiers = G;
-	else
-		Level.Game.GameRulesModifiers.AddGameRules(G);
+        Level.Game.GameRulesModifiers = G;
+    else
+        Level.Game.GameRulesModifiers.AddGameRules(G);
 
     Level.Game.DefaultPlayerClassName=string(class'Forward_Pawn');
     Level.Game.PlayerControllerClassName=string(class'Forward_xPlayer');
@@ -189,7 +189,7 @@ function ModifyPlayer(Pawn Other)
     local int i;
 
     if(xPawn(Other)!=None)
-		xPawn(Other).bCanBoostDodge = true;
+        xPawn(Other).bCanBoostDodge = true;
 
 
     if(!Level.Game.IsA('UTComp_ClanArena'))
@@ -201,7 +201,7 @@ function ModifyPlayer(Pawn Other)
     }
 
     if ( NextMutator != None )
-		NextMutator.ModifyPlayer(Other);
+        NextMutator.ModifyPlayer(Other);
 }
 
 function FindWhatWeaponsToGive()
@@ -352,13 +352,13 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
           }
        }
         if(Other.IsA('SuperShieldCharger'))
-	    {
+        {
             SuperShieldCharger(Other).PowerUp=class'Forward_SuperShieldPack';
             SuperShieldCharger(Other).bDelayedSpawn=false;
             return true;
         }
-	    else if(Other.IsA('ShieldCharger'))
-	    {
+        else if(Other.IsA('ShieldCharger'))
+        {
             ShieldCharger(Other).PowerUp=class'Forward_ShieldPack';
             ShieldCharger(Other).bDelayedSpawn=false;
             return true;
@@ -411,23 +411,23 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
         return false;
     }
     else if ( GameReplicationInfo(Other) != None )
-	{
-		GameReplicationInfo(Other).bFastWeaponSwitching = true;
-		return true;
-	}
-	return true;
+    {
+        GameReplicationInfo(Other).bFastWeaponSwitching = true;
+        return true;
+    }
+    return true;
 }
 
 function string GetInventoryClassOverride(string InventoryClassName)
 {
-	local int i;
+    local int i;
     // here, in mutator subclass, change InventoryClassName if desired.  For example:
-	// if ( InventoryClassName == "Weapons.DorkyDefaultWeapon"
-	//		InventoryClassName = "ModWeapons.SuperDisintegrator"
+    // if ( InventoryClassName == "Weapons.DorkyDefaultWeapon"
+    //      InventoryClassName = "ModWeapons.SuperDisintegrator"
 
-	for(i=0; i<ArrayCount(ReplacedWeaponClassNames); i++)
-	{
-	   if(InventoryClassName~=ReplacedWeaponClassNames[i])
+    for(i=0; i<ArrayCount(ReplacedWeaponClassNames); i++)
+    {
+       if(InventoryClassName~=ReplacedWeaponClassNames[i])
        {
           if(bEnhancedNetCodeEnabledAtStartOfMap)
              InventoryClassName = WeaponClassNames[i];
@@ -436,10 +436,10 @@ function string GetInventoryClassOverride(string InventoryClassName)
 
           break;
        }
-	}
-	for(i=0; i<ArrayCount(NewNetWeaponClassNames); i++)
-	{
-	   if(InventoryClassName~=NewNetWeaponClassNames[i])
+    }
+    for(i=0; i<ArrayCount(NewNetWeaponClassNames); i++)
+    {
+       if(InventoryClassName~=NewNetWeaponClassNames[i])
        {
           if(bEnhancedNetCodeEnabledAtStartOfMap)
              InventoryClassName = WeaponClassNames[i];
@@ -448,10 +448,10 @@ function string GetInventoryClassOverride(string InventoryClassName)
 
           break;
        }
-	}
-	for(i=0; i<ArrayCount(UTCompWeaponClassNames); i++)
-	{
-	   if(InventoryClassName~=UTCompWeaponClassNames[i])
+    }
+    for(i=0; i<ArrayCount(UTCompWeaponClassNames); i++)
+    {
+       if(InventoryClassName~=UTCompWeaponClassNames[i])
        {
           if(bEnhancedNetCodeEnabledAtStartOfMap)
              InventoryClassName = WeaponClassNames[i];
@@ -460,47 +460,47 @@ function string GetInventoryClassOverride(string InventoryClassName)
 
           break;
        }
-	}
+    }
 
     if ( NextMutator != None )
-		return NextMutator.GetInventoryClassOverride(InventoryClassName);
-	return InventoryClassName;
+        return NextMutator.GetInventoryClassOverride(InventoryClassName);
+    return InventoryClassName;
 }
 
 function bool ReplaceWith(actor Other, string aClassName)
 {
-	local Actor A;
-	local class<Actor> aClass;
+    local Actor A;
+    local class<Actor> aClass;
 
-	if ( aClassName == "" )
-		return true;
+    if ( aClassName == "" )
+        return true;
 
-	aClass = class<Actor>(DynamicLoadObject(aClassName, class'Class'));
-	if ( aClass != None )
-		A = Spawn(aClass,Other.Owner,Other.tag,Other.Location, Other.Rotation);
-	if ( Other.IsA('Pickup') )
-	{
-		if ( Pickup(Other).MyMarker != None )
-		{
-			Pickup(Other).MyMarker.markedItem = Pickup(A);
-			if ( Pickup(A) != None )
-			{
-				Pickup(A).MyMarker = Pickup(Other).MyMarker;
-				A.SetLocation(A.Location
-					+ (A.CollisionHeight - Other.CollisionHeight) * vect(0,0,1));
-			}
-			Pickup(Other).MyMarker = None;
-		}
-		else if ( A.IsA('Pickup') && !A.IsA('WeaponPickup') )
-			Pickup(A).Respawntime = 0.0;
-	}
-	if ( A != None )
-	{
-		A.event = Other.event;
-		A.tag = Other.tag;
-		return true;
-	}
-	return false;
+    aClass = class<Actor>(DynamicLoadObject(aClassName, class'Class'));
+    if ( aClass != None )
+        A = Spawn(aClass,Other.Owner,Other.tag,Other.Location, Other.Rotation);
+    if ( Other.IsA('Pickup') )
+    {
+        if ( Pickup(Other).MyMarker != None )
+        {
+            Pickup(Other).MyMarker.markedItem = Pickup(A);
+            if ( Pickup(A) != None )
+            {
+                Pickup(A).MyMarker = Pickup(Other).MyMarker;
+                A.SetLocation(A.Location
+                    + (A.CollisionHeight - Other.CollisionHeight) * vect(0,0,1));
+            }
+            Pickup(Other).MyMarker = None;
+        }
+        else if ( A.IsA('Pickup') && !A.IsA('WeaponPickup') )
+            Pickup(A).Respawntime = 0.0;
+    }
+    if ( A != None )
+    {
+        A.event = Other.event;
+        A.tag = Other.tag;
+        return true;
+    }
+    return false;
 }
 
 function ServerTraveling(string URL, bool bItems)
