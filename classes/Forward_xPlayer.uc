@@ -80,17 +80,15 @@ state PlayerWalking
 
 function AwardDamage(int Damage)
 {
-   local Inventory INV;
-   if(Pawn==None)
-       return;
-   for(Inv=Pawn.Inventory; Inv!=None; Inv=Inv.Inventory)
-   {
-      if(Inv.IsA('ShieldGun'))
-      {
-          if(!Weapon(inv).AmmoMaxed(1))
-             ShieldGun(inv).AddAmmo(Damage*SHIELD_DAMAGE_MULTIPLIER,1);
-      }
-   }
+    local Inventory Inv;
+
+    if(Pawn==None)
+        return;
+
+    for(Inv=Pawn.Inventory; Inv!=None; Inv=Inv.Inventory)
+        if (Inv.IsA('ShieldGun'))
+            if (!Weapon(inv).AmmoMaxed(1))
+                ShieldGun(inv).AddAmmo(int(float(Damage)*SHIELD_DAMAGE_MULTIPLIER),1);
 }
 
 function ClientBecameSpecator()
