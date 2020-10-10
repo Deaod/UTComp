@@ -11,10 +11,7 @@ function Timer()
     if (!bIsFiring)
     {
 		RampTime = 0;
-        if ( !Weapon.AmmoMaxed(1) )
-            Weapon.AddAmmo(0,0);
-        else
-            SetTimer(0, false);
+        SetTimer(0, false);
     }
     else
     {
