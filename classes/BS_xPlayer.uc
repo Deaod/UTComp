@@ -2875,31 +2875,62 @@ simulated function bool UseNewNet()
 /* replace calls fro old weapons if newnet is on */
 exec function GetWeapon(class<Weapon> NewWeaponClass )
 {
-    if(NewWeaponClass == class'AssaultRifle')
-        super.GetWeapon(class'NewNet_AssaultRifle');
-    else if(NewWeaponClass == class'BioRifle')
-        super.GetWeapon(class'NewNet_BioRifle');
-    else if(NewWeaponClass == class'ClassicSniperRifle')
-        super.GetWeapon(class'NewNet_ClassicSniperRifle');
-    else if(NewWeaponClass == class'FlakCannon')
-        super.GetWeapon(class'NewNet_FlakCannon');
-    else if(NewWeaponClass == class'LinkGun')
-        super.GetWeapon(class'NewNet_LinkGun');
-    else if(NewWeaponClass == class'MiniGun')
-        super.GetWeapon(class'NewNet_MiniGun');
-    else if(NewWeaponClass == class'ONSAvril')
-        super.GetWeapon(class'NewNet_ONSAvril');
-    else if(NewWeaponClass == class'ONSGrenadeLauncher')
-        super.GetWeapon(class'NewNet_ONSGrenadeLauncher');
-    else if(NewWeaponClass == class'ONSMineLayer')
-        super.GetWeapon(class'NewNet_ONSMineLayer');
-    else if(NewWeaponClass == class'RocketLauncher')
-        super.GetWeapon(class'NewNet_RocketLauncher');
-    else if(NewWeaponClass == class'ShockRifle')
-        super.GetWeapon(class'NewNet_ShockRifle');
-    else if(NewWeaponClass == class'SniperRifle')
-        super.GetWeapon(class'NewNet_SniperRifle');
+    if(RepInfo==None)
+        foreach DynamicActors(class'UTComp_ServerReplicationInfo', RepInfo);
 
+    if (RepInfo.bEnableEnhancedNetCode) {
+        if (NewWeaponClass == class'AssaultRifle')
+            NewWeaponClass = class'NewNet_AssaultRifle';
+        else if (NewWeaponClass == class'BioRifle')
+            NewWeaponClass = class'NewNet_BioRifle';
+        else if (NewWeaponClass == class'ClassicSniperRifle')
+            NewWeaponClass = class'NewNet_ClassicSniperRifle';
+        else if (NewWeaponClass == class'FlakCannon')
+            NewWeaponClass = class'NewNet_FlakCannon';
+        else if (NewWeaponClass == class'LinkGun')
+            NewWeaponClass = class'NewNet_LinkGun';
+        else if (NewWeaponClass == class'MiniGun')
+            NewWeaponClass = class'NewNet_MiniGun';
+        else if (NewWeaponClass == class'ONSAvril')
+            NewWeaponClass = class'NewNet_ONSAvril';
+        else if (NewWeaponClass == class'ONSGrenadeLauncher')
+            NewWeaponClass = class'NewNet_ONSGrenadeLauncher';
+        else if (NewWeaponClass == class'ONSMineLayer')
+            NewWeaponClass = class'NewNet_ONSMineLayer';
+        else if (NewWeaponClass == class'RocketLauncher')
+            NewWeaponClass = class'NewNet_RocketLauncher';
+        else if (NewWeaponClass == class'ShockRifle')
+            NewWeaponClass = class'NewNet_ShockRifle';
+        else if (NewWeaponClass == class'SniperRifle')
+            NewWeaponClass = class'NewNet_SniperRifle';
+    } else {
+        if (NewWeaponClass == class'ShieldGun')
+            NewWeaponClass = class'UTComp_ShieldGun';
+        else if (NewWeaponClass == class'AssaultRifle')
+            NewWeaponClass = class'UTComp_AssaultRifle';
+        else if (NewWeaponClass == class'BioRifle')
+            NewWeaponClass = class'UTComp_BioRifle';
+        // else if (NewWeaponClass == class'ClassicSniperRifle')
+        //     NewWeaponClass = class'UTComp_ClassicSniperRifle';
+        else if (NewWeaponClass == class'FlakCannon')
+            NewWeaponClass = class'UTComp_FlakCannon';
+        else if (NewWeaponClass == class'LinkGun')
+            NewWeaponClass = class'UTComp_LinkGun';
+        else if (NewWeaponClass == class'MiniGun')
+            NewWeaponClass = class'UTComp_MiniGun';
+        // else if (NewWeaponClass == class'ONSAvril')
+        //     NewWeaponClass = class'UTComp_ONSAvril';
+        // else if (NewWeaponClass == class'ONSGrenadeLauncher')
+        //     NewWeaponClass = class'UTComp_ONSGrenadeLauncher';
+        // else if (NewWeaponClass == class'ONSMineLayer')
+        //     NewWeaponClass = class'UTComp_ONSMineLayer';
+        else if (NewWeaponClass == class'RocketLauncher')
+            NewWeaponClass = class'UTComp_RocketLauncher';
+        else if (NewWeaponClass == class'ShockRifle')
+            NewWeaponClass = class'UTComp_ShockRifle';
+        else if (NewWeaponClass == class'SniperRifle')
+            NewWeaponClass = class'UTComp_SniperRifle';
+    }
     super.GetWeapon(NewWeaponClass);
 }
 

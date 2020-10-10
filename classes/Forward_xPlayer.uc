@@ -98,6 +98,67 @@ function ClientBecameSpecator()
     SavedShieldAmmoCount= 0;
 }
 
+/* replace calls fro old weapons if newnet is on */
+exec function GetWeapon(class<Weapon> NewWeaponClass )
+{
+    if(RepInfo==None)
+        foreach DynamicActors(class'UTComp_ServerReplicationInfo', RepInfo);
+
+    if (RepInfo.bEnableEnhancedNetCode) {
+        if (NewWeaponClass == class'AssaultRifle')
+            NewWeaponClass = class'Forward_NewNet_AssaultRifle';
+        else if (NewWeaponClass == class'BioRifle')
+            NewWeaponClass = class'Forward_NewNet_BioRifle';
+        else if (NewWeaponClass == class'ClassicSniperRifle')
+            NewWeaponClass = class'Forward_NewNet_SniperRifle';
+        else if (NewWeaponClass == class'FlakCannon')
+            NewWeaponClass = class'Forward_NewNet_FlakCannon';
+        else if (NewWeaponClass == class'LinkGun')
+            NewWeaponClass = class'Forward_NewNet_LinkGun';
+        else if (NewWeaponClass == class'MiniGun')
+            NewWeaponClass = class'Forward_NewNet_MiniGun';
+        else if (NewWeaponClass == class'ONSAvril')
+            NewWeaponClass = class'NewNet_ONSAvril';
+        else if (NewWeaponClass == class'ONSGrenadeLauncher')
+            NewWeaponClass = class'NewNet_ONSGrenadeLauncher';
+        else if (NewWeaponClass == class'ONSMineLayer')
+            NewWeaponClass = class'NewNet_ONSMineLayer';
+        else if (NewWeaponClass == class'RocketLauncher')
+            NewWeaponClass = class'Forward_NewNet_RocketLauncher';
+        else if (NewWeaponClass == class'ShockRifle')
+            NewWeaponClass = class'Forward_NewNet_ShockRifle';
+        else if (NewWeaponClass == class'SniperRifle')
+            NewWeaponClass = class'Forward_NewNet_SniperRifle';
+    } else {
+        if (NewWeaponClass == class'AssaultRifle')
+            NewWeaponClass = class'Forward_UTComp_AssaultRifle';
+        else if (NewWeaponClass == class'BioRifle')
+            NewWeaponClass = class'Forward_UTComp_BioRifle';
+        // else if (NewWeaponClass == class'ClassicSniperRifle')
+        //     NewWeaponClass = class'Forward_UTComp_ClassicSniperRifle';
+        else if (NewWeaponClass == class'FlakCannon')
+            NewWeaponClass = class'Forward_UTComp_FlakCannon';
+        else if (NewWeaponClass == class'LinkGun')
+            NewWeaponClass = class'Forward_UTComp_LinkGun';
+        else if (NewWeaponClass == class'MiniGun')
+            NewWeaponClass = class'Forward_UTComp_MiniGun';
+        // else if (NewWeaponClass == class'ONSAvril')
+        //     NewWeaponClass = class'Forward_UTComp_ONSAvril';
+        // else if (NewWeaponClass == class'ONSGrenadeLauncher')
+        //     NewWeaponClass = class'Forward_UTComp_ONSGrenadeLauncher';
+        // else if (NewWeaponClass == class'ONSMineLayer')
+        //     NewWeaponClass = class'Forward_UTComp_ONSMineLayer';
+        else if (NewWeaponClass == class'RocketLauncher')
+            NewWeaponClass = class'Forward_UTComp_RocketLauncher';
+        else if (NewWeaponClass == class'ShockRifle')
+            NewWeaponClass = class'Forward_UTComp_ShockRifle';
+        else if (NewWeaponClass == class'SniperRifle')
+            NewWeaponClass = class'Forward_UTComp_SniperRifle';
+    }
+
+    super.GetWeapon(NewWeaponClass);
+}
+
 
 DefaultProperties
 {
