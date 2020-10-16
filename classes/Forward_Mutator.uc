@@ -1,7 +1,8 @@
 //-----------------------------------------------------------
 //
 //-----------------------------------------------------------
-class Forward_Mutator extends Mutator;
+class Forward_Mutator extends Mutator
+    CacheExempt;
 
 var bool bEnhancedNetCodeEnabledAtStartOfMap;
 var bool bEnableDoubleDamage;
@@ -255,72 +256,71 @@ function FindWhatWeaponsToGive()
 
 function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 {
- //  local int x, i;
-//   local WeaponLocker L;
-   bSuperRelevant=0;
+    // local int x, i;
+    // local WeaponLocker L;
 
-  /* if(bEnhancedNetCodeEnabledAtStartOfMap)
-   {
-        if (xWeaponBase(Other) != None)
-    	{
-	    	for (x = 0; x < ArrayCount(ReplacedWeaponClasses); x++)
-	    		if (xWeaponBase(Other).WeaponType == ReplacedWeaponClasses[x])
-	    		{
-                	xWeaponBase(Other).WeaponType = WeaponClasses[x];
-                 }
-        }
-        else if (WeaponPickup(Other) != None)
-    	{
-             for (x = 0; x < ArrayCount(ReplacedWeaponClasses); x++)
-		    	if ( Other.Class == ReplacedWeaponPickupClasses[x])
-		    	{
-                    ReplaceWith(Other, WeaponPickupClassNames[x]);
-                    return false;
-	     		}
-    	}
-    	else if (WeaponLocker(Other) != None)
-    	{
-    		if(Level.Game.IsA('UTComp_ClanArena'))
-                L.GotoState('Disabled');
-            L = WeaponLocker(Other);
-    		for (x = 0; x < ArrayCount(ReplacedWeaponClasses); x++)
-    			for (i = 0; i < L.Weapons.Length; i++)
-    				if (L.Weapons[i].WeaponClass == ReplacedWeaponClasses[x])
-    					L.Weapons[i].WeaponClass = WeaponClasses[x];
-    		return true;
-    	}
-	}
-	else
-	{
-        if (xWeaponBase(Other) != None)
-    	{
-	    	for (x = 0; x < ArrayCount(ReplacedWeaponClasses); x++)
-	    		if (xWeaponBase(Other).WeaponType == ReplacedWeaponClasses[x])
-	    		{
-                	xWeaponBase(Other).WeaponType = AltWeaponClasses[x];
-                 }
-        }
-        else if (WeaponPickup(Other) != None)
-    	{
-             for (x = 0; x < ArrayCount(ReplacedWeaponClasses); x++)
-		    	if ( Other.Class == ReplacedWeaponPickupClasses[x])
-		    	{
-                    ReplaceWith(Other, AltWeaponPickupClassNames[x]);
-                    return false;
-	     		}
-    	}
-    	else if (WeaponLocker(Other) != None)
-    	{
-    		if(Level.Game.IsA('UTComp_ClanArena'))
-                L.GotoState('Disabled');
-            L = WeaponLocker(Other);
-    		for (x = 0; x < ArrayCount(ReplacedWeaponClasses); x++)
-    			for (i = 0; i < L.Weapons.Length; i++)
-    				if (L.Weapons[i].WeaponClass == ReplacedWeaponClasses[x])
-    					L.Weapons[i].WeaponClass = AltWeaponClasses[x];
-    		return true;
-    	}
-	}           */
+    bSuperRelevant=0;
+
+    // if(bEnhancedNetCodeEnabledAtStartOfMap)
+    // {
+    //     if (xWeaponBase(Other) != None)
+    //     {
+    //         for (x = 0; x < ArrayCount(ReplacedWeaponClassNames); x++)
+    //             if (string(xWeaponBase(Other).WeaponType) == ReplacedWeaponClassNames[x])
+    //             {
+    //                 xWeaponBase(Other).WeaponType = class<Weapon>(DynamicLoadObject(WeaponClassNames[x], class'class'));
+    //              }
+    //     }
+    //     else if (WeaponPickup(Other) != None)
+    //     {
+    //          for (x = 0; x < ArrayCount(ReplacedWeaponClassNames); x++)
+    //             if ( string(WeaponPickup(Other).InventoryType) == ReplacedWeaponClassNames[x])
+    //             {
+    //                 WeaponPickup(Other).InventoryType = class<Weapon>(DynamicLoadObject(WeaponClassNames[x], class'class'));
+    //             }
+    //     }
+    //     else if (WeaponLocker(Other) != None)
+    //     {
+    //         L = WeaponLocker(Other);
+    //         if(Level.Game.IsA('UTComp_ClanArena'))
+    //             L.GotoState('Disabled');
+    //         for (x = 0; x < ArrayCount(ReplacedWeaponClassNames); x++)
+    //             for (i = 0; i < L.Weapons.Length; i++)
+    //                 if (string(L.Weapons[i].WeaponClass) == ReplacedWeaponClassNames[x])
+    //                     L.Weapons[i].WeaponClass = class<Weapon>(DynamicLoadObject(WeaponClassNames[x], class'class'));
+    //         return true;
+    //     }
+    // }
+    // else
+    // {
+    //     if (xWeaponBase(Other) != None)
+    //     {
+    //         for (x = 0; x < ArrayCount(ReplacedWeaponClassNames); x++)
+    //             if (string(xWeaponBase(Other).WeaponType) == ReplacedWeaponClassNames[x])
+    //             {
+    //                 xWeaponBase(Other).WeaponType = class<Weapon>(DynamicLoadObject(AltWeaponClassNames[x], class'class'));
+    //             }
+    //     }
+    //     else if (WeaponPickup(Other) != None)
+    //     {
+    //          for (x = 0; x < ArrayCount(ReplacedWeaponClassNames); x++)
+    //             if ( string(WeaponPickup(Other).InventoryType) == ReplacedWeaponClassNames[x])
+    //             {
+    //                 WeaponPickup(Other).InventoryType = class<Weapon>(DynamicLoadObject(AltWeaponClassNames[x], class'class'));
+    //             }
+    //     }
+    //     else if (WeaponLocker(Other) != None)
+    //     {
+    //         L = WeaponLocker(Other);
+    //         if(Level.Game.IsA('UTComp_ClanArena'))
+    //             L.GotoState('Disabled');
+    //         for (x = 0; x < ArrayCount(ReplacedWeaponClassNames); x++)
+    //             for (i = 0; i < L.Weapons.Length; i++)
+    //                 if (string(L.Weapons[i].WeaponClass) == ReplacedWeaponClassNames[x])
+    //                     L.Weapons[i].WeaponClass = class<Weapon>(DynamicLoadObject(AltWeaponClassNames[x], class'class'));
+    //         return true;
+    //     }
+    // }
 
 
     if(Other.IsA('UTAmmoPickup'))
