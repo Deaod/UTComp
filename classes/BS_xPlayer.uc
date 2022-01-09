@@ -113,6 +113,8 @@ var float TimeBetweenUpdates;
 var UTComp_Settings Settings;
 var UTComp_HUDSettings HUDSettings;
 
+var float LastWeaponEffectSent;
+
 replication
 {
     unreliable if(Role==Role_Authority)
@@ -136,6 +138,11 @@ replication
 
     unreliable if (Role < ROLE_Authority)
         UTComp_ServerMove, UTComp_DualServerMove, UTComp_ShortServerMove;
+
+    reliable if (RemoteRole == ROLE_AutonomousProxy)
+        ReceiveWeaponEffect;
+    reliable if (bDemoRecording)
+        DemoReceiveWeaponEffect;
 }
 
 simulated function SaveSettings()
@@ -3700,6 +3707,79 @@ function UTComp_ServerMove(
     //log("Server moved stamp "$TimeStamp$" location "$Pawn.Location$" Acceleration "$Pawn.Acceleration$" Velocity "$Pawn.Velocity);
 }
 
+simulated final function ReceiveWeaponEffect(
+    class<UTComp_WeaponEffect> Effect,
+    Pawn Source,
+    vector SourceLocation,
+    vector Direction,
+    vector HitLocation,
+    vector HitNormal,
+    int ReflectNum
+) {
+    Effect.static.Play(
+        self,
+        Settings,
+        Source,
+        SourceLocation,
+        Normal(Direction/32767),
+        HitLocation,
+        Normal(HitNormal/32767),
+        ReflectNum
+    );
+}
+
+simulated final function DemoReceiveWeaponEffect(
+    class<UTComp_WeaponEffect> Effect,
+    Pawn Source,
+    vector SourceLocation,
+    vector Direction,
+    vector HitLocation,
+    vector HitNormal,
+    int ReflectNum
+) {
+    if (LastWeaponEffectSent >= 0) return;
+    Effect.static.Play(
+        self,
+        Settings,
+        Source,
+        SourceLocation,
+        Normal(Direction/32767),
+        HitLocation,
+        Normal(HitNormal/32767),
+        ReflectNum
+    );
+}
+
+simulated final function SendWeaponEffect(
+    class<UTComp_WeaponEffect> Effect,
+    Pawn Source,
+    vector SourceLocation,
+    vector Direction,
+    vector HitLocation,
+    vector HitNormal,
+    int ReflectNum
+) {
+    ReceiveWeaponEffect(
+        Effect,
+        Source,
+        SourceLocation,
+        Direction * 32767,
+        HitLocation,
+        HitNormal * 32767,
+        ReflectNum
+    );
+    LastWeaponEffectSent = Level.TimeSeconds;
+    DemoReceiveWeaponEffect(
+        Effect,
+        Source,
+        SourceLocation,
+        Direction * 32767,
+        HitLocation,
+        HitNormal * 32767,
+        ReflectNum
+    );
+}
+
 defaultproperties
 {
 
@@ -3762,4 +3842,5 @@ defaultproperties
      CustomWepTypes(12)=(WepName="XxxX ESR",damtype[0]="XxxXESRInstaGib",damtype[1]="XxxXESRHeadshot")
 
      TimeBetweenUpdates=0.0111111;
+     LastWeaponEffectSent=-1
 }

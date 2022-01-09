@@ -389,28 +389,53 @@ simulated function DoClientTrace(Vector Start, Rotator Dir)
 
 simulated function SpawnClientBeamEffect(Vector Start, Rotator Dir, Vector HitLocation, Vector HitNormal, int ReflectNum)
 {
-    NewNet_SuperShockRifle(Weapon).SpawnBeamEffect(Hitlocation, hitnormal, start, dir, reflectnum);
+    local Controller C;
+
+    if (Instigator.Controller.IsA('BS_xPlayer'))
+        C = Instigator.Controller;
+    else
+        C = Level.GetLocalPlayerController();
+
+    if (C.IsA('BS_xPlayer'))
+        BS_xPlayer(C).SendWeaponEffect(
+            class'UTComp_SuperShockRifleEffect',
+            Instigator,
+            Start,
+            vector(Dir),
+            HitLocation,
+            HitNormal,
+            ReflectNum
+        );
 }
 
 function SpawnBeamEffect(Vector Start, Rotator Dir, Vector HitLocation, Vector HitNormal, int ReflectNum)
 {
     local ShockBeamEffect Beam;
+    local Controller C;
     if(!bUseEnhancedNetCode)
     {
         Super.SpawnBeamEffect(Start, Dir, HitLocation, HitNormal, ReflectNum);
-        return;
     }
-
-    if ( (Instigator.PlayerReplicationInfo.Team != None) && (Instigator.PlayerReplicationInfo.Team.TeamIndex == 1) )
-        Beam = Weapon.Spawn(class'NewNet_BlueSuperShockBeam',Weapon.Owner,, Start, Dir);
     else
-        Beam = Weapon.Spawn(BeamEffectClass,Weapon.Owner,, Start, Dir);
-    if (ReflectNum != 0) Beam.Instigator = None; // prevents client side repositioning of beam start
-    Beam.AimAt(HitLocation, HitNormal);
+    {
+        for (C = Level.ControllerList; C != none; C = C.NextController) {
+            if (C == Instigator.Controller) continue;
+            if (C.IsA('BS_xPlayer')) {
+                BS_xPlayer(C).SendWeaponEffect(
+                    class'UTComp_SuperShockRifleEffect',
+                    Instigator,
+                    Start,
+                    vector(Dir),
+                    HitLocation,
+                    HitNormal,
+                    ReflectNum
+                );
+            }
+        }
+    }
 }
 
 
 DefaultProperties
 {
-    BeamEffectClass=Class'NewNet_SuperShockBeamEffect'
 }

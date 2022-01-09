@@ -64,7 +64,7 @@ simulated event NewNet_ClientStartFire(int Mode)
             {
                 if(T==None)
                     foreach DynamicActors(class'TimeStamp_Pawn', T)
-                         break;
+                        break;
                 Stamp = T.TimeStamp;
                 NewNet_OldServerStartFire(Mode,Stamp, T.DT);
              //   Log("This should never execute");
@@ -112,24 +112,6 @@ simulated function bool AltReadyToFire(int Mode)
     // error if people just hold down the button...
     // This will never cause the weapon to actually fire slower
     return ReadyToFire(Mode);
-    f = 0.015;
-
-    if(!ReadyToFire(Mode))
-        return false;
-
-    if ( Mode == 0 )
-        alt = 1;
-    else
-        alt = 0;
-
-    if ( ((FireMode[alt] != FireMode[Mode]) && FireMode[alt].bModeExclusive && FireMode[alt].bIsFiring)
-		|| !FireMode[Mode].AllowFire()
-		|| (FireMode[Mode].NextFireTime > Level.TimeSeconds + FireMode[Mode].PreFireTime - f) )
-    {
-        return false;
-    }
-
-	return true;
 }
 
 simulated function WeaponTick(float deltatime)
@@ -265,12 +247,10 @@ simulated function SpawnBeamEffect(vector HitLocation, vector HitNormal, vector 
         Start.Z = Start.Z - 64.0;
     }
     if ( (Instigator.PlayerReplicationInfo.Team != None) && (Instigator.PlayerReplicationInfo.Team.TeamIndex == 1) ) {
-        Beam = Spawn(class'NewNet_BlueSuperShockBeam',,, Start, Dir);
-        if (Beam == none) return;
+        Beam = Spawn(class'BlueSuperShockBeam',,, Start, Dir);
         Beam.CoilClass = class'NewNet_Client_ShockBeamCoilBlue';
     } else {
-        Beam = Spawn(class'NewNet_SuperShockBeamEffect',,, Start, Dir);
-        if (Beam == none) return;
+        Beam = Spawn(class'SuperShockBeamEffect',,, Start, Dir);
         Beam.CoilClass = class'NewNet_Client_ShockBeamCoilB';
     }
     Beam.RemoteRole = ROLE_None;
