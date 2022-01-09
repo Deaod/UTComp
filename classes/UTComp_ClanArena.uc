@@ -6,6 +6,7 @@ var UTComp_Warmup uWarmup;
 var int RoundTimeRemaining;
 var bool bWeaponsLocked;
 var int lastscoredteam;
+var bool bFirstSpawn;
 
 var string SecondaryMutatorClass;
 
@@ -34,6 +35,7 @@ event InitGame( string Options, out string Error )
 
 function StartMatch()
 {
+    bFirstSpawn = true;
     super.StartMatch();
     if(uWarmup.bInWarmup)
     {
@@ -65,6 +67,156 @@ function bool CanSpectate( PlayerController Viewer, bool bOnlySpectator, actor V
 				&& (Controller(ViewTarget).PlayerReplicationInfo.Team == Viewer.PlayerReplicationInfo.Team) );
 	return ( (Pawn(ViewTarget) != None)
 		&& (Pawn(ViewTarget).PlayerReplicationInfo.Team == Viewer.PlayerReplicationInfo.Team) );
+}
+
+/* Return the 'best' player start for this player to start from.
+ */
+function NavigationPoint FindPlayerStart(Controller Player, optional byte InTeam, optional string incomingName)
+{
+    local NavigationPoint N, BestStart;
+    local Teleporter Tel;
+    local float BestRating, NewRating;
+    local byte Team;
+
+    if((Player != None) && (Player.StartSpot != None))
+        LastPlayerStartSpot = Player.StartSpot;
+
+    // always pick StartSpot at start of match
+    if(Level.NetMode == NM_Standalone && bWaitingToStartMatch && Player != None && Player.StartSpot != None)
+    {
+        return Player.StartSpot;
+    }
+
+    if ( GameRulesModifiers != None )
+    {
+        N = GameRulesModifiers.FindPlayerStart(Player, InTeam, incomingName);
+        if ( N != None )
+            return N;
+    }
+
+    // if incoming start is specified, then just use it
+    if( incomingName!="" )
+        foreach AllActors( class 'Teleporter', Tel )
+            if( string(Tel.Tag)~=incomingName )
+                return Tel;
+
+    // use InTeam if player doesn't have a team yet
+    if((Player != None) && (Player.PlayerReplicationInfo != None))
+    {
+        if(Player.PlayerReplicationInfo.Team != None)
+            Team = Player.PlayerReplicationInfo.Team.TeamIndex;
+        else
+            Team = InTeam;
+    }
+    else
+        Team = InTeam;
+
+    for ( N=Level.NavigationPointList; N!=None; N=N.NextNavigationPoint )
+    {
+        if(N.IsA('PathNode') || N.IsA('PlayerStart') || N.IsA('JumpSpot'))
+            NewRating = RatePlayerStart(N, Team, Player);
+        else
+            NewRating = 1;
+        if ( NewRating > BestRating )
+        {
+            BestRating = NewRating;
+            BestStart = N;
+        }
+    }
+
+    if (BestStart == None)
+    {
+        log("Warning - PATHS NOT DEFINED or NO PLAYERSTART with positive rating");
+        BestRating = -100000000;
+        ForEach AllActors( class 'NavigationPoint', N )
+        {
+            NewRating = RatePlayerStart(N,0,Player);
+            if ( InventorySpot(N) != None )
+                NewRating -= 50;
+            NewRating += 20 * FRand();
+            if ( NewRating > BestRating )
+            {
+                BestRating = NewRating;
+                BestStart = N;
+            }
+        }
+    }
+
+    LastStartSpot = BestStart;
+    if(Player != None)
+        Player.StartSpot = BestStart;
+
+    if(!bWaitingToStartMatch)
+        bFirstSpawn = false;
+
+    return BestStart;
+}
+
+function float RatePlayerStart(NavigationPoint N, byte Team, Controller Player)
+{
+    local NavigationPoint P;
+    local float Score, NextDist;
+    local Controller OtherPlayer;
+
+    P = N;
+
+    if ((P == None) || P.PhysicsVolume.bWaterVolume || Player == None)
+        return -10000000;
+
+    /*if(bFirstSpawn && Player != None && Player.bIsPlayer)
+        return(FMax(4000000.0 * FRand(), 5));*/
+
+    Score = 1000000.0;
+
+    if(bFirstSpawn && LastPlayerStartSpot != None)
+    {
+        NextDist = VSize(N.Location - LastPlayerStartSpot.Location);
+        Score += (NextDist * (0.25 + 0.75 * FRand()));
+
+        if(N == LastStartSpot || N == LastPlayerStartSpot)
+            Score -= 100000000.0;
+        else if(FastTrace(N.Location, LastPlayerStartSpot.Location))
+            Score -= 1000000.0;
+    }
+
+    //Score += (N.Location.Z * 10) * FRand();
+
+    for(OtherPlayer = Level.ControllerList; OtherPlayer != None; OtherPlayer = OtherPlayer.NextController)
+    {
+        if(OtherPlayer != None && OtherPlayer.bIsPlayer && (OtherPlayer.Pawn != None))
+        {
+            NextDist = VSize(OtherPlayer.Pawn.Location - N.Location);
+
+            if(NextDist < OtherPlayer.Pawn.CollisionRadius + OtherPlayer.Pawn.CollisionHeight)
+                return 0.0;
+            else
+            {
+                // same team
+                if(OtherPlayer.GetTeamNum() == Player.GetTeamNum() && OtherPlayer != Player)
+                {
+                    if(FastTrace(OtherPlayer.Pawn.Location, N.Location))
+                        Score += 10000.0;
+
+                    if(NextDist > 1500)
+                        Score -= (NextDist * 10);
+                    else if (NextDist < 1000)
+                        Score += (NextDist * 10);
+                    else
+                        Score += (NextDist * 20);
+                }
+                // different team
+                else if(OtherPlayer.GetTeamNum() != Player.GetTeamNum())
+                {
+                    if(FastTrace(OtherPlayer.Pawn.Location, N.Location))
+                        Score -= 20000.0;       // strongly discourage spawning in line-of-sight of an enemy
+
+                    Score += (NextDist * 10);
+                }
+            }
+        }
+    }
+
+    return FMax(Score, 5);
 }
 
 state MatchInProgress
