@@ -23,8 +23,6 @@ replication
 {
     reliable if( Role<ROLE_Authority )
         NewNet_ServerStartFire,NewNet_OldServerStartFire;
-    unreliable if(bDemoRecording)
-        SpawnBeamEffect;
 }
 
 function DisableNet()
@@ -104,13 +102,6 @@ simulated event NewNet_ClientStartFire(int Mode)
 
 simulated function bool AltReadyToFire(int Mode)
 {
-    local int alt;
-    local float f;
-
-    //There is a very slight descynchronization error on the server
-    // with weapons due to differing deltatimes which accrues to a pretty big
-    // error if people just hold down the button...
-    // This will never cause the weapon to actually fire slower
     return ReadyToFire(Mode);
 }
 
@@ -236,26 +227,6 @@ function bool IsReasonable(Vector V)
    // if(clErr>=750)
    //   Log("ERROR TOO GREAT");
    return clErr < 1250.0;
-}
-
-simulated function SpawnBeamEffect(vector HitLocation, vector HitNormal, vector Start, rotator Dir, int reflectnum)
-{
-    local ShockBeamEffect Beam;
-
-    if(bClientDemoNetFunc)
-    {
-        Start.Z = Start.Z - 64.0;
-    }
-    if ( (Instigator.PlayerReplicationInfo.Team != None) && (Instigator.PlayerReplicationInfo.Team.TeamIndex == 1) ) {
-        Beam = Spawn(class'BlueSuperShockBeam',,, Start, Dir);
-        Beam.CoilClass = class'NewNet_Client_ShockBeamCoilBlue';
-    } else {
-        Beam = Spawn(class'SuperShockBeamEffect',,, Start, Dir);
-        Beam.CoilClass = class'NewNet_Client_ShockBeamCoilB';
-    }
-    Beam.RemoteRole = ROLE_None;
-    if (ReflectNum != 0) Beam.Instigator = None; // prevents client side repositioning of beam start
-    Beam.AimAt(HitLocation, HitNormal);
 }
 
 

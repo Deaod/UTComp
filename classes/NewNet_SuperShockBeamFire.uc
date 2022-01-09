@@ -410,8 +410,8 @@ simulated function SpawnClientBeamEffect(Vector Start, Rotator Dir, Vector HitLo
 
 function SpawnBeamEffect(Vector Start, Rotator Dir, Vector HitLocation, Vector HitNormal, int ReflectNum)
 {
-    local ShockBeamEffect Beam;
     local Controller C;
+    
     if(!bUseEnhancedNetCode)
     {
         Super.SpawnBeamEffect(Start, Dir, HitLocation, HitNormal, ReflectNum);
