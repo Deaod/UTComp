@@ -2764,6 +2764,9 @@ state PlayerWalking
         NewAccel.Z = 0;
         if ( VSize(NewAccel) < 1.0 )
             NewAccel = vect(0,0,0);
+        if (PlayerInput2 == none || PlayerInput2.Outer != self) {
+            FindPlayerInput();
+        }
         DoubleClickMove = PlayerInput2.CheckForDoubleClickMove(1.1*DeltaTime/Level.TimeDilation);
 
         GroundPitch = 0;
