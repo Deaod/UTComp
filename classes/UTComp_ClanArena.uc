@@ -1,7 +1,5 @@
-
 class UTComp_ClanArena extends xTeamGame;
 
-var config float LockWeaponTime;
 var UTComp_Warmup uWarmup;
 var int RoundTimeRemaining;
 var bool bWeaponsLocked;
@@ -13,8 +11,50 @@ var string SecondaryMutatorClass;
 const HEALTH_REMOVE = 5.0;
 const RESTART_WAIT_TIME = 8.0;
 
-var config int Round_Health;
-var config int Round_Armor;
+var config float LockWeaponTime;
+var config int RoundHealth;
+var config int MaxHealth;
+var config int RoundArmor;
+var config int MaxArmor;
+var config int AssaultRifleAmmo;
+var config int AssaultRifleGrenades;
+var config int BioRifleAmmo;
+var config int ShockRifleAmmo;
+var config int LinkGunAmmo;
+var config int MinigunAmmo;
+var config int FlakCannonAmmo;
+var config int RocketLauncherAmmo;
+var config int LightningGunAmmo;
+
+var localized string LockWeaponTimeTitle;
+var localized string RoundHealthTitle;
+var localized string MaxHealthTitle;
+var localized string RoundArmorTitle;
+var localized string MaxArmorTitle;
+var localized string AssaultRifleAmmoTitle;
+var localized string AssaultRifleGrenadesTitle;
+var localized string BioRifleAmmoTitle;
+var localized string ShockRifleAmmoTitle;
+var localized string LinkGunAmmoTitle;
+var localized string MinigunAmmoTitle;
+var localized string FlakCannonAmmoTitle;
+var localized string RocketLauncherAmmoTitle;
+var localized string LightningGunAmmoTitle;
+
+var localized string LockWeaponTimeDesc;
+var localized string RoundHealthDesc;
+var localized string MaxHealthDesc;
+var localized string RoundArmorDesc;
+var localized string MaxArmorDesc;
+var localized string AssaultRifleAmmoDesc;
+var localized string AssaultRifleGrenadesDesc;
+var localized string BioRifleAmmoDesc;
+var localized string ShockRifleAmmoDesc;
+var localized string LinkGunAmmoDesc;
+var localized string MinigunAmmoDesc;
+var localized string FlakCannonAmmoDesc;
+var localized string RocketLauncherAmmoDesc;
+var localized string LightningGunAmmoDesc;
 
 var bool bGameInProgress;
 var array<PlayerController> WaitingPlayer;
@@ -344,20 +384,24 @@ function DrainHealth()
 
 }
 
-function int ReduceDamage( int Damage, pawn injured, pawn instigatedBy, vector HitLocation, out vector Momentum, class<DamageType> DamageType )
-{
-    local utcomp_pri uPRI;
+function int ReduceDamage( int Damage, pawn Injured, pawn InstigatedBy, vector HitLocation, out vector Momentum, class<DamageType> DamageType ) {
+    local UTComp_PRI uPRI;
 
-    Damage=Super.ReduceDamage(damage,injured, instigatedby, hitlocation, momentum, damagetype);
-    if(instigatedby!=None)
+    Damage = super.ReduceDamage(Damage, Injured, Instigatedby, HitLocation, Momentum, DamageType);
+    if (InstigatedBy != none)
         uPRI = class'UTComp_Util'.static.GetUTCompPRIForPawn(Instigatedby);
-    if(uPRI!=None)
-    {
-        if(InstigatedBy!=None && Injured!=None && InstigatedBy.GetTeamNum() != Injured.GetTeamNum() && InstigatedBy.PlayerReplicationInfo!=None)
-            InstigatedBy.PlayerReplicationInfo.Score+= (uPRI.TotalDamageG+Damage)/100 - uPRI.TotalDamageG/100;
-        uPRI.TotalDamageG+=Damage;
+    
+    if (uPRI != none) {
+        if (InstigatedBy != none &&
+            Injured != none &&
+            InstigatedBy.GetTeamNum() != Injured.GetTeamNum() &&
+            InstigatedBy.PlayerReplicationInfo != none
+        ) {
+            InstigatedBy.PlayerReplicationInfo.Score += (float(Damage) / 100.0);
+        }
+        uPRI.TotalDamageG += Damage;
     }
-    return damage;
+    return Damage;
 }
 
 function LockWeapons()
@@ -452,7 +496,7 @@ function CheckEndRound(controller Killer,controller Other)
     else
         LastScoredTeam = 1;
 
-    for(C=Level.ControllerList; C!=None; C=C.NextController)
+    for (C = Level.ControllerList; C != None; C = C.NextController)
     {
         if(C!=Other && C.GetTeamNum() == TeamToCheck && C.PlayerReplicationInfo != none && !C.PlayerReplicationInfo.bOutOfLives && !C.IsInState('Spectating'))
              return;
@@ -647,68 +691,95 @@ function EndRound(int TeamThatWon, PlayerReplicationInfo Winner)
 
 }
 
-function AddGameSpecificInventory(Pawn p)
+
+function GiveWeaponTo(string InventoryClassName, Pawn P, int StartingAmmoPrimary, int StartingAmmoSecondary)
+{
+    local Weapon W;
+    local class<Inventory> InventoryClass;
+
+    InventoryClass = Level.Game.BaseMutator.GetInventoryClass(InventoryClassName);
+    if( (InventoryClass!=None) && (P.FindInventoryType(InventoryClass)==None) && ClassIsChildOf(InventoryClass, class'Engine.Weapon') )
+    {
+        W = Weapon(P.Spawn(InventoryClass));
+        if( W != None )
+        {
+            W.GiveTo(P);
+            if ( W != None )
+                W.PickupFunction(P);
+
+            if (uWarmup.bInWarmup) {
+                W.SuperMaxOutAmmo();
+            } else {
+                if (StartingAmmoPrimary >= 0)
+                    W.AddAmmo(StartingAmmoPrimary - W.AmmoAmount(0), 0);
+                else if (StartingAmmoPrimary == -1)
+                    W.MaxAmmo(0);
+
+                if (StartingAmmoSecondary >= 0)
+                    W.AddAmmo(StartingAmmoSecondary - W.AmmoAmount(1), 1);
+                else if (StartingAmmoSecondary == -1);
+                    W.MaxAmmo(1);
+            }
+        }
+    }
+}
+
+function AddGameSpecificInventory(Pawn P)
 {
     local inventory inv;
     if(!class'MutUTComp'.default.bEnableEnhancedNetCode)
     {
-        p.CreateInventory("UTCompv18c.UTComp_ShieldGun");
-        p.CreateInventory("UTCompv18c.UTComp_AssaultRifle");
-        p.CreateInventory("UTCompv18c.UTComp_BioRifle");
-        p.CreateInventory("UTCompv18c.UTComp_MiniGun");
-        p.CreateInventory("UTCompv18c.UTComp_ShockRifle");
-        p.CreateInventory("UTCompv18c.UTComp_LinkGun");
-        p.CreateInventory("UTCompv18c.UTComp_FlakCannon");
-        p.CreateInventory("UTCompv18c.UTComp_RocketLauncher");
-        p.CreateInventory("UTCompv18c.UTComp_SniperRifle");
-   }
-   else
-   {
-        p.CreateInventory("UTCompv18c.UTComp_ShieldGun");
-        p.CreateInventory("UTCompv18c.NewNet_AssaultRifle");
-        p.CreateInventory("UTCompv18c.NewNet_BioRifle");
-        p.CreateInventory("UTCompv18c.NewNet_MiniGun");
-        p.CreateInventory("UTCompv18c.NewNet_ShockRifle");
-        p.CreateInventory("UTCompv18c.NewNet_LinkGun");
-        p.CreateInventory("UTCompv18c.NewNet_FlakCannon");
-        p.CreateInventory("UTCompv18c.NewNet_RocketLauncher");
-        p.CreateInventory("UTCompv18c.NewNet_SniperRifle");
-   }
-   for(inv=p.Inventory; inv!=None; inv=inv.inventory)
-   {
-       if(weapon(inv)!=None)
-       {
-           Weapon(inv).Loaded();
-           Weapon(inv).MaxOutAmmo();
-       }
-   }
-   p.GiveHealth(Round_Health, Round_Health);
-   if(p.ShieldStrength < Round_Armor)
-       p.AddShieldStrength(Round_Armor-p.ShieldStrength);
+        GiveWeaponTo("UTCompv18c.UTComp_ShieldGun", P, -1, -1);
+        GiveWeaponTo("UTCompv18c.UTComp_AssaultRifle", P, AssaultRifleAmmo, AssaultRifleGrenades);
+        GiveWeaponTo("UTCompv18c.UTComp_BioRifle", P, BioRifleAmmo, -2);
+        GiveWeaponTo("UTCompv18c.UTComp_ShockRifle", P, ShockRifleAmmo, -2);
+        GiveWeaponTo("UTCompv18c.UTComp_LinkGun", P, LinkGunAmmo, -2);
+        GiveWeaponTo("UTCompv18c.UTComp_MiniGun", P, MinigunAmmo, -2);
+        GiveWeaponTo("UTCompv18c.UTComp_FlakCannon", P, FlakCannonAmmo, -2);
+        GiveWeaponTo("UTCompv18c.UTComp_RocketLauncher", P, RocketLauncherAmmo, -2);
+        GiveWeaponTo("UTCompv18c.UTComp_SniperRifle", P, LightningGunAmmo, -2);
+    }
+    else
+    {
+        GiveWeaponTo("UTCompv18c.UTComp_ShieldGun", P, -1, -1);
+        GiveWeaponTo("UTCompv18c.NewNet_AssaultRifle", P, AssaultRifleAmmo, AssaultRifleGrenades);
+        GiveWeaponTo("UTCompv18c.NewNet_BioRifle", P, BioRifleAmmo, -2);
+        GiveWeaponTo("UTCompv18c.NewNet_ShockRifle", P, ShockRifleAmmo, -2);
+        GiveWeaponTo("UTCompv18c.NewNet_LinkGun", P, LinkGunAmmo, -2);
+        GiveWeaponTo("UTCompv18c.NewNet_MiniGun", P, MinigunAmmo, -2);
+        GiveWeaponTo("UTCompv18c.NewNet_FlakCannon", P, FlakCannonAmmo, -2);
+        GiveWeaponTo("UTCompv18c.NewNet_RocketLauncher", P, RocketLauncherAmmo, -2);
+        GiveWeaponTo("UTCompv18c.NewNet_SniperRifle", P, LightningGunAmmo, -2);
+    }
+    P.SuperHealthMax = MaxHealth;
+    xPawn(P).ShieldStrengthMax = MaxArmor;
+    P.GiveHealth(RoundHealth, RoundHealth);
+    if(P.ShieldStrength < RoundArmor)
+        P.AddShieldStrength(RoundArmor-P.ShieldStrength);
 
 
-   if(bWeaponsLocked && p.Controller!=None && p.Controller.IsA('bot'))
-      for(Inv=p.Inventory; Inv!=None; Inv=Inv.Inventory)
-     {
-               if(UTComp_AssaultRifle(Inv)!=None)
-                  UTComp_AssaultRifle(Inv).LockOut();
-               else if( UTComp_BioRifle(Inv)!=None)
-                  UTComp_BioRifle(Inv).LockOut();
-               else if(UTComp_ShockRifle(Inv)!=None)
-                  UTComp_ShockRifle(Inv).LockOut();
-               else if(UTComp_MiniGun(Inv)!=None)
-                  UTComp_MiniGun(Inv).LockOut();
-               else if(UTComp_LinkGun(Inv)!=None)
-                  UTComp_LinkGun(Inv).LockOut();
-               else if(UTComp_RocketLauncher(Inv)!=None)
-                  UTComp_RocketLauncher(inv).LockOut();
-               else if(UTComp_FlakCannon(inv)!=None)
-                  UTComp_FlakCannon(inv).LockOut();
-               else if(UTComp_SniperRifle(inv)!=None)
-                  UTComp_SniperRifle(inv).LockOut();
-               else if(UTComp_ShieldGun(inv)!=None)
-                  UTComp_ShieldGun(inv).LockOut();
-            }
+    if (bWeaponsLocked && P.Controller!=None && P.Controller.IsA('bot'))
+        for (Inv=P.Inventory; Inv!=None; Inv=Inv.Inventory)
+        {
+            if (UTComp_AssaultRifle(Inv)!=None)
+                UTComp_AssaultRifle(Inv).LockOut();
+            else if( UTComp_BioRifle(Inv)!=None)
+                UTComp_BioRifle(Inv).LockOut();
+            else if(UTComp_ShockRifle(Inv)!=None)
+                UTComp_ShockRifle(Inv).LockOut();
+            else if(UTComp_MiniGun(Inv)!=None)
+                UTComp_MiniGun(Inv).LockOut();
+            else if(UTComp_LinkGun(Inv)!=None)
+                UTComp_LinkGun(Inv).LockOut();
+            else if(UTComp_RocketLauncher(Inv)!=None)
+                UTComp_RocketLauncher(inv).LockOut();
+            else if(UTComp_FlakCannon(inv)!=None)
+                UTComp_FlakCannon(inv).LockOut();
+            else if(UTComp_SniperRifle(inv)!=None)
+                UTComp_SniperRifle(inv).LockOut();
+            else if(UTComp_ShieldGun(inv)!=None)
+                UTComp_ShieldGun(inv).LockOut();
+        }
 }
 event PlayerController Login
 (
@@ -748,20 +819,103 @@ function bool AllowBecomeActivePlayer (PlayerController P)
 	return Super.AllowBecomeActivePlayer(P);
 }
 
+static function FillPlayInfo(PlayInfo I) {
+    super.FillPlayInfo(I);
+
+    I.AddSetting(default.GameName, "LockWeaponTime",       default.LockWeaponTimeTitle,       0,  0, "Text");
+    I.AddSetting(default.GameName, "RoundHealth",          default.RoundHealthTitle,          0,  1, "Text", "3;1:999");
+    I.AddSetting(default.GameName, "MaxHealth",            default.MaxHealthTitle,            0,  2, "Text", "3;1:999");
+    I.AddSetting(default.GameName, "RoundArmor",           default.RoundArmorTitle,           0,  3, "Text", "3;0:999");
+    I.AddSetting(default.GameName, "MaxArmor",             default.MaxArmorTitle,             0,  4, "Text", "3;0:999");
+    I.AddSetting(default.GameName, "AssaultRifleAmmo",     default.AssaultRifleAmmoTitle,     0,  5, "Text", "3;0:200");
+    I.AddSetting(default.GameName, "AssaultRifleGrenades", default.AssaultRifleGrenadesTitle, 0,  6, "Text", "1;0:8");
+    I.AddSetting(default.GameName, "BioRifleAmmo",         default.BioRifleAmmoTitle,         0,  7, "Text", "2;0:50");
+    I.AddSetting(default.GameName, "ShockRifleAmmo",       default.ShockRifleAmmoTitle,       0,  8, "Text", "2;0:50");
+    I.AddSetting(default.GameName, "LinkGunAmmo",          default.LinkGunAmmoTitle,          0,  9, "Text", "3;0:220");
+    I.AddSetting(default.GameName, "MinigunAmmo",          default.MinigunAmmoTitle,          0, 10, "Text", "3;0:300");
+    I.AddSetting(default.GameName, "FlakCannonAmmo",       default.FlakCannonAmmoTitle,       0, 11, "Text", "2;0:35");
+    I.AddSetting(default.GameName, "RocketLauncherAmmo",   default.RocketLauncherAmmoTitle,   0, 12, "Text", "2;0:30");
+    I.AddSetting(default.GameName, "LightningGunAmmo",     default.LightningGunAmmoTitle,     0, 13, "Text", "2;0:40");
+}
+
+static event string GetDescriptionText(string PropName)
+{
+    switch(PropName) {
+        case "LockWeaponTime":       return default.LockWeaponTimeDesc;
+        case "RoundHealth":          return default.RoundHealthDesc;
+        case "MaxHealth":            return default.MaxHealthDesc;
+        case "RoundArmor":           return default.RoundArmorDesc;
+        case "MaxArmor":             return default.MaxArmorDesc;
+        case "AssaultRifleAmmo":     return default.AssaultRifleAmmoDesc;
+        case "AssaultRifleGrenades": return default.AssaultRifleGrenadesDesc;
+        case "BioRifleAmmo":         return default.BioRifleAmmoDesc;
+        case "ShockRifleAmmo":       return default.ShockRifleAmmoDesc;
+        case "LinkGunAmmo":          return default.LinkGunAmmoDesc;
+        case "MinigunAmmo":          return default.MinigunAmmoDesc;
+        case "FlakCannonAmmo":       return default.FlakCannonAmmoDesc;
+        case "RocketLauncherAmmo":   return default.RocketLauncherAmmoDesc;
+        case "LightningGunAmmo":     return default.LightningGunAmmoDesc;
+    }
+    return super.GetDescriptionText(PropName);
+}
+
 DefaultProperties
 {
-     MaxLives=0
-     LockWeaponTime = 6.0
-     TimeLimit = 2
-     GoalScore=8
-     GameName="UTComp Clan Arena 1.8c"
-     bAllowWeaponThrowing=false
-     SecondaryMutatorClass="UTCompv18c.MutUTComp"
-     Round_Health = 150
-     Round_Armor = 100
-     Description = "No Powerups, No Distractions, Full Weapon and armor Load! Kill the enemy team before they kill yours. Dead players are out until the round is over."
-     FriendlyFireScale = 0.0
-     BroadcastHandlerClass="BonusPack.LMSBroadcastHandler"
+    MaxLives=0
+    LockWeaponTime=6.0
+    TimeLimit = 2
+    GoalScore=8
+    GameName="UTComp Clan Arena 1.8c"
+    bAllowWeaponThrowing=false
+    SecondaryMutatorClass="UTCompv18c.MutUTComp"
+    Description = "No Powerups, No Distractions, Full Weapon and armor Load! Kill the enemy team before they kill yours. Dead players are out until the round is over."
+    FriendlyFireScale = 0.0
+    BroadcastHandlerClass="BonusPack.LMSBroadcastHandler"
+
+    RoundHealth = 100
+    MaxHealth = 125
+    RoundArmor = 100
+    MaxArmor = 125
+    AssaultRifleAmmo = 200
+    AssaultRifleGrenades = 8
+    BioRifleAmmo = 50
+    ShockRifleAmmo = 50
+    LinkGunAmmo = 220
+    MinigunAmmo = 300
+    FlakCannonAmmo = 35
+    RocketLauncherAmmo = 30
+    LightningGunAmmo = 40
+
+    LockWeaponTimeTitle = "Weapon Unlock Delay"
+    RoundHealthTitle = "Starting Health"
+    MaxHealthTitle = "Maximum Health"
+    RoundArmorTitle = "Starting Armor"
+    MaxArmorTitle = "Maximum Armor"
+    AssaultRifleAmmoTitle = "Assault Rifle Ammo"
+    AssaultRifleGrenadesTitle = "Assault Rifle Grenades"
+    BioRifleAmmoTitle = "Bio Rifle Ammo"
+    ShockRifleAmmoTitle = "Shock Rifle Ammo"
+    LinkGunAmmoTitle = "Link Gun Ammo"
+    MinigunAmmoTitle = "Minigun Ammo"
+    FlakCannonAmmoTitle = "Flak Cannon Ammo"
+    RocketLauncherAmmoTitle = "Rocket Launcher Ammo"
+    LightningGunAmmoTitle = "Lightning Gun Ammo"
+
+    LockWeaponTimeDesc = "How many seconds weapons are locked for at the start of each round"
+    RoundHealthDesc = "How much health players start with each round"
+    MaxHealthDesc = "How much health players can have at most"
+    RoundArmorDesc = "How much armor player start with each round"
+    MaxArmorDesc = "How much armor player can have at most"
+    AssaultRifleAmmoDesc = "Assault Rifle ammo given to each player at the start of each round"
+    AssaultRifleGrenadesDesc = "Assault Rifle grenades given to each player at the start of each round"
+    BioRifleAmmoDesc = "Bio Rifle ammo given to each player at the start of each round"
+    ShockRifleAmmoDesc = "Shock Rifle ammo given to each player at the start of each round"
+    LinkGunAmmoDesc = "Link Gun ammo given to each player at the start of each round"
+    MinigunAmmoDesc = "Minigun ammo given to each player at the start of each round"
+    FlakCannonAmmoDesc = "Flak Cannon ammo given to each player at the start of each round"
+    RocketLauncherAmmoDesc = "Rocket Launcher ammo given to each player at the start of each round"
+    LightningGunAmmoDesc = "Lightning Gun ammo given to each player at the start of each round"
+}
 
 
 
