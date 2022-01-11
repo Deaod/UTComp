@@ -127,14 +127,10 @@ defaultproperties
     ColorName(18)=(R=255,G=255,B=255,A=255)
     ColorName(19)=(R=255,G=255,B=255,A=255)
     FallbackCharacterName="Arclite"
-    ClientSkinModeRedTeammate=3
-    ClientSkinModeBlueEnemy=3
-    PreferredSkinColorRedTeammate=5
-    PreferredSkinColorBlueEnemy=6
+    ClientSkinModeRedTeammate=1
+    ClientSkinModeBlueEnemy=1
     BlueEnemyUTCompSkinColor=(R=0,G=0,B=128,A=255)
     RedTeammateUTCompSkinColor=(R=128,G=0,B=0,A=255)
-    bBlueEnemyModelsForced=True
-    bRedTeammateModelsForced=True
     BlueEnemyModelName="Arclite"
     RedTeammateModelName="Arclite"
     bEnableDarkSkinning=True

@@ -119,11 +119,11 @@ event Opened(guicomponent sender)
     if(RepInfo==None || RepInfo.EnableBrightSkinsMode>1)
         co_TypeSkinSelect.AddItem("Brighter Epic Style");
     else
-        co_TypeSkinSelect.AddItem("Brighter Epic Style(Server Disabled)");
+        co_TypeSkinSelect.AddItem("Brighter Epic Style (Server Disabled)");
     if(RepInfo==None || RepInfo.EnableBrightSkinsMode>2)
         co_TypeSkinSelect.AddItem("UTComp Style");
     else
-        co_TypeSkinSelect.AddItem("UTComp Style(Server Disabled)");
+        co_TypeSkinSelect.AddItem("UTComp Style (Server Disabled)");
     co_TypeSkinSelect.SetIndex(Temp-1);
 
    InitializeSpinnyDude();

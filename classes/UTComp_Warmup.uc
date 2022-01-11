@@ -104,7 +104,7 @@ function SoftRestart()
         }
         bWaitingOnRestart=false;
         if(Level.Game.IsA('UTComp_ClanArena'))
-           UTComp_ClanArena(Level.Game).UnlockWeapons();
+            UTComp_ClanArena(Level.Game).UnlockWeapons();
     }
     bSoftRestart=false;
 }
@@ -138,28 +138,28 @@ function SaveScores()
 
 function RevertScores()
 {
-   local int i;
-   local controller c;
-   for(C=Level.ControllerList; C!=None; C=C.NextController)
-   {
-      if(C.PlayerReplicationInfo!=None)
-      {
-          for(i=0; i<SavedPRIList.Length; i++)
-          {
-              if(C.PlayerReplicationInfo == SavedPRIList[i].PRI)
-              {
-                   C.PlayerReplicationInfo.Kills = SavedPRIList[i].Kills;
-                   C.PlayerReplicationInfo.Score = SavedPRIList[i].Score;
-                   C.PlayerReplicationInfo.Deaths = SavedPRIList[i].Deaths;
-                   break;
-              }
-          }
-      }
-   }
-   for(i=SavedPRIList.Length-1; i>=0; i--)
-   {
-       SavedPRIList.Remove(i,1);
-   }
+    local int i;
+    local controller c;
+    for(C=Level.ControllerList; C!=None; C=C.NextController)
+    {
+        if(C.PlayerReplicationInfo!=None)
+        {
+            for(i=0; i<SavedPRIList.Length; i++)
+            {
+                if(C.PlayerReplicationInfo == SavedPRIList[i].PRI)
+                {
+                    C.PlayerReplicationInfo.Kills = SavedPRIList[i].Kills;
+                    C.PlayerReplicationInfo.Score = SavedPRIList[i].Score;
+                    C.PlayerReplicationInfo.Deaths = SavedPRIList[i].Deaths;
+                    break;
+                }
+            }
+        }
+    }
+    for(i=SavedPRIList.Length-1; i>=0; i--)
+    {
+        SavedPRIList.Remove(i,1);
+    }
 }
 
 function NotifyPlayersOfRestart()
@@ -220,8 +220,8 @@ function ResetKills()
         {
             C.PlayerReplicationInfo.Kills = 0;
             C.PlayerReplicationInfo.Score = 0;
-	        C.PlayerReplicationInfo.Deaths = 0;
-	        C.PlayerReplicationInfo.NumLives=0;
+            C.PlayerReplicationInfo.Deaths = 0;
+            C.PlayerReplicationInfo.NumLives=0;
             if (C.PlayerReplicationInfo.Team != none)
                 C.PlayerReplicationInfo.Team.Score = 0;
             if(TeamPlayerReplicationInfo(C.PlayerReplicationInfo)!=None)
@@ -239,7 +239,7 @@ function ResetCore()
 
     for ( NP = Level.NavigationPointList; NP!=None; NP=NP.NextNavigationPoint )
     {
-       if (NP.IsA('ONSPowerCore') && !NP.IsA('ONSPowerNode'))
+        if (NP.IsA('ONSPowerCore') && !NP.IsA('ONSPowerNode'))
             ONSPowerCore(NP).health=ONSPowerCore(NP).Default.DamageCapacity;
     }
 }
@@ -306,10 +306,10 @@ function KillAllPlayers()
 
     for(C=Level.ControllerList; C!=None; C=C.NextController)
     {
-       if(PlayerController(C)!=None && C.Pawn!=None && C.PlayerReplicationInfo!=None && !C.PlayerReplicationInfo.bOnlySpectator)
-           C.Pawn.Died(PlayerController(C), class'DamageType', C.Pawn.Location);
-       if(PlayerController(C)!=None && C.PlayerReplicationInfo!=None && !C.PlayerReplicationInfo.bOnlySpectator)
-           C.GoToState('None');
+        if(PlayerController(C)!=None && C.Pawn!=None && C.PlayerReplicationInfo!=None && !C.PlayerReplicationInfo.bOnlySpectator)
+            C.Pawn.Died(PlayerController(C), class'DamageType', C.Pawn.Location);
+        if(PlayerController(C)!=None && C.PlayerReplicationInfo!=None && !C.PlayerReplicationInfo.bOnlySpectator)
+            C.GoToState('None');
     }
     SavedBots=Level.Game.NumBots;
     if(!Level.Game.IsA('UTComp_ClanArena'))
@@ -379,16 +379,16 @@ function string CreatePlayerString()
 
     if(BluePlayerNames.Length>0 && RedPlayerNames.Length>0)
     {
-         ReturnString=BluePlayerNames[0];
-         for(i=1; i<BluePlayerNames.Length && i<4; i++)
-         {
-             ReturnString$="-"$BluePlayerNames[i];
-         }
-         ReturnString$="-vs-"$RedPlayerNames[0];
-         for(i=1; i<RedPlayerNames.Length && i<4; i++)
-         {
-             ReturnString$="-"$RedPlayerNames[i];
-         }
+        ReturnString=BluePlayerNames[0];
+        for(i=1; i<BluePlayerNames.Length && i<4; i++)
+        {
+            ReturnString$="-"$BluePlayerNames[i];
+        }
+        ReturnString$="-vs-"$RedPlayerNames[0];
+        for(i=1; i<RedPlayerNames.Length && i<4; i++)
+        {
+            ReturnString$="-"$RedPlayerNames[i];
+        }
     }
     else if(RedPlayerNames.Length>0)
     {
@@ -400,12 +400,12 @@ function string CreatePlayerString()
     }
     else if(BluePlayerNames.Length>0)
     {
-         ReturnString=BluePlayerNames[0];
-         for(i=1; i<BluePlayerNames.Length && i<4; i++)
-         {
-             ReturnString$="-"$BluePlayerNames[i];
-         }
-         returnString$="-vs-EmptyTeam";
+        ReturnString=BluePlayerNames[0];
+        for(i=1; i<BluePlayerNames.Length && i<4; i++)
+        {
+            ReturnString$="-"$BluePlayerNames[i];
+        }
+        returnString$="-vs-EmptyTeam";
     }
     returnstring=Left(ReturnString, 100);
     return ReturnString;
@@ -429,19 +429,19 @@ function string CreateTimeString()
 
 simulated function string StripIllegalWindowsCharacters(string S)
 {
-   S=repl(S, ".", "-");
-   S=repl(S, "*", "-");
-   S=repl(S, ":", "-");
-   S=repl(S, "|", "-");
-   S=repl(S, "/", "-");
-   S=repl(S, ";", "-");
-   S=repl(S, "\\","-");
-   S=repl(S, ">", "-");
-   S=repl(S, "<", "-");
-   S=repl(S, "+", "-");
-   S=repl(S, " ", "-");
-   S=repl(S, "?", "-");
-   return S;
+    S=repl(S, ".", "-");
+    S=repl(S, "*", "-");
+    S=repl(S, ":", "-");
+    S=repl(S, "|", "-");
+    S=repl(S, "/", "-");
+    S=repl(S, ";", "-");
+    S=repl(S, "\\","-");
+    S=repl(S, ">", "-");
+    S=repl(S, "<", "-");
+    S=repl(S, "+", "-");
+    S=repl(S, " ", "-");
+    S=repl(S, "?", "-");
+    return S;
 }
 
 function ClearRandomStuff()
@@ -467,39 +467,39 @@ function ResetStats()
     {
         if(C.PlayerReplicationInfo!=None && TeamPlayerReplicationInfo(C.PlayerReplicationInfo)!=None)
         {
-             tPRI=TeamPlayerReplicationInfo(C.PlayerReplicationInfo);
+            tPRI=TeamPlayerReplicationInfo(C.PlayerReplicationInfo);
         }
-       if(tPRI!=None)
-       {
-          tPRI.bFirstBlood=False;
-          tPRI.FlagTouches=0;
-          tPRI.FlagReturns=0;
-          for(i=0; i<=5; i++)
-          {
-             tPRI.Spree[i]=0;
-             tPRI.MultiKills[i]=0;
-          }
-          tPRI.MultiKills[6]=0;
-          tPRI.flakcount=0;
-          tPRI.combocount=0;
-          tPRI.headcount=0;
-          tPRI.ranovercount=0;
-          tPRI.DaredevilPoints=0;
-          for(i=0; i<=4; i++)
-            tPRI.Combos[i]=0;
-          for ( i = tPRI.VehicleStatsArray.Length - 1; i >= 0; i-- )
-		  {
-              tPRI.VehicleStatsArray.Remove(i,1);
-          }
-          for ( i = tPRI.WeaponStatsArray.Length - 1; i >= 0; i-- )
-		  {
-              tPRI.WeaponStatsArray.Remove(i,1);
-          }
-      }
-      tPRI=None;
-   }
-   foreach dynamicactors(class'UTComp_PRI', uPRI)
-       uPRI.ClearStats();
+        if(tPRI!=None)
+        {
+            tPRI.bFirstBlood=False;
+            tPRI.FlagTouches=0;
+            tPRI.FlagReturns=0;
+            for(i=0; i<=5; i++)
+            {
+                tPRI.Spree[i]=0;
+                tPRI.MultiKills[i]=0;
+            }
+            tPRI.MultiKills[6]=0;
+            tPRI.flakcount=0;
+            tPRI.combocount=0;
+            tPRI.headcount=0;
+            tPRI.ranovercount=0;
+            tPRI.DaredevilPoints=0;
+            for(i=0; i<=4; i++)
+                tPRI.Combos[i]=0;
+            for ( i = tPRI.VehicleStatsArray.Length - 1; i >= 0; i-- )
+		        {
+                tPRI.VehicleStatsArray.Remove(i,1);
+            }
+            for ( i = tPRI.WeaponStatsArray.Length - 1; i >= 0; i-- )
+		        {
+                tPRI.WeaponStatsArray.Remove(i,1);
+            }
+        }
+        tPRI=None;
+    }
+    foreach dynamicactors(class'UTComp_PRI', uPRI)
+        uPRI.ClearStats();
 }
 
 function ResetTheLevel()
@@ -531,10 +531,6 @@ function ResetTheLevel()
     }
     SetTimer(0.0, false);
 
-  /*  for(C=Level.ControllerList; C!=None; C=C.NextController)
-        if (PlayerController(C)!=None && C.PlayerReplicationInfo != None && !C.PlayerReplicationInfo.bOnlySpectator)
-	        Level.Game.RestartPlayer(C); */
-
     Deathmatch(Level.Game).RemainingTime = Deathmatch(Level.Game).Timelimit*60+1;
     UNREALMPGAmeInfo(Level.Game).FindNewObjectives(None);
     level.game.startmatch();
@@ -543,7 +539,7 @@ function ResetTheLevel()
     for (C= Level.ControllerList; C!=None; C=C.nextController)
     {
         if (C.IsA('PlayerController') && !C.IsA('MessagingSpectator'))
-           PlayerController(C).ClientSetBehindView(false);
+            PlayerController(C).ClientSetBehindView(false);
     }
     i=0;
     if(Level.NetMode==NM_DedicatedServer && !Level.Game.IsA('UTComp_ClanArena'))
@@ -647,24 +643,24 @@ function WarmupFinalization(int iTimeRemaining)
 
 function bool NoTimeLeftCheck()
 {
-   local int Clients;
-   if(bTimeUnlimitedWarmup)
-   {
-       SetClientTimer(0);
-       return false;
-   }
-   else if(iWarmupTimeRemaining>1)
-       SetClientTimer(iWarmupTimeRemaining+12);
-   else
-       SetClientTimer(0);
-   Clients=GetNumClients();
-   if( Clients > 0)
-       iWarmupTimeRemaining--;
-   else
-       iWarmupTimeRemaining=iWarmuptime;
-   if(iWarmupTimeRemaining <= 0)
-       return true;
-   return false;
+    local int Clients;
+    if(bTimeUnlimitedWarmup)
+    {
+        SetClientTimer(0);
+        return false;
+    }
+    else if(iWarmupTimeRemaining>1)
+        SetClientTimer(iWarmupTimeRemaining+12);
+    else
+        SetClientTimer(0);
+    Clients=GetNumClients();
+    if( Clients > 0)
+        iWarmupTimeRemaining--;
+    else
+        iWarmupTimeRemaining=iWarmuptime;
+    if(iWarmupTimeRemaining <= 0)
+        return true;
+    return false;
 }
 
 function int GetNumClients()
