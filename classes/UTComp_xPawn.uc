@@ -33,6 +33,9 @@ var UTComp_HUDSettings HUDSettings;
 
 replication
 {
+  reliable if (Role==ROLE_Authority)
+     MultiDodgesRemaining;
+
   unreliable if (Role==Role_authority)
      bShieldActive, bLinkActive, bShockActive, bLGactive, overlayActive;
 }
@@ -1072,5 +1075,5 @@ defaultproperties
      lgcolor=(B=80,G=40,R=40)
      beffectscleared=True
 
-     MultiDodgesRemaining=1
+     MultiDodgesRemaining=0
 }
