@@ -461,10 +461,45 @@ function ModifyPlayer(Pawn Other)
 
 function DriverEnteredVehicle(Vehicle V, Pawn P)
 {
-	SpawnCollisionCopy(V);
+    local PawnCollisionCopy C;
+    if(RepInfo != none && RepInfo.bEnableEnhancedNetCode)
+    {
+        C = PCC;
+        while(C != None)
+        {
+            if(C.CopiedPawn == P)
+            {
+                C.SetPawn(V);
+                break;
+            }
+            C = C.Next;
+        }
+    }
 
     if( NextMutator != none )
 		NextMutator.DriverEnteredVehicle(V, P);
+}
+
+function DriverLeftVehicle(Vehicle V, Pawn P)
+{
+    local PawnCollisionCopy C;
+
+    if(RepInfo != None && RepInfo.bEnableEnhancedNetCode)
+    {
+        C = PCC;
+        while(C != None)
+        {
+            if(C.CopiedPawn == V)
+            {
+                C.SetPawn(P);
+                break;
+            }
+            C = C.Next;
+        }
+    }
+
+    if( NextMutator != none )
+		NextMutator.DriverLeftVehicle(V, P);
 }
 
 function SpawnCollisionCopy(Pawn Other)

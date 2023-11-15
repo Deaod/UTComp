@@ -64,10 +64,12 @@ function SetPawn(Pawn Other)
     bCrouched=CopiedPawn.bIsCrouched;
 
     //If we cant use simple collisions, set up the mesh
-    if(!bUseCylinderCollision)
-        LinkMesh(CopiedPawn.Mesh);
-    else
-        SetCollisionSize(CopiedPawn.CollisionRadius, CopiedPawn.CollisionHeight);
+    //if(!bUseCylinderCollision)
+    //    LinkMesh(CopiedPawn.Mesh);
+    //else
+    // Linking the mesh causes a slow memory leak and eventual crash
+    // it works fine without linking mesh 
+    SetCollisionSize(CopiedPawn.CollisionRadius, CopiedPawn.CollisionHeight);
 }
 
 /*
