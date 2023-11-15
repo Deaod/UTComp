@@ -143,6 +143,9 @@ replication
         ReceiveWeaponEffect;
     reliable if (bDemoRecording)
         DemoReceiveWeaponEffect;
+
+    reliable if(Role == ROLE_Authority)
+        ClientResetNetcode;        
 }
 
 simulated function SaveSettings()
@@ -3781,6 +3784,17 @@ simulated final function SendWeaponEffect(
         HitNormal * 32767,
         ReflectNum
     );
+}
+
+simulated function ClientResetNetcode()
+{
+    local Timestamp_Pawn P;
+
+    foreach DynamicActors(class'Timestamp_Pawn', P)
+    {
+        if(P != None)
+            P.Destroy();
+    }
 }
 
 defaultproperties

@@ -1434,6 +1434,26 @@ function string GetInventoryClassOverride(string InventoryClassName)
 	return InventoryClassName;
 }
 
+function Reset()
+{
+    local Controller C;
+
+    // remove all Timestamp_pawn from clients
+    for(C = Level.ControllerList;C != None;C = C.NextController)
+    {
+        if(BS_xPlayer(C) != None)
+            BS_xPlayer(C).ClientResetNetcode();
+    }
+
+    // delete these server side, the get recreated in SetPawnStamp function
+    counterpawn.Unpossessed();
+    counterpawn.Destroy();
+    counterpawn = none;
+    countercontroller.Pawn = None;
+    countercontroller.Destroy();
+    countercontroller = None;
+}
+
 defaultproperties
 {
      bAddToServerPackages=True
