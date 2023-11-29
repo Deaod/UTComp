@@ -817,52 +817,48 @@ function DrawLocation(Canvas Canvas, UTComp_PRI uPRI, int team)
 
 function GetFonts(Canvas Canvas)
 {
-       InfoFont = GetFont(AutoPickFont((Canvas.SizeX),default.theFontSize),1);
-       LocationFont = GetFont(AutoPickFont((Canvas.SizeX),default.theFontSize-1), 1);
+       InfoFont     = GetFont(AutoPickFont(Canvas.SizeX, default.theFontSize    ), 1);
+       LocationFont = GetFont(AutoPickFont(Canvas.SizeX, default.theFontSize - 1), 1);
 }
 
 // Picks an appropriate font based on ScrWidth
 simulated function string AutoPickFont(int ScrWidth, int SizeModifier)
 {
-     local string FontArrayNames[9];
-     local int FontScreenWidthMedium[9], counter, recommendedfont;
+    local string FontArrayNames[9];
+    local int FontScreenWidthMedium[9], i, RecommendedFont;
 
-     // ScreenWidths to look at
-     FontScreenWidthMedium[0]=2048;
-     FontScreenWidthMedium[1]=1600;
-     FontScreenWidthMedium[2]=1280;
-     FontScreenWidthMedium[3]=1024;
-     FontScreenWidthMedium[4]=800;
-     FontScreenWidthMedium[5]=640;
-     FontScreenWidthMedium[6]=512;
-     FontScreenWidthMedium[7]=400;
-     FontScreenWidthMedium[8]=320;
+    // ScreenWidths to look at
+    FontScreenWidthMedium[0]=1600;
+    FontScreenWidthMedium[1]=1280;
+    FontScreenWidthMedium[2]=1024;
+    FontScreenWidthMedium[3]=800;
+    FontScreenWidthMedium[4]=640;
+    FontScreenWidthMedium[5]=512;
+    FontScreenWidthMedium[6]=400;
+    FontScreenWidthMedium[7]=320;
+    FontScreenWidthMedium[8]=0;
 
-     FontArrayNames[0]="2K4Fonts.Verdana34";
-     FontArrayNames[1]="2K4Fonts.Verdana28";
-     FontArrayNames[2]="2K4Fonts.Verdana24";
-     FontArrayNames[3]="2K4Fonts.Verdana20";
-     FontArrayNames[4]="2K4Fonts.Verdana16";
-     FontArrayNames[5]="2K4Fonts.Verdana14";
-     FontArrayNames[6]="2K4Fonts.Verdana12";
-     FontArrayNames[7]="2K4Fonts.Verdana8";
-     FontArrayNames[8]="2K4Fonts.FontSmallText";
+    FontArrayNames[0]="2K4Fonts.Verdana34";
+    FontArrayNames[1]="2K4Fonts.Verdana28";
+    FontArrayNames[2]="2K4Fonts.Verdana24";
+    FontArrayNames[3]="2K4Fonts.Verdana20";
+    FontArrayNames[4]="2K4Fonts.Verdana16";
+    FontArrayNames[5]="2K4Fonts.Verdana14";
+    FontArrayNames[6]="2K4Fonts.Verdana12";
+    FontArrayNames[7]="2K4Fonts.Verdana8";
+    FontArrayNames[8]="2K4Fonts.FontSmallText";
 
-     for(counter=0;counter<=8;counter++)
-     {
-         if(FontScreenWidthMedium[counter] >= ScrWidth)
-         {
-             recommendedfont = clamp((counter - SizeModifier), 0,8);
-         }
-     }
+    for (i = 0; i < arraycount(FontScreenWidthMedium); i++)
+        if (FontScreenWidthMedium[i] < ScrWidth)
+            break;
 
-     if(recommendedfont == 9)
-        log ("Font selection error");
-     if(recommendedFont<8)
-       BiggerFont=True;
-     else
-       BiggerFont=False;
-     return FontArrayNames[recommendedfont];
+    RecommendedFont = Clamp((i - SizeModifier), 0,8);
+
+    if (RecommendedFont < 8)
+        BiggerFont = True;
+    else
+        BiggerFont = False;
+    return FontArrayNames[RecommendedFont];
 }
 
 simulated function Font GetFont(string FontClassName, float ResX)
