@@ -39,3 +39,8 @@ For releases the following steps need to be done in addition:
 #### Step 4 - Change MiniSuperHealth Material
 
 ![Step 4 - Select Property Materials[0].Material, Replace FinalBlend'minimegatex.minimegatex' with FinalBlend'[Release Package].minimegatex'](Docs/Release_Step_4.png)
+
+#### Step 5 - Save Release Package
+
+![Step 5 - Open Actor Class Browser, Select Release Package, Under File Click Save Selected Packages](Docs/Release_Step_5.png)
+
