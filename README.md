@@ -19,3 +19,23 @@ git clone https://github.com/Deaod/UTComp UTCompv18c
 cd UTCompv18c
 build.bat
 ```
+
+### Release Builds
+
+For releases the following steps need to be done in addition:
+
+#### Step 1 - Load Release Package
+
+![Step 1 - Open Actor Class Browser, under main menu File, select Open Package](Docs/Release_Step_1.png)
+
+#### Step 2 - Select Release Package
+
+![Step 2 - File Open Menu, Select UTComp .u-File to be released](Docs/Release_Step_2.png)
+
+#### Step 3 - Select MiniSuperHealth Static Mesh
+
+![Step 3 - Open Static Mesh Browser, Select Release Package, Select MiniSuperHealth Mesh, Open Materials[0] Property](Docs/Release_Step_3.png)
+
+#### Step 4 - Change MiniSuperHealth Material
+
+![Step 4 - Select Property Materials[0].Material, Replace FinalBlend'minimegatex.minimegatex' with FinalBlend'[Release Package].minimegatex'](Docs/Release_Step_4.png)
