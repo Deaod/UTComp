@@ -75,7 +75,7 @@ jobs:
               [string]$NewSuffix
             )
             if (Test-Path -Path ("UT2004/${{ env.PKG_NAME }}"+$SubDir+$FilePattern)) {
-              Get-ChildItem ("${{ env.PKG_NAME }}"+$SubDir+$FilePattern) | ForEach-Object {
+              Get-ChildItem ("UT2004/${{ env.PKG_NAME }}"+$SubDir+$FilePattern) | ForEach-Object {
                 Replace-PackageName-File $_ $SubDir $OldSuffix $NewSuffix
               }
             }
