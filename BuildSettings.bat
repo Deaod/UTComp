@@ -5,4 +5,4 @@
 :: Example:
 ::   set DEPENDENCIES=MyDependency MyOtherDependency MyThirdDependency
 :: 
-set DEPENDENCIES=MiniSuperHealth
+set DEPENDENCIES=MiniSuperHealth AdditionalPackages
