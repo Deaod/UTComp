@@ -1,0 +1,3 @@
+OBJ LOAD FILE=StaticMeshes/MiniSuperHealth.usx PACKAGE=UTComp
+OBJ LOAD FILE=Textures/minimegatex.utx PACKAGE=UTComp
+POKE StaticMesh UTComp.MiniSuperHealth Materials ((EnableCollision=True,Material=FinalBlend'UTComp.MiniMegaTex'),(EnableCollision=False,Material=Shader'XGameShaders.Trans.TransRing'),(EnableCollision=False,Material=Shader'XGameShaders.Trans.TransRing'))
