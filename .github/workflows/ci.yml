@@ -20,7 +20,7 @@ jobs:
         with:
           repository: Deaod/UT2004Minimal
           path: UT2004/
-          ssh-key: ${{ secrets.UT2004_MINIMAL_KEY }}
+          ssh-key: ${{ secrets.UT2004_MINIMAL_DEPLOY }}
           persist-credentials: false
 
       - name: Determine Package Name
