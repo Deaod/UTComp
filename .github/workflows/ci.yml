@@ -59,8 +59,13 @@ jobs:
             $OldName = $File.Name
             $NewName = ($File.Name -replace ("${{ github.event.repository.name }}"+$OldSuffix),"${{ env.PKG_NAME }}.")
             $NewItem = ("UT2004/${{ env.PKG_NAME }}"+$SubDir+$NewName)
-            Write-Output ($SubDir + $OldName + " -> " + $SubDir + $NewName)
-            if (Test-Path -Path $NewItem) { Remove-Item $NewItem }
+            if ($OldName -eq $NewName) {
+              Rename-Item -Path $File.FullName -NewName ($File.FullName+".bak")
+              $File = (Get-Item ($File.FullName+".bak"))
+            } else {
+              Write-Output ($SubDir + $OldName + " -> " + $SubDir + $NewName)
+              if (Test-Path -Path $NewItem) { Remove-Item $NewItem }
+            }
             (Get-Content -Path $File.FullName) | ForEach-Object {
               ($_ -replace ("${{ github.event.repository.name }}"+$OldSuffix),("${{ env.PKG_NAME }}"+$NewSuffix)) >> $NewItem
             }
