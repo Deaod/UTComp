@@ -83,7 +83,7 @@ jobs:
 
           Replace-PackageName "/System/"  "${{ github.event.repository.name }}.*"    "\." "."
           Replace-PackageName "/USrc/"    "${{ github.event.repository.name }}.upkg" "\." "."
-          Replace-PackageName "/Classes/" "*.cmds"                                   ""   ""
+          Replace-PackageName "/USrc/"    "*.cmds"                                   ""   ""
 
       - name: Create VersionInfo.uc
         shell: cmd
@@ -92,7 +92,7 @@ jobs:
           UT2004/${{ env.PKG_NAME }}/Build/CreateVersionInfo.bat ${{ github.event.repository.name }} ${{ env.PKG_VER }} ${{ env.PKG_NAME }}
 
       - name: Build ${{ github.event.repository.name }}
-        run: "UT2004/${{ env.PKG_NAME }}/Build.bat silent noint nouz"
+        run: "UT2004/${{ env.PKG_NAME }}/Build.bat noint nouz"
 
       - name: Save Logs
         uses: actions/upload-artifact@v4
