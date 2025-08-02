@@ -92,13 +92,14 @@ jobs:
           UT2004/${{ env.PKG_NAME }}/Build/CreateVersionInfo.bat ${{ github.event.repository.name }} ${{ env.PKG_VER }} ${{ env.PKG_NAME }}
 
       - name: Build ${{ github.event.repository.name }}
-        run: "UT2004/${{ env.PKG_NAME }}/Build.bat silent noint nouz verbose"
+        run: "UT2004/${{ env.PKG_NAME }}/Build.bat silent noint nouz"
 
-      - name: Save make.log
+      - name: Save Logs
         uses: actions/upload-artifact@v4
         with:
-          name: ucc-output
-          path: UT2004/${{ env.PKG_NAME }}/Build/Temp/make.log
+          name: ucc-logs
+          path: |
+            UT2004/**/*.log
 
       - name: Collect Release Files
         run: |
