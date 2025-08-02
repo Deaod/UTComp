@@ -142,8 +142,12 @@ pushd "%BUILD_DIR%..\System"
 
 set MAKEINI="%BUILD_TEMP%make.ini"
 set MAKELOG="%BUILD_TEMP%make.log"
-call :GenerateMakeIni %MAKEINI% %DEPENDENCIES% %PACKAGE_NAME%
+
+set EDITPACKAGES=
 call :PrepareDependencies %DEPENDENCIES%
+if %VERBOSE% GEQ 1 echo EDITPACKAGES=!EDITPACKAGES!
+
+call :GenerateMakeIni %MAKEINI% !EDITPACKAGES! %PACKAGE_NAME%
 call :PrepareUnrealscriptSource
 if ERRORLEVEL 1 goto compile_failed
 
@@ -325,6 +329,9 @@ exit /B %ERRORLEVEL%
         	robocopy "%BUILD_DIR%Build/Dependencies/%1/" .. *.* /S /NJH /NJS /NS /NC /NP
         ) else (
         	robocopy "%BUILD_DIR%Build/Dependencies/%1/" .. *.* /S >NUL
+        )
+        if exist "%BUILD_DIR%Build/Dependencies/%1/System/%1.u" (
+            set EDITPACKAGES=!EDITPACKAGES! %1
         )
     ) else (
         echo "Could not locate dependency '%1' in '%BUILD_DIR%Build/Dependencies/'"

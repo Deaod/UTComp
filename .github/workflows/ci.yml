@@ -51,16 +51,18 @@ jobs:
           function Replace-PackageName-File {
             param(
               $File,
-              $SubDir
+              $SubDir,
+              $OldSuffix,
+              $NewSuffix
             )
 
             $OldName = $File.Name
-            $NewName = ($File.Name -replace "${{ github.event.repository.name }}\.","${{ env.PKG_NAME }}.")
+            $NewName = ($File.Name -replace ("${{ github.event.repository.name }}"+$OldSuffix),"${{ env.PKG_NAME }}.")
             $NewItem = ("${{ env.PKG_NAME }}"+$SubDir+$NewName)
             Write-Output ($SubDir + $OldName + " -> " + $SubDir + $NewName)
             if (Test-Path -Path $NewItem) { Remove-Item $NewItem }
             (Get-Content -Path $File.FullName) | ForEach-Object {
-              ($_ -replace "${{ github.event.repository.name }}\.","${{ env.PKG_NAME }}.") >> $NewItem
+              ($_ -replace ("${{ github.event.repository.name }}"+$OldSuffix),("${{ env.PKG_NAME }}"+$NewSuffix)) >> $NewItem
             }
             Remove-Item $File
           }
@@ -68,18 +70,20 @@ jobs:
           function Replace-PackageName {
             param(
               [string]$SubDir,
-              [string]$FilePattern
+              [string]$FilePattern,
+              [string]$OldSuffix,
+              [string]$NewSuffix
             )
             if (Test-Path -Path ("UT2004/${{ env.PKG_NAME }}"+$SubDir+$FilePattern)) {
               Get-ChildItem ("${{ env.PKG_NAME }}"+$SubDir+$FilePattern) | ForEach-Object {
-                Replace-PackageName-File $_ $SubDir
+                Replace-PackageName-File $_ $SubDir $OldSuffix $NewSuffix
               }
             }
           }
 
-          Replace-PackageName "/System/"  "${{ github.event.repository.name }}.*"
-          Replace-PackageName "/USrc/"    "${{ github.event.repository.name }}.upkg"
-          Replace-PackageName "/Classes/" "*.cmds"
+          Replace-PackageName "/System/"  "${{ github.event.repository.name }}.*"    "\." "."
+          Replace-PackageName "/USrc/"    "${{ github.event.repository.name }}.upkg" "\." "."
+          Replace-PackageName "/Classes/" "*.cmds"                                   ""   ""
 
       - name: Create VersionInfo.uc
         shell: cmd
@@ -98,15 +102,15 @@ jobs:
 
       - name: Collect Release Files
         run: |
-          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/System" -PathType Container)    { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/System" -Destination "Release/System" -Recurse -Force -Verbose }
-          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/Docs" -PathType Container)      { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/Docs" -Destination "Release/Docs" -Recurse -Force -Verbose }
-          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/Help" -PathType Container)      { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/Help" -Destination "Release/Help" -Recurse -Force -Verbose }
-          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/LICENSE")                       { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/LICENSE" -Destination "Release" -Verbose }
+          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/System" -PathType Container)    { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/System"    -Destination "Release/System" -Recurse -Force -Verbose }
+          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/Docs" -PathType Container)      { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/Docs"      -Destination "Release/Docs" -Recurse -Force -Verbose }
+          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/Help" -PathType Container)      { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/Help"      -Destination "Release/Help" -Recurse -Force -Verbose }
+          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/LICENSE")                       { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/LICENSE"   -Destination "Release" -Verbose }
           if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/README.md")                     { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/README.md" -Destination "Release" -Verbose }
           if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/Build/Dependencies" -PathType Container) {
             Get-ChildItem "UT2004/${{ env.PKG_NAME }}/Build/Dependencies" | ForEach-Object {
               $Dep = $_
-              if (Test-Path $Dep -PathType Container) {
+              if ((Test-Path $Dep -PathType Container) -and (-not (Test-Path -Path ($Dep.FullName+"/noinstall") -PathType Leaf))) {
                 Get-ChildItem $Dep | ForEach-Object {
                   Copy-Item $_ -Destination "Release" -Recurse -Force -Verbose
                 }
