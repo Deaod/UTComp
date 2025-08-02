@@ -1,0 +1,146 @@
+name: CI
+
+on:
+  push:
+
+  pull_request:
+
+  release:
+    types: [released]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Download UT2004 Minimal
+        uses: actions/checkout@v4
+        with:
+          repository: Deaod/UT2004Minimal
+          path: UT2004/
+          ssh-key: ${{ secrets.UT2004_MINIMAL_KEY }}
+          persist-credentials: false
+
+      - name: Determine Package Name
+        run: |
+          $ref = "${{ github.ref }}"
+          $repoName = "${{ github.event.repository.name }}"
+          $sha = "${{ github.sha }}"
+          $prever = (Get-Date -UFormat "%Y%m%d%H%M%S")
+          if ("${{ github.ref_type }}" -eq "tag") {
+            echo ("PKG_NAME="+$repoName+"_"+$ref.SubString(10)) >> $env:GITHUB_ENV
+            echo ("PKG_VER="+$ref.SubString(10)) >> $env:GITHUB_ENV
+          } elseif ($ref.StartsWith("refs/pull/")) {
+            echo ("PKG_NAME="+$repoName+"_pr_"+$ref.SubString(10, $ref.Length - 16)) >> $env:GITHUB_ENV
+            echo ("PKG_VER=pr_"+$ref.SubString(10, $ref.Length - 16)) >> $env:GITHUB_ENV
+          } else {
+            echo ("PKG_NAME="+$repoName+"_"+$ref.SubString(11)+"-"+$sha.SubString(0,8)) >> $env:GITHUB_ENV
+            echo ("PKG_VER="+$ref.SubString(11)+"-"+$sha.SubString(0,8)) >> $env:GITHUB_ENV
+            echo ("PREVIEW_VER=v"+$prever+"-"+$ref.SubString(11)) >> $env:GITHUB_ENV
+          }
+
+      - name: Checkout ${{ github.event.repository.name }}
+        uses: actions/checkout@v4
+        with:
+          path: UT2004/${{ env.PKG_NAME }}/
+
+      - name: Rename Localization Files
+        run: |
+          function Replace-PackageName-File {
+            param(
+              $File,
+              $SubDir
+            )
+
+            $OldName = $File.Name
+            $NewName = ($File.Name -replace "${{ github.event.repository.name }}\.","${{ env.PKG_NAME }}.")
+            $NewItem = ("${{ env.PKG_NAME }}"+$SubDir+$NewName)
+            Write-Output ($SubDir + $OldName + " -> " + $SubDir + $NewName)
+            if (Test-Path -Path $NewItem) { Remove-Item $NewItem }
+            (Get-Content -Path $File.FullName) | ForEach-Object {
+              ($_ -replace "${{ github.event.repository.name }}\.","${{ env.PKG_NAME }}.") >> $NewItem
+            }
+            Remove-Item $File
+          }
+
+          function Replace-PackageName {
+            param(
+              [string]$SubDir,
+              [string]$FilePattern
+            )
+            if (Test-Path -Path ("UT2004/${{ env.PKG_NAME }}"+$SubDir+$FilePattern)) {
+              Get-ChildItem ("${{ env.PKG_NAME }}"+$SubDir+$FilePattern) | ForEach-Object {
+                Replace-PackageName-File $_ $SubDir
+              }
+            }
+          }
+
+          Replace-PackageName "/System/"  "${{ github.event.repository.name }}.*"
+          Replace-PackageName "/USrc/"    "${{ github.event.repository.name }}.upkg"
+          Replace-PackageName "/Classes/" "*.cmds"
+
+      - name: Create VersionInfo.uc
+        shell: cmd
+        run: |
+          set BUILD_DIR=UT2004/${{ env.PKG_NAME }}/
+          UT2004/${{ env.PKG_NAME }}/Build/CreateVersionInfo.bat ${{ github.event.repository.name }} ${{ env.PKG_VER }} ${{ env.PKG_NAME }}
+
+      - name: Build ${{ github.event.repository.name }}
+        run: "UT2004/${{ env.PKG_NAME }}/Build.bat silent noint nouz verbose"
+
+      - name: Save make.log
+        uses: actions/upload-artifact@v4
+        with:
+          name: ucc-output
+          path: UT2004/${{ env.PKG_NAME }}/Build/Temp/make.log
+
+      - name: Collect Release Files
+        run: |
+          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/System" -PathType Container)    { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/System" -Destination "Release/System" -Recurse -Force -Verbose }
+          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/Docs" -PathType Container)      { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/Docs" -Destination "Release/Docs" -Recurse -Force -Verbose }
+          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/Help" -PathType Container)      { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/Help" -Destination "Release/Help" -Recurse -Force -Verbose }
+          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/LICENSE")                       { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/LICENSE" -Destination "Release" -Verbose }
+          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/README.md")                     { Copy-Item -Path "UT2004/${{ env.PKG_NAME }}/README.md" -Destination "Release" -Verbose }
+          if (Test-Path -Path "UT2004/${{ env.PKG_NAME }}/Build/Dependencies" -PathType Container) {
+            Get-ChildItem "UT2004/${{ env.PKG_NAME }}/Build/Dependencies" | ForEach-Object {
+              $Dep = $_
+              if (Test-Path $Dep -PathType Container) {
+                Get-ChildItem $Dep | ForEach-Object {
+                  Copy-Item $_ -Destination "Release" -Recurse -Force -Verbose
+                }
+              }
+            }
+          }
+
+      - name: Save ${{ github.event.repository.name }} Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ env.PKG_NAME }}"
+          path: |
+            Release/**/*
+            Release/*
+            !Release/**/*.uz
+
+      - name: Create Release Asset
+        run: |
+          cd Release
+          7z a -tzip -- "${{ env.PKG_NAME }}.zip" *
+
+      - name: Attach Asset To Release
+        if: success() && github.event_name == 'release'
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: Release/${{ env.PKG_NAME }}.zip
+          overwrite: true
+
+      - name: Create Pre-Release
+        if: success() && github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: VoteSys ${{ env.PREVIEW_VER }}
+          prerelease: true
+          files: Release/${{ env.PKG_NAME }}.zip
+          tag_name: ${{ env.PREVIEW_VER }}

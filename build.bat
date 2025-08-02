@@ -121,7 +121,7 @@ call :SetPackageName "%BUILD_DIR%."
 call "%~dp0BuildSettings.bat"
 
 set BUILD_TEMP=%BUILD_DIR%Build\Temp\
-mkdir %BUILD_TEMP%
+if not exist "%BUILD_TEMP%" mkdir "%BUILD_TEMP%"
 
 if %VERBOSE% GEQ 1 (
     echo PACKAGE_NAME=%PACKAGE_NAME%
