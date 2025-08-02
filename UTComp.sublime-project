@@ -1,11 +1,15 @@
 {
-	"folders":
-	[
-		{
-			"path": ".",
-            "folder_exclude_patterns": ["System"]
-		}
-	],
+    "folders":
+    [
+        {
+            "path": ".",
+            "folder_exclude_patterns": [
+                "//Build/Temp",
+                "//Classes",
+                "//System"
+            ]
+        },
+    ],
     "settings":
     {
         "tab_size": 4,

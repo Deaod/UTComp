@@ -1,4 +1,6 @@
-/System/**/*
+/Build/Temp
+/Classes
+/System
 
 *.sublime-workspace
 PostBuildHook.bat
