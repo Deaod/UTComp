@@ -156,7 +156,7 @@ if ERRORLEVEL 1 goto compile_failed
 if exist "%PACKAGE_NAME%.u" del "%PACKAGE_NAME%.u"
 if exist "%PACKAGE_NAME%.ucl" del "%PACKAGE_NAME%.ucl"
 
-set MAKE_PARAMS=-ini=%MAKEINI% -log=%MAKELOG%
+set MAKE_PARAMS=-ini=%MAKEINI%
 
 if %BUILD_SILENT% == 1 set MAKE_PARAMS=!MAKE_PARAMS! -Silent
 if %BUILD_NOBIND% == 1 set MAKE_PARAMS=!MAKE_PARAMS! -NoBind
