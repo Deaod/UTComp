@@ -20,8 +20,7 @@
     [
         {
             "name": "Build",
-            "cmd": ["$project_path/Build.bat", "verbose"],
-            "working_dir": "$project_path"
+            "cmd": ["$project_path/Build.bat"],
         }
     ]
 }
