@@ -1,0 +1,271 @@
+[BS_xPlayer]
+WepStatNames[0]="Combo"
+WepStatNames[1]="I-Gib"
+WepStatNames[2]="AVRIL"
+WepStatNames[3]="Grenades"
+WepStatNames[4]="Spider"
+WepStatNames[5]="Sniper"
+WepStatNames[6]="Rockets"
+WepStatNames[7]="Flak"
+WepStatNames[8]="Mini"
+WepStatNames[9]="Link"
+WepStatNames[10]="Shock"
+WepStatNames[11]="Bio"
+WepStatNames[12]="Assault"
+WepStatNames[13]="Shield"
+WepStatNames[14]="Crush"
+
+[MutUTComp]
+FriendlyName="UTComp Version 1.8c"
+Description="A mutator for warmup, brightskins, hitsounds, and various other features."
+
+[NewNet_SuperShockRifle]
+ItemName="NewNet SSR"
+
+[RoundMessage]
+RoundWord="Round"
+OfWord="Of"
+
+[RoundWonMessage]
+RedWon="The red team has won the round!"
+BlueWon="The blue team has won the round!"
+
+[UTComp_CTFMessage]
+CoveredMsg="covered the flagcarrier!"
+YouCoveredMsg="You covered the flagcarrier!"
+CoverSpreeMsg="is on a cover spree!"
+YouCoverSpreeMsg="You are on a cover spree!"
+UltraCoverMsg="got a multi cover!"
+YouUltraCoverMsg="You got a multi cover!"
+SealMsg="is sealing off the base!"
+YouSealMsg="You are sealing off the base!"
+SavedMsg="Saved By"
+YouSavedMsg="Close save!!"
+
+[UTComp_CTFStatsScreen]
+FlagCaps="Flag Captures"
+FlagGrabs="Flag Grabs"
+FlagPickups="Flag Pickups"
+FlagKills="Flag Kills"
+FlagSaves="Flag Saves"
+FlagDenials="Flag Denials"
+Assists="Assists"
+Covers="Covers"
+Seals="Seals"
+DefKills="Defender Kills"
+
+[UTComp_ClanArena]
+LockWeaponTimeTitle="Weapon Unlock Delay"
+RoundHealthTitle="Starting Health"
+MaxHealthTitle="Maximum Health"
+RoundArmorTitle="Starting Armor"
+MaxArmorTitle="Maximum Armor"
+AssaultRifleAmmoTitle="Assault Rifle Ammo"
+AssaultRifleGrenadesTitle="Assault Rifle Grenades"
+BioRifleAmmoTitle="Bio Rifle Ammo"
+ShockRifleAmmoTitle="Shock Rifle Ammo"
+LinkGunAmmoTitle="Link Gun Ammo"
+MinigunAmmoTitle="Minigun Ammo"
+FlakCannonAmmoTitle="Flak Cannon Ammo"
+RocketLauncherAmmoTitle="Rocket Launcher Ammo"
+LightningGunAmmoTitle="Lightning Gun Ammo"
+LockWeaponTimeDesc="How many seconds weapons are locked for at the start of each round"
+RoundHealthDesc="How much health players start with each round"
+MaxHealthDesc="How much health players can have at most"
+RoundArmorDesc="How much armor player start with each round"
+MaxArmorDesc="How much armor player can have at most"
+AssaultRifleAmmoDesc="Assault Rifle ammo given to each player at the start of each round"
+AssaultRifleGrenadesDesc="Assault Rifle grenades given to each player at the start of each round"
+BioRifleAmmoDesc="Bio Rifle ammo given to each player at the start of each round"
+ShockRifleAmmoDesc="Shock Rifle ammo given to each player at the start of each round"
+LinkGunAmmoDesc="Link Gun ammo given to each player at the start of each round"
+MinigunAmmoDesc="Minigun ammo given to each player at the start of each round"
+FlakCannonAmmoDesc="Flak Cannon ammo given to each player at the start of each round"
+RocketLauncherAmmoDesc="Rocket Launcher ammo given to each player at the start of each round"
+LightningGunAmmoDesc="Lightning Gun ammo given to each player at the start of each round"
+GameName="UTComp Clan Arena 1.8c"
+Description="No Powerups, No Distractions, Full Weapon and armor Load! Kill the enemy team before they kill yours. Dead players are out until the round is over."
+
+[UTComp_HealthDrain]
+FemaleSuicide="%o's time is up."
+MaleSuicide="%o's time is up."
+
+[UTComp_InvasionDeathMessage]
+SomeoneString="a monster"
+
+[UTComp_Menu_AdrenMenu]
+AdrenLabel.Caption="----Adrenaline Combo Settings----"
+BerserkCheck.Caption="Enable Berserk Combo"
+BoosterCheck.Caption="Enable Booster Combo"
+InvisCheck.Caption="Enable Invisibility Combo"
+SpeedCheck.Caption="Enable Speed Combo"
+
+[UTComp_Menu_AutoDemoSS]
+AutoDemoCheck.Caption="Automatically record a demo of each match."
+AutoSSCheck.Caption="Automatically take a screenshot at the end of each match."
+DemnoHeadingLabel.Caption="--- Auto Demo Recording---"
+DemoMaskLabel.Caption="Demo Mask:"
+SSHeadingLabel.Caption="--- Auto Screenshot ---"
+SSMaskLabel.Caption="Screenshot Mask:"
+
+[UTComp_Menu_BrightSkins]
+AddClanSkinButton.Caption="Add Clanskin"
+BlueSkinLabel.Caption="Blue"
+DarkSkinCheck.Caption="Darken Dead Bodies"
+DeleteClanSkinButton.Caption="Delete ClanSkin"
+EnemyBasedModelCheck.Caption="Enemy Based models"
+EnemyBasedSkinCheck.Caption="Enemy Based Skins"
+ForceThisModelCheck.Caption="Force This Model"
+GreenSkinLabel.Caption="Green"
+RedSkinLabel.Caption="Red"
+
+[UTComp_Menu_ColorNames]
+BlueLabel.Caption="Blue"
+ButtonApply.Caption="Use This Name"
+ButtonDelete.Caption="Delete"
+ButtonSave.Caption="Save"
+ButtonWhite.Caption="Reset entire name to white"
+ColorChatCheck.Caption="Show colored names in chat messages"
+ColorDeathCombo.Caption="Death Message Color:"
+ColorScoreboardCheck.Caption="Show colored names on scoreboard"
+Colorq3Check.Caption="Show colored text in chat messages(Q3 Style)"
+EnemyNamesCheck.Caption="Show colored enemy names on targeting"
+GreenLabel.Caption="Green"
+RedLabel.Caption="Red"
+
+[UTComp_Menu_Crosshairs]
+AddHairButton.Caption="Add"
+BlueCrossLabel.Caption="Blue"
+DeleteHairButton.Caption="Delete"
+GreenCrossLabel.Caption="Green"
+HorizCrossLabel.Caption="Left"
+MoveDownHairButton.Caption="Down"
+MoveUpHairButton.Caption="Up"
+OpacityCrossLabel.Caption="Alpha"
+RedCrossLabel.Caption="Red"
+SizeCrossLabel.Caption="Size"
+SizeIncreaseCheck.Caption="Crosshair Size Increase"
+UseFactoryCheck.Caption="Use Crosshair Factory"
+VertCrossLabel.Caption="Up"
+
+[UTComp_Menu_HitSounds]
+CPMAstyle.Caption="CPMA Style Hitsounds"
+EnableHit.Caption="Enable Hitsounds"
+EnemySoundLabel.Caption="Enemy Sound"
+FriendlySoundLabel.Caption="Team Sound"
+PitchLabel.Caption="CPMA Pitch Modifier"
+VolumeLabel.Caption="Hitsound Volume"
+
+[UTComp_Menu_MainMenu]
+AutoDemoButton.Caption="Auto Demo/SS"
+ColoredNameButton.Caption="Colored Names"
+CrosshairButton.Caption="Crosshairs"
+HitsoundButton.Caption="Hitsounds"
+MiscButton.Caption="Misc"
+OverlayButton.Caption="Team Overlay"
+SkinModelButton.Caption="Skins/Models"
+VotingButton.Caption="Voting"
+
+[UTComp_Menu_Miscellaneous]
+AdrenButton.Caption="Disable Adrenaline Combos"
+FootCheck.Caption="Play own footstep sounds."
+GenericLabel.Caption="----Generic UT2004 Settings----"
+HudColorCheck.Caption="Match Hud Color To Skins"
+InfoLabel.Caption="--------Adrenaline Combos--------"
+NetUpdateRate.Caption="Desired Network Update Rate"
+NewNetCheck.Caption="Enable Enhanced Netcode"
+NewNetLabel.Caption="-----------Net Code-----------"
+PickupCheck.Caption="Show pickup stats on scoreboard."
+ScoreboardCheck.Caption="Use UTComp enhanced scoreboard."
+ScoreboardLabel.Caption="----------Scoreboard----------"
+StatsCheck.Caption="Show weapon stats on scoreboard."
+UseEyeHeightAlgoCheck.Caption="Use New EyeHeight Algorithm"
+
+[UTComp_Menu_OpenedMenu]
+NewVersions.Caption="Visit https://GitHub.com/Deaod/UTComp for new versions."
+ServerSetLabel.Caption="------Server Settings------"
+
+[UTComp_Menu_TeamOverlay]
+BGColorLabel.Caption="Background Color"
+BlueBGLabel.Caption="Blue"
+BlueLocLabel.Caption="Blue"
+BlueNameLabel.Caption="Blue"
+CheckEnable.Caption="Enable Overlay"
+CheckIcons.Caption="Enable Icons"
+CheckShowSelf.Caption="Show Self"
+GreenBGLabel.Caption="Green"
+GreenLocLabel.Caption="Green"
+GreenNameLabel.Caption="Green"
+HorizLabel.Caption="Size:"
+LocColorLabel.Caption="Location color"
+NameColorLabel.Caption="Name color"
+RedBGLabel.Caption="Red"
+RedLocLabel.Caption="Red"
+RedNameLabel.Caption="Red"
+SizeLabel.Caption="Horizontal Location:"
+VertLabel.Caption="Vertical Location:"
+
+[UTComp_Menu_VoteInProgress]
+VoteLabel0.Caption="--- Vote in progress ---"
+VoteYesButton.Caption="Vote Yes"
+votenoButton.Caption="Vote No"
+
+[UTComp_Menu_Voting]
+DemnoHeadingLabel.Caption="------- Select your voting type -------"
+GameTypeButton.Caption="Gametype"
+MapChangeButton.Caption="Change Map"
+UTComp_SettingsButton.Caption="Settings"
+
+[UTComp_Menu_Voting_GameType]
+AdrenCheck.Caption="Adren"
+AdvancedOptionsCheck.Caption="Advanced Options"
+ChangeMapButton.Caption="Call Vote"
+DDCheck.Caption="DD"
+GoalScoreLabel.Caption="GoalScore"
+MapNameLabel.Caption="Map Name"
+MaxPlayersLabe.Caption="Max Players"
+OvertimeLabel.Caption="OT Length"
+RefreshButton.Caption="Refresh Maps"
+SuperWeaponsCheck.Caption="SuperWeapons"
+WeaponStayCheck.Caption="WeaponStay"
+gametypeLabel.Caption="Gametype"
+grenadeLabel.Caption="Grenades"
+quickrestartButton.Caption="Just Restart Map"
+timelimitLabel.Caption="Time Limit"
+
+[UTComp_Menu_Voting_Map]
+ChangeMapButton.Caption="Change Map"
+MapNameLabel.Caption="Map Name"
+RefreshButton.Caption="Refresh Maps"
+quickrestartButton.Caption="Restart Current Map"
+
+[UTComp_Menu_Voting_Settings]
+DemnoHeadingLabel.Caption="--- These settings require a map reload to take effect ---"
+ForwardButton.Caption="Call Vote"
+ForwardLabel.Caption="Forward Mode"
+HitsoundsButton.Caption="Call Vote"
+HitsoundsLabel.Caption="Hitsounds"
+NewNetButton.Caption="Call Vote"
+NewNetLabel.Caption="Enhanced Netcode"
+RestartLabel.Caption="--- These settings are applied instantly after the vote passes ---"
+SkinsButton.Caption="Call Vote"
+SkinsLabel.Caption="Skins"
+TeamOverlayButton.Caption="Call Vote"
+TeamOverlayLabel.Caption="Team Overlay"
+WarmupButton.Caption="Call Vote"
+WarmupLabel.Caption="Warmup"
+
+[UTComp_ScoreBoard]
+fraglimitteam="SCORE LIMIT:"
+
+[UTComp_ScoreBoardCTF]
+FontArrayNames[0]="Engine.DefaultFont"
+FontArrayNames[1]="2K4Fonts.Verdana12"
+FontArrayNames[2]="2K4Fonts.Verdana14"
+FontArrayNames[3]="UT2003Fonts.FontEurostile14"
+FontArrayNames[4]="2K4Fonts.Verdana16"
+FontArrayNames[5]="UT2003Fonts.FontEurostile17"
+FontArrayNames[6]="UT2003Fonts.FontEurostile29"
+FontArrayNames[7]="UT2003Fonts.FontEurostile37"
+FontArrayNames[8]="Engine.DefaultFont"
+
