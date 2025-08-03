@@ -95,6 +95,7 @@ set BUILD_NOUZ=0
 set BUILD_SILENT=0
 set BUILD_NOBIND=0
 set BUILD_BYTEHAX=0
+set BUILD_STRIP=0
 set VERBOSE=0
 
 :ParseArgs
@@ -104,6 +105,7 @@ set VERBOSE=0
     if /I "%1" EQU "Silent"   ( set BUILD_SILENT=1 )
     if /I "%1" EQU "NoBind"   ( set BUILD_NOBIND=1 )
     if /I "%1" EQU "ByteHax"  ( set BUILD_BYTEHAX=1 )
+    if /I "%1" EQU "Strip"    ( set BUILD_STRIP=1 )
 
     if /I "%1" EQU "Verbose"  ( set /A VERBOSE+=1 )
 
@@ -167,6 +169,11 @@ call :Invoke ucc make !MAKE_PARAMS!
 :: dont do the post-process steps if compilation failed
 if ERRORLEVEL 1 goto compile_failed
 
+:: strip source code if requested
+if %BUILD_STRIP% == 1 (
+    call :Invoke ucc Editor.StripSourceCommandlet %PACKAGE_NAME%
+)
+
 :: copy to release location
 if not exist "%BUILD_DIR%System" (mkdir "%BUILD_DIR%System")
 copy "%PACKAGE_NAME%.u"   "%BUILD_DIR%System" >NUL
@@ -175,7 +182,7 @@ copy "%PACKAGE_NAME%.ucl" "%BUILD_DIR%System" >NUL
 if %BUILD_NOUZ% == 0 (
     :: generate compressed file for redirects
     call :Invoke ucc compress "%PACKAGE_NAME%.u"
-    copy "%PACKAGE_NAME%.u.uz" "%BUILD_DIR%System" >NUL
+    copy "%PACKAGE_NAME%.u.uz2" "%BUILD_DIR%System" >NUL
 )
 
 if %BUILD_NOINT% == 0 (
@@ -324,11 +331,11 @@ exit /B %ERRORLEVEL%
 :PrepareDependencies
     if [%1] EQU [] exit /B %ERRORLEVEL%
     if exist "%BUILD_DIR%Build/Dependencies/%1/" (
-    	if %VERBOSE% GEQ 1 echo Copying Dependency %1
+        if %VERBOSE% GEQ 1 echo Copying Dependency %1
         if %VERBOSE% GEQ 2 (
-        	robocopy "%BUILD_DIR%Build/Dependencies/%1/" .. *.* /S /NJH /NJS /NS /NC /NP
+            robocopy "%BUILD_DIR%Build/Dependencies/%1/" .. *.* /S /NJH /NJS /NS /NC /NP
         ) else (
-        	robocopy "%BUILD_DIR%Build/Dependencies/%1/" .. *.* /S >NUL
+            robocopy "%BUILD_DIR%Build/Dependencies/%1/" .. *.* /S >NUL
         )
         if exist "%BUILD_DIR%Build/Dependencies/%1/System/%1.u" (
             set EDITPACKAGES=!EDITPACKAGES! %1
