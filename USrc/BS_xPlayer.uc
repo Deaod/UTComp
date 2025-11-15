@@ -3797,6 +3797,26 @@ simulated function ClientResetNetcode()
     }
 }
 
+simulated function Destroyed()
+{
+    local LinkedReplicationInfo LPRI, Next;
+
+    if(PlayerReplicationInfo != None)
+    {
+        LPRI = PlayerReplicationInfo.CustomReplicationInfo;
+        while(LPRI != None)
+        {
+            Next = LPRI.NextReplicationInfo;
+            LPRI.Destroy();
+            LPRI = Next;
+        }
+
+        PlayerReplicationInfo.CustomReplicationInfo = None;
+    }
+
+    super.Destroyed();
+}
+
 defaultproperties
 {
 
